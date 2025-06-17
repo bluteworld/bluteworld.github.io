@@ -10,13 +10,22 @@ table, tr, td{
   text-align: center;
 }
 .txt{
-  font-family: "Asap", sans-serif;
-  font-optical-sizing: auto;
+  font-family: "Jua", sans-serif;
+  font-weight: 400;
   font-style: normal;
-  font-variation-settings: "wdth" 100;
   color: #494031;
-  padding-left: 10%;
+/*  text-align: right;*/
+  padding: 100px 0px 0px 300px; 
+}
+#welcome{
+    font-size:3em;
+}
+#title{
+    font-size:6em;
+}
+#image{
+  text-align: left;
 }
 img{
-  height: 600px;
+  height: 900px;
 }
