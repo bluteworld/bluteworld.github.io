@@ -1,1 +1,3 @@
-console.log('Website loaded successfully!');
+function tippy(){
+  // document.getElementById("tippy").innerHTML = "Tippy clicked"; 
+}
