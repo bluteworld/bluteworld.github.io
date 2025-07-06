@@ -1,0 +1,30 @@
+{
+  "name": "blutegories",
+  "version": "1.0.0",
+  "description": "A blute scenario puzzle game",
+  "keywords": [
+    "blute",
+    "puzzle",
+    "categories",
+    "game"
+  ],
+  "homepage": "https://github.com/bluteworld/blutegories#readme",
+  "bugs": {
+    "url": "https://github.com/bluteworld/blutegories/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bluteworld/blutegories.git"
+  },
+  "license": "ISC",
+  "author": "Divya Komaravolu",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "dependencies": {
+    "dotenv": "^17.0.1",
+    "openai": "^5.8.2"
+  }
+}
