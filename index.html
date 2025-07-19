@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" >
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blute World</title>
   <link rel="icon" type="image/x-icon" href="assets/favicon.png">
-  <!-- <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,100..900;1,100..900&amp;display=swap'> -->
   <link rel="stylesheet" href="./style.css">
   <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 
 </head>
 <body>
-<!-- partial:index.partial.html -->
-<table>
-  <tr>
-    <td class="txt">
-      <div id="welcome"> welcome to </div>
-      <div id="title"> blute world</div>
-    </td>
-    <td id="image">
-      <img src="assets/blute.png"></img>
-    </td>
-  </tr>
-</table>
-<!-- partial -->
+
+<div class="container">
+  <div class="flex-column container-2">
+    <div class="container-3">
+      <div class="container-4">
+        <div style="font-size: clamp(1rem, 2vw, 4rem);">  welcome to </div>
+        <div style="font-size: clamp(2rem, 4vw, 6rem);"> blute world </div>
+      </div>
+      <div class="image-container">
+        <img id="blute-img" src="assets/blute.png" alt="Blute">
+      </div>
+    </div>
+    <div style="height: 20vh;">Some long text so I can see that it's in there dawg</div>
+  </div>
+</div>
+
+<!-- scripts -->
   <script  src="./script.js"></script>
 
 </body>

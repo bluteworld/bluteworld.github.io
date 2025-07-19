@@ -1,31 +1,107 @@
-body{
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
   background-color: #E0D3B6;
-}
-table{
-  width:100%;
-  height: 98vh;
-}
-table, tr, td{
-/*   border: 2px solid black; */
-  text-align: center;
-}
-.txt{
   font-family: "Jua", sans-serif;
-  font-weight: 400;
-  font-style: normal;
   color: #494031;
-/*  text-align: right;*/
-  padding: 100px 0px 0px 300px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-#welcome{
-    font-size:3em;
+
+.container {
+  width: 90vw;
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-#title{
-    font-size:6em;
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
 }
-#image{
-  text-align: left;
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
-img{
-  height: 900px;
+
+.container-2 {
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
 }
+
+.container-3 {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.container-4 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: fit-content;
+  margin-left: auto;
+}
+
+.image-container {
+  flex: 1;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  justify-content: start;
+}
+
+#blute-img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  width: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .container-3 {
+    flex-direction: column;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: nowrap; /* optional: helps prevent weird wrapping issues */
+    align-self: center;
+  }
+
+  .image-container {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container-4 {
+    margin: 0;
+    align-items: center;
+    text-align: center;
+  }
+
+  #blute-img {
+    max-height: 50%;
+  }
+}
+
+div, img {
+  border: 2px solid black;
+  box-sizing: border-box;
+}
+
