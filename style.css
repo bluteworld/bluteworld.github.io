@@ -1,107 +1,56 @@
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
 
-body {
+*{
+  /* border: 2px solid */
+}
+html{
+  border-radius: 10px;
+  border: 2px solid #494031;
+}
+html, body {
+  margin: 2%;
+  height: 100%;
   background-color: #E0D3B6;
+  
+}
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: "Jua", sans-serif;
   color: #494031;
+}
+.footer {
+  height: 10%;
+}
+.body {
+  height: 70%;
+  
+}
+
+.header {
+  height: 20%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
-.container {
-  width: 90vw;
-  height: 90vh;
+.header-content {
+  height: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.flex-column {
-  display: flex;
-  flex-direction: column;
-}
-
-.flex-row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   gap: 1rem;
 }
+.header h1{
+  text-align: left;
 
-.container-2 {
-  width: 100%;
-  height: 100%;
-  justify-content: space-between;
 }
-
-.container-3 {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-}
-
-.container-4 {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  width: fit-content;
-  margin-left: auto;
-}
-
-.image-container {
-  flex: 1;
-  max-width: 100%;
+.header-content img {
+  max-width: 100px;
   max-height: 100%;
-  display: flex;
-  justify-content: start;
-}
-
-#blute-img {
-  max-width: 100%;
-  max-height: 100%;
-  height: auto;
   width: auto;
+  height: auto;
   object-fit: contain;
-}
-
-@media (max-width: 768px) {
-  .container-3 {
-    flex-direction: column;
-    justify-content: center !important;
-    align-items: center !important;
-    flex-wrap: nowrap; /* optional: helps prevent weird wrapping issues */
-    align-self: center;
-  }
-
-  .image-container {
-    justify-content: center;
-    align-items: center;
-  }
-
-  .container-4 {
-    margin: 0;
-    align-items: center;
-    text-align: center;
-  }
-
-  #blute-img {
-    max-height: 50%;
-  }
-}
-
-div, img {
-  border: 2px solid black;
-  box-sizing: border-box;
 }
 
