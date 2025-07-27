@@ -1,4 +1,3 @@
-
 *{
   /* border: 2px solid */
 }
@@ -17,6 +16,7 @@ body{
   flex-direction: column;
   font-family: "Jua", sans-serif;
   color: #494031;
+  font-size: 0.8em;
 }
 .header {
   width: 100%;
@@ -37,18 +37,97 @@ body{
   text-align: left;
 }
 .header-content img {
-  max-width: 100px;
+  max-width: 60px;
   max-height: 100%;
   width: auto;
   height: auto;
   object-fit: contain;
 }
-.body {
-  height: 70%;
+h1{
+  text-align: center;
 }
+.body {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: start; /* was center */
+  padding: 0; /* optional, remove extra space */
+}
+
+.grid-wrapper {
+  width: min(85vw, 60vh);
+  aspect-ratio: 1 / 1;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.blute-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 2px solid #494031;
+}
+
+.blute-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.blute-card:hover .overlay {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.btn {
+  padding: 0.3rem;
+  font-size: 0.8rem;
+  border: none;
+  cursor: pointer;
+}
+
+.red-overlay,
+.green-overlay,
+.black-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  opacity: 0.3;
+  z-index: 1;
+}
+
+.red-overlay { background-color: red; }
+.green-overlay { background-color: green; }
+.black-overlay { background-color: black; }
+
+
+
 .footer {
   width: 100%;
   height: 10%;
 }
-
-
