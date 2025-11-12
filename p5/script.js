@@ -3,14 +3,17 @@ let w, h;
 let gw = 4;
 let gh = 4;
 let padding;
-// let numImgs = 58
-// let images = [];
 
-// function preload() {
-//   for(let i = 1; i <= numImgs; i++){
-//     images.push(loadImage('../assets/b('+num+').jpg'));
-//   }
-// }
+let numImgs = 58
+let images = [];
+let imgIdx;
+let imgCount = 0;
+
+function preload() {
+  for(let i = 1; i <= numImgs; i++){
+    images.push(loadImage('https://raw.githubusercontent.com/bluteworld/bluteworld.github.io/refs/heads/main/assets/b('+i+').png'));
+  }
+}
 
 function setup(){
   createCanvas();
@@ -39,10 +42,11 @@ let gridToScreen = (x, y) => {
   ];
 }
 
-// let cell = (i, j) => {
-//   rect(i, j, 1, 1);
-//   images(images[])
-// } 
+let cell = (i, j) => {
+  rect(i, j, 1, 1);
+  image(images[imgCount], i, j);
+  imgCount++;
+} 
 
 const getRandomUniqueNumbers = (min, max, count) =>
   [...Array(max - min + 1).keys()]
@@ -63,16 +67,17 @@ function draw(){
     strokeWeight(1/scl);
 
     let mouse = screenToGrid(...mousePos).map(i => floor(i));
-    // let imgIdx = 
+    imgIdx = getRandomUniqueNumbers(1, numImgs, gw*gh);
     for(let i = 0; i < gw; i++){
       for(let j = 0; j < gh; j++){
         pushPop(() => {
           if(mouse[0] == i && mouse[1] == j && mouseDown) fill('#bba983ff');
-          rect(i, j, 1, 1);
-          // cell(i, j)
+          // rect(i, j, 1, 1);
+          cell(i, j)
         });
       }
     }
+    imgCount = 0;
   });
 }
 
