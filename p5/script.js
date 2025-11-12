@@ -4,7 +4,7 @@ let gw = 4;
 let gh = 4;
 let padding;
 
-let numImgs = 58
+let numImgs = 55
 let images = [];
 let imgIdx;
 let imgCount = 0;
