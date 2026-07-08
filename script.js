@@ -8,6 +8,8 @@ const modalOverlay = document.getElementById('modalOverlay');
 const modalContent = document.getElementById('modalContent');
 const statsBtn = document.getElementById('statsBtn');
 const infoBtn = document.getElementById('infoBtn');
+const homeBtn = document.getElementById('homeBtn');
+const secretLabel = document.getElementById('secretLabel');
 
 let dailyState = null;
 
@@ -368,19 +370,17 @@ function handleGuess(guessId) {
   }
 }
 
-function initDailyGame() {
-  const today = getTodayString();
-  const rand = seededRandom(dateToSeed(today));
-
+function buildGame(date, rand) {
   const playable = BLUTE_DATA.blutes.filter((b) => b.is_blute);
   const gridBlutes = shuffle(playable, rand).slice(0, 25);
   const secretIndex = Math.floor(rand() * 25);
   const secretBlute = gridBlutes[secretIndex];
 
   renderGrid(gridBlutes);
+  secretLabel.textContent = secretBlute.name;
 
   dailyState = {
-    date: today,
+    date,
     gridIds: gridBlutes.map((b) => b.id),
     secretId: secretBlute.id,
     history: [],
@@ -389,6 +389,11 @@ function initDailyGame() {
 
   renderHistory();
   syncGridWidth();
+}
+
+function initDailyGame() {
+  const today = getTodayString();
+  buildGame(today, seededRandom(dateToSeed(today)));
 
   getPlayerScore(today, getPlayerUUID()).then((existingScore) => {
     if (existingScore !== null) {
@@ -405,6 +410,19 @@ statsBtn.addEventListener('click', () => {
 });
 
 infoBtn.addEventListener('click', renderRulesModal);
+
+homeBtn.addEventListener('click', () => {
+  const date = dailyState ? dailyState.date : getTodayString();
+  const uuid = getPlayerUUID();
+
+  clearPlayerScore(date, uuid).finally(() => {
+    closeModal();
+    grid.classList.remove('locked');
+    questionWrap.classList.remove('locked');
+    questionInput.disabled = false;
+    buildGame(getTodayString(), Math.random);
+  });
+});
 
 modalOverlay.addEventListener('click', (e) => {
   if (e.target === modalOverlay) closeModal();

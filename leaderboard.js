@@ -2,6 +2,10 @@ function submitScore(date, uuid, questionsAsked) {
   return db.ref(`leaderboard/${date}/${uuid}`).set(questionsAsked);
 }
 
+function clearPlayerScore(date, uuid) {
+  return db.ref(`leaderboard/${date}/${uuid}`).remove();
+}
+
 function getPlayerScore(date, uuid) {
   return db
     .ref(`leaderboard/${date}/${uuid}`)

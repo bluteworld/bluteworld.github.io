@@ -31,9 +31,19 @@ body {
   color: #F0E6C8;
 }
 
+.title-group {
+  display: flex;
+  flex-direction: column;
+}
+
 .title {
   font-size: 2rem;
   font-weight: bold;
+}
+
+.secret-label {
+  font-size: 0.8rem;
+  color: rgba(240, 230, 200, 0.6);
 }
 
 .icon-buttons {
@@ -242,7 +252,8 @@ body {
   min-width: 280px;
   max-width: 90vw;
   max-height: 80vh;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   font-family: sans-serif;
 }
 
@@ -255,7 +266,7 @@ body {
 }
 
 .modal ul {
-  margin: 0 0 2vmin 4vmin;
+  margin: 3vmin 2.5vmin 4vmin
 }
 
 .modal ul li {
@@ -285,15 +296,16 @@ body {
 
 .leaderboard-list {
   list-style: none;
-  width: 100%;
+  width: calc(100% - 3.5vmin);
   margin-bottom: 2vmin;
+  margin-left: -1.5vmin;
 }
 
 .leaderboard-list li {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
   gap: 2vmin;
-  padding: 0.8vmin 0;
+  padding: 0.8vmin 0.5vmin;
   border-bottom: 1px solid rgba(172, 147, 102, 0.3);
 }
 
