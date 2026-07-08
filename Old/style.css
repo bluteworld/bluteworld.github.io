@@ -1,0 +1,138 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  border-radius: 10px;
+  border: 2px solid #494031;
+  margin: 2%;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  background-color: #E0D3B6;
+  font-family: "Jua", sans-serif;
+  color: #494031;
+  font-size: 0.8em;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  width: 100%;
+  flex: 0 0 15%; /* slightly smaller for mobile room */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-content {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+.header h1 {
+  text-align: left;
+}
+
+.header-content img {
+  max-width: 60px;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+h1 {
+  text-align: center;
+}
+
+.body {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  overflow: auto;
+  padding: 1rem;
+}
+
+.grid-wrapper {
+  width: min(90vw, 80vh);
+  aspect-ratio: 1 / 1;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+  height: 100%;
+}
+
+.blute-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 2px solid #494031;
+}
+
+.blute-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.blute-card:hover .overlay {
+  display: flex;
+}
+
+.btn {
+  padding: 0.3rem;
+  font-size: 0.8rem;
+  border: none;
+  cursor: pointer;
+  background: white;
+  border-radius: 4px;
+  margin: 2px;
+}
+
+.red-overlay,
+.green-overlay,
+.black-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.3;
+  z-index: 1;
+}
+
+.red-overlay { background-color: red; }
+.green-overlay { background-color: green; }
+.black-overlay { background-color: black; }
+
+.footer {
+  width: 100%;
+  flex: 0 0 10%;
+}

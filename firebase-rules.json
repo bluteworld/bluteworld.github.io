@@ -1,0 +1,13 @@
+{
+  "rules": {
+    "leaderboard": {
+      "$date": {
+        ".read": true,
+        "$uuid": {
+          ".write": true,
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 200"
+        }
+      }
+    }
+  }
+}
