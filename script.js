@@ -2,8 +2,8 @@ const CARD_FRAME = 'card_bg.PNG';
 
 const grid = document.getElementById('grid');
 const questionWrap = document.querySelector('.question-wrap');
-const questionInput = document.getElementById('questionInput');
-const questionBody = document.getElementById('questionBody');
+const categoryAccordion = document.getElementById('categoryAccordion');
+const historyList = document.getElementById('historyList');
 const modalOverlay = document.getElementById('modalOverlay');
 const modalContent = document.getElementById('modalContent');
 const statsBtn = document.getElementById('statsBtn');
@@ -12,6 +12,41 @@ const homeBtn = document.getElementById('homeBtn');
 const secretLabel = document.getElementById('secretLabel');
 
 let dailyState = null;
+let expandedCategories = new Set();
+
+const CATEGORY_ORDER = ['Color', 'Appearance', 'Activity', 'Setting', 'Objects'];
+
+const ATTRIBUTE_CATEGORY = {
+  color: 'Color',
+  wearing_glasses: 'Appearance',
+  wearing_hat: 'Appearance',
+  has_mustache: 'Appearance',
+  wearing_clothing: 'Appearance',
+  is_fancy_dressed: 'Appearance',
+  is_in_costume: 'Appearance',
+  has_hair: 'Appearance',
+  eyes_open: 'Appearance',
+  has_eyebrows: 'Appearance',
+  hands_visible: 'Appearance',
+  is_eating_or_drinking: 'Activity',
+  is_doing_sport: 'Activity',
+  is_doing_creative: 'Activity',
+  is_relaxing: 'Activity',
+  is_working: 'Activity',
+  is_traveling: 'Activity',
+  is_celebrating: 'Activity',
+  is_sitting: 'Activity',
+  is_standing: 'Activity',
+  is_outdoors: 'Setting',
+  is_indoors: 'Setting',
+  is_at_beach: 'Setting',
+  is_in_water: 'Setting',
+  with_animal: 'Objects',
+  holding_food: 'Objects',
+  has_hearts: 'Objects',
+  has_music_notes: 'Objects',
+  holding_tool_or_prop: 'Objects',
+};
 
 const MARK_STATES = ['none', 'red', 'yellow'];
 const MARK_LABELS = { none: '', red: 'eliminated', yellow: 'suspect' };
@@ -29,7 +64,6 @@ function cycleMark(cell, blute) {
 function lockBoard() {
   grid.classList.add('locked');
   questionWrap.classList.add('locked');
-  questionInput.disabled = true;
 }
 
 function getPlayerUUID() {
@@ -166,25 +200,76 @@ function evaluateQuestion(blute, question) {
   return blute.attributes[question.attribute] === question.value;
 }
 
-function unaskedQuestions(query) {
+function questionsForCategory(category) {
+  return BLUTE_DATA.questions.filter((q) => ATTRIBUTE_CATEGORY[q.attribute] === category);
+}
+
+function toggleCategory(category) {
+  if (!dailyState || dailyState.finished) return;
+  if (expandedCategories.has(category)) {
+    expandedCategories.delete(category);
+  } else {
+    expandedCategories.add(category);
+  }
+  renderQuestionList();
+}
+
+function renderQuestionList() {
   const askedIds = new Set(dailyState.history.map((h) => h.id));
-  return BLUTE_DATA.questions.filter(
-    (q) => !askedIds.has(q.id) && q.text.toLowerCase().includes(query.toLowerCase())
-  );
+
+  categoryAccordion.innerHTML = '';
+
+  CATEGORY_ORDER.forEach((category) => {
+    const expanded = expandedCategories.has(category);
+
+    const group = document.createElement('div');
+    group.className = 'category-group';
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'category-toggle';
+    toggle.textContent = category;
+    toggle.setAttribute('aria-expanded', String(expanded));
+    toggle.addEventListener('click', () => toggleCategory(category));
+    group.appendChild(toggle);
+
+    if (expanded) {
+      const remaining = questionsForCategory(category).filter((q) => !askedIds.has(q.id));
+      const list = document.createElement('ul');
+      list.className = 'question-list';
+
+      if (remaining.length === 0) {
+        const li = document.createElement('li');
+        li.className = 'question-empty';
+        li.textContent = "You've asked everything here.";
+        list.appendChild(li);
+      } else {
+        remaining.forEach((q) => {
+          const li = document.createElement('li');
+          li.textContent = q.text;
+          li.addEventListener('click', () => askQuestion(q));
+          list.appendChild(li);
+        });
+      }
+
+      group.appendChild(list);
+    }
+
+    categoryAccordion.appendChild(group);
+  });
 }
 
 function renderHistory() {
-  questionBody.innerHTML = '';
+  historyList.innerHTML = '';
 
   if (dailyState.history.length === 0) {
-    const p = document.createElement('p');
-    p.textContent = 'Type above to ask a yes/no question.';
-    questionBody.appendChild(p);
+    const li = document.createElement('li');
+    li.className = 'question-empty';
+    li.textContent = 'No questions asked yet.';
+    historyList.appendChild(li);
     return;
   }
 
-  const list = document.createElement('ul');
-  list.className = 'history-list';
   for (let i = dailyState.history.length - 1; i >= 0; i--) {
     const entry = dailyState.history[i];
     const li = document.createElement('li');
@@ -195,31 +280,8 @@ function renderHistory() {
     a.className = entry.answer ? 'answer-yes' : 'answer-no';
     li.appendChild(q);
     li.appendChild(a);
-    list.appendChild(li);
+    historyList.appendChild(li);
   }
-  questionBody.appendChild(list);
-}
-
-function renderSuggestions(query) {
-  const matches = unaskedQuestions(query).slice(0, 8);
-  questionBody.innerHTML = '';
-
-  if (matches.length === 0) {
-    const p = document.createElement('p');
-    p.textContent = 'No suggestions match, but you can press Enter to ask it your own way.';
-    questionBody.appendChild(p);
-    return;
-  }
-
-  const list = document.createElement('ul');
-  list.className = 'question-list';
-  matches.forEach((q) => {
-    const li = document.createElement('li');
-    li.textContent = q.text;
-    li.addEventListener('click', () => askQuestion(q));
-    list.appendChild(li);
-  });
-  questionBody.appendChild(list);
 }
 
 function askQuestion(question) {
@@ -229,56 +291,9 @@ function askQuestion(question) {
   dailyState.history.push({ id: question.id, text: question.text, answer });
   dailyState.questionsAsked += 1;
 
-  questionInput.value = '';
+  renderQuestionList();
   renderHistory();
 }
-
-function showQuestionFeedback(message) {
-  questionBody.innerHTML = '';
-  const p = document.createElement('p');
-  p.textContent = message;
-  questionBody.appendChild(p);
-}
-
-function askFreeformQuestion(text) {
-  const answer = interpretQuestion(getSecretBlute(), text);
-
-  if (answer === null) {
-    showQuestionFeedback("Hmm, I couldn't figure that one out. Try asking about color, clothing, activity, or surroundings.");
-    return;
-  }
-
-  dailyState.history.push({ id: null, text, answer });
-  dailyState.questionsAsked += 1;
-
-  questionInput.value = '';
-  renderHistory();
-}
-
-questionInput.addEventListener('input', () => {
-  if (!dailyState || dailyState.finished) return;
-  const query = questionInput.value.trim();
-  if (query === '') {
-    renderHistory();
-  } else {
-    renderSuggestions(query);
-  }
-});
-
-questionInput.addEventListener('keydown', (e) => {
-  if (e.key !== 'Enter' || !dailyState || dailyState.finished) return;
-  e.preventDefault();
-  const text = questionInput.value.trim();
-  if (text === '') return;
-
-  const canonicalMatches = unaskedQuestions(text);
-  if (canonicalMatches.length === 1) {
-    askQuestion(canonicalMatches[0]);
-    return;
-  }
-
-  askFreeformQuestion(text);
-});
 
 function renderStatsModal(date, yourScore) {
   const wrap = document.createElement('div');
@@ -334,7 +349,7 @@ function renderRulesModal() {
     <h2>How to Play</h2>
     <p>Every day there's one secret blute hiding among the 25 on the grid.</p>
     <ul>
-      <li>Ask yes/no questions to narrow it down — type your own or pick a suggestion.</li>
+      <li>Ask yes/no questions to narrow it down — tap a category to expand it, then tap a question. Your answers show up on the right.</li>
       <li>Click a cell once to mark it red (eliminated) or yellow (suspect); click again to cycle.</li>
       <li>Double-click (or long-press on touch) a cell to lock in your guess.</li>
       <li>Your score is the number of questions you asked — fewer is better.</li>
@@ -387,6 +402,8 @@ function buildGame(date, rand) {
     questionsAsked: 0,
   };
 
+  expandedCategories = new Set();
+  renderQuestionList();
   renderHistory();
   syncGridWidth();
 }
@@ -411,18 +428,19 @@ statsBtn.addEventListener('click', () => {
 
 infoBtn.addEventListener('click', renderRulesModal);
 
-homeBtn.addEventListener('click', () => {
-  const date = dailyState ? dailyState.date : getTodayString();
-  const uuid = getPlayerUUID();
+if (homeBtn) {
+  homeBtn.addEventListener('click', () => {
+    const date = dailyState ? dailyState.date : getTodayString();
+    const uuid = getPlayerUUID();
 
-  clearPlayerScore(date, uuid).finally(() => {
-    closeModal();
-    grid.classList.remove('locked');
-    questionWrap.classList.remove('locked');
-    questionInput.disabled = false;
-    buildGame(getTodayString(), Math.random);
+    clearPlayerScore(date, uuid).finally(() => {
+      closeModal();
+      grid.classList.remove('locked');
+      questionWrap.classList.remove('locked');
+      buildGame(getTodayString(), Math.random);
+    });
   });
-});
+}
 
 modalOverlay.addEventListener('click', (e) => {
   if (e.target === modalOverlay) closeModal();
