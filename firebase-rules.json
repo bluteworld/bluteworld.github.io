@@ -5,7 +5,31 @@
         ".read": true,
         "$uuid": {
           ".write": true,
-          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 200"
+          ".validate": "newData.hasChildren(['questionsAsked']) && newData.child('questionsAsked').isNumber() && newData.child('questionsAsked').val() >= 0 && newData.child('questionsAsked').val() <= 200"
+        }
+      }
+    },
+    "questionLog": {
+      "$date": {
+        "$uuid": {
+          ".write": true,
+          ".read": false
+        }
+      }
+    },
+    "unansweredQuestions": {
+      "$date": {
+        "$uuid": {
+          ".write": true,
+          ".read": false
+        }
+      }
+    },
+    "feedback": {
+      "$date": {
+        "$uuid": {
+          ".write": true,
+          ".read": false
         }
       }
     }

@@ -2,56 +2,50 @@ const CARD_FRAME = 'card_bg.PNG';
 
 const grid = document.getElementById('grid');
 const questionWrap = document.querySelector('.question-wrap');
-const categoryAccordion = document.getElementById('categoryAccordion');
+const questionForm = document.getElementById('questionForm');
+const questionInput = document.getElementById('questionInput');
+const questionFeedback = document.getElementById('questionFeedback');
 const historyList = document.getElementById('historyList');
 const modalOverlay = document.getElementById('modalOverlay');
 const modalContent = document.getElementById('modalContent');
 const statsBtn = document.getElementById('statsBtn');
 const infoBtn = document.getElementById('infoBtn');
-const homeBtn = document.getElementById('homeBtn');
+const feedbackBtn = document.getElementById('feedbackBtn');
+const testModeBtn = document.getElementById('testModeBtn');
+const unlimitedModeBtn = document.getElementById('unlimitedModeBtn');
 const secretLabel = document.getElementById('secretLabel');
 
 let dailyState = null;
-let expandedCategories = new Set();
+let gameMode = 'daily'; // 'daily' | 'test' | 'unlimited'
+let testUUID = null;
+let playerName = localStorage.getItem('guessBluteName') || '';
 
-const CATEGORY_ORDER = ['Color', 'Appearance', 'Activity', 'Setting', 'Objects'];
+const DEFAULT_PLACEHOLDER = questionInput.placeholder;
 
-const ATTRIBUTE_CATEGORY = {
-  color: 'Color',
-  wearing_glasses: 'Appearance',
-  wearing_hat: 'Appearance',
-  has_mustache: 'Appearance',
-  wearing_clothing: 'Appearance',
-  is_fancy_dressed: 'Appearance',
-  is_in_costume: 'Appearance',
-  has_hair: 'Appearance',
-  eyes_open: 'Appearance',
-  has_eyebrows: 'Appearance',
-  hands_visible: 'Appearance',
-  is_eating_or_drinking: 'Activity',
-  is_doing_sport: 'Activity',
-  is_doing_creative: 'Activity',
-  is_relaxing: 'Activity',
-  is_working: 'Activity',
-  is_traveling: 'Activity',
-  is_celebrating: 'Activity',
-  is_sitting: 'Activity',
-  is_standing: 'Activity',
-  is_outdoors: 'Setting',
-  is_indoors: 'Setting',
-  is_at_beach: 'Setting',
-  is_in_water: 'Setting',
-  with_animal: 'Objects',
-  holding_food: 'Objects',
-  has_hearts: 'Objects',
-  has_music_notes: 'Objects',
-  holding_tool_or_prop: 'Objects',
-};
-
-const MARK_STATES = ['none', 'red', 'yellow'];
-const MARK_LABELS = { none: '', red: 'eliminated', yellow: 'suspect' };
+const MARK_STATES = ['none', 'red', 'yellow', 'green'];
+const MARK_LABELS = { none: '', red: 'eliminated', yellow: 'suspect', green: 'likely' };
 const DOUBLE_CLICK_MS = 300;
 const LONG_PRESS_MS = 500;
+const WRONG_GUESS_SHAKE_MS = 400;
+
+function shakeWrongGuess(cell) {
+  cell.classList.remove('wrong-guess');
+  void cell.offsetWidth; // restart the animation if it's already mid-shake
+  cell.classList.add('wrong-guess');
+  setTimeout(() => cell.classList.remove('wrong-guess'), WRONG_GUESS_SHAKE_MS);
+}
+
+function shakeFeedback() {
+  questionFeedback.classList.remove('shake');
+  void questionFeedback.offsetWidth;
+  questionFeedback.classList.add('shake');
+  setTimeout(() => questionFeedback.classList.remove('shake'), WRONG_GUESS_SHAKE_MS);
+}
+
+function randomExampleQuestion() {
+  const list = BLUTE_DATA.questions;
+  return list[Math.floor(Math.random() * list.length)].text;
+}
 
 function cycleMark(cell, blute) {
   const current = cell.dataset.mark || 'none';
@@ -75,9 +69,14 @@ function getPlayerUUID() {
   return uuid;
 }
 
+function getActiveUUID() {
+  return gameMode === 'test' ? testUUID : getPlayerUUID();
+}
+
 function closeModal() {
   modalOverlay.hidden = true;
   modalContent.innerHTML = '';
+  delete modalOverlay.dataset.blocking;
 }
 
 function openModal(contentEl) {
@@ -144,7 +143,7 @@ function renderGrid(gridBlutes) {
       if (clickTimer) {
         clearTimeout(clickTimer);
         clickTimer = null;
-        handleGuess(blute.id);
+        handleGuess(blute.id, cell);
       } else {
         clickTimer = setTimeout(() => {
           clickTimer = null;
@@ -161,7 +160,7 @@ function renderGrid(gridBlutes) {
         longPressFired = false;
         pressTimer = setTimeout(() => {
           longPressFired = true;
-          if (dailyState && !dailyState.finished) handleGuess(blute.id);
+          if (dailyState && !dailyState.finished) handleGuess(blute.id, cell);
         }, LONG_PRESS_MS);
       },
       { passive: true }
@@ -176,7 +175,7 @@ function renderGrid(gridBlutes) {
       if (!dailyState || dailyState.finished) return;
       if (e.key === 'Enter') {
         e.preventDefault();
-        handleGuess(blute.id);
+        handleGuess(blute.id, cell);
       } else if (e.key === ' ') {
         e.preventDefault();
         cycleMark(cell, blute);
@@ -200,62 +199,10 @@ function evaluateQuestion(blute, question) {
   return blute.attributes[question.attribute] === question.value;
 }
 
-function questionsForCategory(category) {
-  return BLUTE_DATA.questions.filter((q) => ATTRIBUTE_CATEGORY[q.attribute] === category);
-}
-
-function toggleCategory(category) {
-  if (!dailyState || dailyState.finished) return;
-  if (expandedCategories.has(category)) {
-    expandedCategories.delete(category);
-  } else {
-    expandedCategories.add(category);
-  }
-  renderQuestionList();
-}
-
-function renderQuestionList() {
-  const askedIds = new Set(dailyState.history.map((h) => h.id));
-
-  categoryAccordion.innerHTML = '';
-
-  CATEGORY_ORDER.forEach((category) => {
-    const expanded = expandedCategories.has(category);
-
-    const group = document.createElement('div');
-    group.className = 'category-group';
-
-    const toggle = document.createElement('button');
-    toggle.type = 'button';
-    toggle.className = 'category-toggle';
-    toggle.textContent = category;
-    toggle.setAttribute('aria-expanded', String(expanded));
-    toggle.addEventListener('click', () => toggleCategory(category));
-    group.appendChild(toggle);
-
-    if (expanded) {
-      const remaining = questionsForCategory(category).filter((q) => !askedIds.has(q.id));
-      const list = document.createElement('ul');
-      list.className = 'question-list';
-
-      if (remaining.length === 0) {
-        const li = document.createElement('li');
-        li.className = 'question-empty';
-        li.textContent = "You've asked everything here.";
-        list.appendChild(li);
-      } else {
-        remaining.forEach((q) => {
-          const li = document.createElement('li');
-          li.textContent = q.text;
-          li.addEventListener('click', () => askQuestion(q));
-          list.appendChild(li);
-        });
-      }
-
-      group.appendChild(list);
-    }
-
-    categoryAccordion.appendChild(group);
+function getRemainingCandidates(historyEntries) {
+  return dailyState.gridIds.filter((id) => {
+    const blute = BLUTE_DATA.blutes.find((b) => b.id === id);
+    return historyEntries.every((entry) => evaluateQuestion(blute, entry));
   });
 }
 
@@ -270,28 +217,75 @@ function renderHistory() {
     return;
   }
 
-  for (let i = dailyState.history.length - 1; i >= 0; i--) {
-    const entry = dailyState.history[i];
+  dailyState.history.forEach((entry) => {
     const li = document.createElement('li');
     const q = document.createElement('span');
+    q.className = 'history-question';
     q.textContent = entry.text;
+    const dots = document.createElement('span');
+    dots.className = 'history-dots';
     const a = document.createElement('span');
     a.textContent = entry.answer ? 'Yes' : 'No';
     a.className = entry.answer ? 'answer-yes' : 'answer-no';
     li.appendChild(q);
+    li.appendChild(dots);
     li.appendChild(a);
     historyList.appendChild(li);
-  }
+  });
+
+  historyList.scrollTop = historyList.scrollHeight;
 }
 
-function askQuestion(question) {
+function showQuestionFeedback(message) {
+  questionFeedback.textContent = message;
+}
+
+function askQuestion() {
   if (!dailyState || dailyState.finished) return;
 
-  const answer = evaluateQuestion(getSecretBlute(), question);
-  dailyState.history.push({ id: question.id, text: question.text, answer });
+  const rawText = questionInput.value.trim();
+  if (!rawText) return;
+
+  const result = interpretQuestion(rawText);
+
+  if (!result.ok) {
+    questionInput.value = '';
+    questionInput.placeholder = `Try something like: "${randomExampleQuestion()}"`;
+    showQuestionFeedback("Couldn't quite figure out what that's asking — try the example above.");
+    shakeFeedback();
+    logUnansweredQuestion(dailyState.date, getActiveUUID(), rawText, playerName).catch(() => {});
+    return;
+  }
+
+  const askedKey = `${result.attribute}:${result.value}`;
+  if (dailyState.askedKeys.has(askedKey)) {
+    showQuestionFeedback("You've already asked something that answers that.");
+    shakeFeedback();
+    return;
+  }
+
+  const remainingBefore = getRemainingCandidates(dailyState.history);
+  const answer = evaluateQuestion(getSecretBlute(), result);
+  dailyState.askedKeys.add(askedKey);
+  dailyState.history.push({ text: rawText, attribute: result.attribute, value: result.value, answer });
   dailyState.questionsAsked += 1;
 
-  renderQuestionList();
+  const remainingAfter = getRemainingCandidates(dailyState.history);
+  const eliminated = remainingBefore.filter((id) => !remainingAfter.includes(id));
+  logQuestionEvent(dailyState.date, getActiveUUID(), {
+    name: playerName,
+    secretId: dailyState.secretId,
+    rawText,
+    attribute: result.attribute,
+    value: result.value,
+    answer,
+    remainingBefore,
+    remainingAfter,
+    eliminated,
+  }).catch(() => {});
+
+  questionInput.value = '';
+  showQuestionFeedback('');
   renderHistory();
 }
 
@@ -343,30 +337,114 @@ function renderStatsModal(date, yourScore) {
     });
 }
 
+function renderNameModal(onSubmit) {
+  const wrap = document.createElement('div');
+  wrap.innerHTML = `
+    <h2>Welcome!</h2>
+    <p>What should we call you?</p>
+    <input type="text" id="nameInput" placeholder="Your name" autocomplete="off" />
+  `;
+
+  const submit = () => {
+    const input = document.getElementById('nameInput');
+    const name = input.value.trim() || 'Anonymous';
+    playerName = name;
+    localStorage.setItem('guessBluteName', name);
+    closeModal();
+    onSubmit();
+  };
+
+  wrap.appendChild(makeButton('Start', submit));
+  openModal(wrap);
+  modalOverlay.dataset.blocking = 'true';
+
+  const input = document.getElementById('nameInput');
+  input.value = playerName;
+  input.focus();
+  input.select();
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      submit();
+    }
+  });
+}
+
+function renderFeedbackModal() {
+  const wrap = document.createElement('div');
+  wrap.innerHTML = `
+    <h2>Feedback</h2>
+    <p>Found a bug, have a question idea, or just want to say hi?</p>
+    <textarea id="feedbackText" rows="4" placeholder="Type your feedback here..."></textarea>
+  `;
+
+  wrap.appendChild(
+    makeButton('Send', () => {
+      const message = document.getElementById('feedbackText').value.trim();
+      if (!message) return;
+
+      const date = dailyState ? dailyState.date : getTodayString();
+      submitFeedback(date, getPlayerUUID(), message, playerName)
+        .then(() => {
+          wrap.innerHTML = '<h2>Thanks!</h2><p>Your feedback was sent.</p>';
+          wrap.appendChild(makeButton('Close', closeModal));
+        })
+        .catch(() => {
+          wrap.innerHTML = '<h2>Oops</h2><p>Could not send feedback right now. Please try again later.</p>';
+          wrap.appendChild(makeButton('Close', closeModal));
+        });
+    })
+  );
+
+  openModal(wrap);
+}
+
 function renderRulesModal() {
   const wrap = document.createElement('div');
   wrap.innerHTML = `
     <h2>How to Play</h2>
     <p>Every day there's one secret blute hiding among the 25 on the grid.</p>
     <ul>
-      <li>Ask yes/no questions to narrow it down — tap a category to expand it, then tap a question. Your answers show up on the right.</li>
-      <li>Click a cell once to mark it red (eliminated) or yellow (suspect); click again to cycle.</li>
-      <li>Double-click (or long-press on touch) a cell to lock in your guess.</li>
+      <li>Ask yes/no questions to narrow it down — type any question and hit enter. Your answers show up below in History.</li>
+      <li>Click a cell to cycle it through red (eliminated), yellow (suspect), and green (likely).</li>
+      <li>Double-click (or long-press on touch) a cell to lock in your guess. A wrong guess just shakes — no penalty, try again.</li>
       <li>Your score is the number of questions you asked — fewer is better.</li>
       <li>One puzzle per day. Check the stats button to see today's average and best score.</li>
+      <li>Want to keep playing after today's puzzle? Toggle unlimited mode for random practice boards that don't count toward the leaderboard.</li>
     </ul>
   `;
   wrap.appendChild(makeButton('Close', closeModal));
   openModal(wrap);
 }
 
+function startRandomBoard(mode) {
+  gameMode = mode;
+  if (mode === 'test') testUUID = crypto.randomUUID();
+
+  closeModal();
+  grid.classList.remove('locked');
+  questionWrap.classList.remove('locked');
+  buildGame(getTodayString(), Math.random);
+}
+
 function handleWin() {
   const questionsAsked = dailyState.questionsAsked;
-  const uuid = getPlayerUUID();
 
   lockBoard();
 
-  submitScore(dailyState.date, uuid, questionsAsked)
+  if (gameMode === 'test' || gameMode === 'unlimited') {
+    const wrap = document.createElement('div');
+    const plural = questionsAsked === 1 ? '' : 's';
+    const label = gameMode === 'test' ? 'test' : 'practice';
+    wrap.innerHTML = `<h2>Solved!</h2><p>Got it in ${questionsAsked} question${plural}. Loading a new ${label} board…</p>`;
+    openModal(wrap);
+    setTimeout(() => startRandomBoard(gameMode), 1500);
+    return;
+  }
+
+  const uuid = getPlayerUUID();
+
+  submitScore(dailyState.date, uuid, questionsAsked, playerName)
     .then(() => renderStatsModal(dailyState.date, questionsAsked))
     .catch(() => {
       const wrap = document.createElement('div');
@@ -376,12 +454,14 @@ function handleWin() {
     });
 }
 
-function handleGuess(guessId) {
+function handleGuess(guessId, cell) {
   if (!dailyState || dailyState.finished) return;
 
   if (guessId === dailyState.secretId) {
     dailyState.finished = true;
     handleWin();
+  } else if (cell) {
+    shakeWrongGuess(cell);
   }
 }
 
@@ -400,10 +480,12 @@ function buildGame(date, rand) {
     secretId: secretBlute.id,
     history: [],
     questionsAsked: 0,
+    askedKeys: new Set(),
   };
 
-  expandedCategories = new Set();
-  renderQuestionList();
+  questionInput.value = '';
+  questionInput.placeholder = DEFAULT_PLACEHOLDER;
+  showQuestionFeedback('');
   renderHistory();
   syncGridWidth();
 }
@@ -427,29 +509,44 @@ statsBtn.addEventListener('click', () => {
 });
 
 infoBtn.addEventListener('click', renderRulesModal);
+feedbackBtn.addEventListener('click', renderFeedbackModal);
 
-if (homeBtn) {
-  homeBtn.addEventListener('click', () => {
-    const date = dailyState ? dailyState.date : getTodayString();
-    const uuid = getPlayerUUID();
+questionForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  askQuestion();
+});
 
-    clearPlayerScore(date, uuid).finally(() => {
-      closeModal();
-      grid.classList.remove('locked');
-      questionWrap.classList.remove('locked');
-      buildGame(getTodayString(), Math.random);
-    });
-  });
+function updateModeButtons() {
+  testModeBtn.classList.toggle('active', gameMode === 'test');
+  unlimitedModeBtn.classList.toggle('active', gameMode === 'unlimited');
 }
 
+function toggleMode(mode) {
+  closeModal();
+  grid.classList.remove('locked');
+  questionWrap.classList.remove('locked');
+
+  if (gameMode === mode) {
+    gameMode = 'daily';
+    initDailyGame();
+  } else {
+    startRandomBoard(mode);
+  }
+
+  updateModeButtons();
+}
+
+testModeBtn.addEventListener('click', () => toggleMode('test'));
+unlimitedModeBtn.addEventListener('click', () => toggleMode('unlimited'));
+
 modalOverlay.addEventListener('click', (e) => {
-  if (e.target === modalOverlay) closeModal();
+  if (e.target === modalOverlay && !modalOverlay.dataset.blocking) closeModal();
 });
 
 const frameProbe = new Image();
 frameProbe.onload = () => {
   document.documentElement.style.setProperty('--card-ratio', frameProbe.naturalWidth / frameProbe.naturalHeight);
-  initDailyGame();
   new ResizeObserver(syncGridWidth).observe(grid);
+  renderNameModal(initDailyGame);
 };
 frameProbe.src = CARD_FRAME;

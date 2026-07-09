@@ -1,5 +1,10 @@
-function submitScore(date, uuid, questionsAsked) {
-  return db.ref(`leaderboard/${date}/${uuid}`).set(questionsAsked);
+function extractScore(entry) {
+  // Older entries were stored as a raw number; newer ones as { questionsAsked, name }.
+  return typeof entry === 'number' ? entry : entry.questionsAsked;
+}
+
+function submitScore(date, uuid, questionsAsked, name) {
+  return db.ref(`leaderboard/${date}/${uuid}`).set({ questionsAsked, name, uuid });
 }
 
 function clearPlayerScore(date, uuid) {
@@ -10,7 +15,7 @@ function getPlayerScore(date, uuid) {
   return db
     .ref(`leaderboard/${date}/${uuid}`)
     .get()
-    .then((snapshot) => (snapshot.exists() ? snapshot.val() : null));
+    .then((snapshot) => (snapshot.exists() ? extractScore(snapshot.val()) : null));
 }
 
 function getStats(date) {
@@ -19,7 +24,7 @@ function getStats(date) {
     .get()
     .then((snapshot) => {
       const data = snapshot.val() || {};
-      const scores = Object.values(data);
+      const scores = Object.values(data).map(extractScore);
 
       if (scores.length === 0) {
         return { count: 0, average: null, best: null };
