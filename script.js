@@ -19,6 +19,7 @@ let dailyState = null;
 let gameMode = 'daily'; // 'daily' | 'test' | 'unlimited'
 let testUUID = null;
 let playerName = localStorage.getItem('guessBluteName') || '';
+let lastQuestionRef = null;
 
 const DEFAULT_PLACEHOLDER = questionInput.placeholder;
 
@@ -27,6 +28,7 @@ const MARK_LABELS = { none: '', red: 'eliminated', yellow: 'suspect', green: 'li
 const DOUBLE_CLICK_MS = 300;
 const LONG_PRESS_MS = 500;
 const WRONG_GUESS_SHAKE_MS = 400;
+const COLOR_BONUS = 2;
 
 function shakeWrongGuess(cell) {
   cell.classList.remove('wrong-guess');
@@ -199,11 +201,33 @@ function evaluateQuestion(blute, question) {
   return blute.attributes[question.attribute] === question.value;
 }
 
-function getRemainingCandidates(historyEntries) {
-  return dailyState.gridIds.filter((id) => {
+function getBoardAnswers(question) {
+  const answers = {};
+  dailyState.gridIds.forEach((id) => {
     const blute = BLUTE_DATA.blutes.find((b) => b.id === id);
-    return historyEntries.every((entry) => evaluateQuestion(blute, entry));
+    answers[id] = evaluateQuestion(blute, question);
   });
+  return answers;
+}
+
+function getBoardMarks() {
+  const marks = {};
+  Array.from(grid.children).forEach((cell) => {
+    marks[cell.dataset.id] = cell.dataset.mark || 'none';
+  });
+  return marks;
+}
+
+// Marks are a manual, player-driven action — nothing about answering a
+// question changes them. So "marksAfter" for a question isn't knowable until
+// the player's next action (another question, or a winning guess). This
+// patches the previously-logged entry at that point instead of writing a
+// same-instant (and therefore always-identical) snapshot.
+function finalizeLastQuestionMarks() {
+  if (!lastQuestionRef) return;
+  const ref = lastQuestionRef;
+  lastQuestionRef = null;
+  ref.update({ marksAfter: getBoardMarks() }).catch(() => {});
 }
 
 function renderHistory() {
@@ -246,14 +270,25 @@ function askQuestion() {
   const rawText = questionInput.value.trim();
   if (!rawText) return;
 
+  finalizeLastQuestionMarks();
+
+  const marksBefore = getBoardMarks();
   const result = interpretQuestion(rawText);
 
   if (!result.ok) {
     questionInput.value = '';
+
+    if (result.reason === 'multiple') {
+      showQuestionFeedback('One question at a time, please — try splitting that up.');
+      shakeFeedback();
+      logUnansweredQuestion(dailyState.date, getActiveUUID(), rawText, playerName, 'multiple').catch(() => {});
+      return;
+    }
+
     questionInput.placeholder = `Try something like: "${randomExampleQuestion()}"`;
     showQuestionFeedback("Couldn't quite figure out what that's asking — try the example above.");
     shakeFeedback();
-    logUnansweredQuestion(dailyState.date, getActiveUUID(), rawText, playerName).catch(() => {});
+    logUnansweredQuestion(dailyState.date, getActiveUUID(), rawText, playerName, 'unmatched').catch(() => {});
     return;
   }
 
@@ -264,32 +299,31 @@ function askQuestion() {
     return;
   }
 
-  const remainingBefore = getRemainingCandidates(dailyState.history);
   const answer = evaluateQuestion(getSecretBlute(), result);
+  const boardAnswers = getBoardAnswers(result);
   dailyState.askedKeys.add(askedKey);
   dailyState.history.push({ text: rawText, attribute: result.attribute, value: result.value, answer });
   dailyState.questionsAsked += 1;
 
-  const remainingAfter = getRemainingCandidates(dailyState.history);
-  const eliminated = remainingBefore.filter((id) => !remainingAfter.includes(id));
-  logQuestionEvent(dailyState.date, getActiveUUID(), {
+  const ref = logQuestionEvent(dailyState.date, getActiveUUID(), {
     name: playerName,
     secretId: dailyState.secretId,
     rawText,
     attribute: result.attribute,
     value: result.value,
     answer,
-    remainingBefore,
-    remainingAfter,
-    eliminated,
-  }).catch(() => {});
+    boardAnswers,
+    marksBefore,
+  });
+  ref.catch(() => {});
+  lastQuestionRef = ref;
 
   questionInput.value = '';
   showQuestionFeedback('');
   renderHistory();
 }
 
-function renderStatsModal(date, yourScore) {
+function renderStatsModal(date, yourScore, colorBonus) {
   const wrap = document.createElement('div');
   wrap.innerHTML = `<h2>Today's Stats</h2><p>Loading…</p>`;
   openModal(wrap);
@@ -313,6 +347,7 @@ function renderStatsModal(date, yourScore) {
         ];
         if (typeof yourScore === 'number') {
           rows.push(['Your score', yourScore]);
+          if (colorBonus) rows.push(['No-color bonus', `-${colorBonus}`]);
         }
 
         rows.forEach(([label, value]) => {
@@ -405,10 +440,10 @@ function renderRulesModal() {
     <h2>How to Play</h2>
     <p>Every day there's one secret blute hiding among the 25 on the grid.</p>
     <ul>
-      <li>Ask yes/no questions to narrow it down — type any question and hit enter. Your answers show up below in History.</li>
+      <li>Ask yes/no questions to narrow it down — type one question at a time and hit enter. Your answers show up below in History.</li>
       <li>Click a cell to cycle it through red (eliminated), yellow (suspect), and green (likely).</li>
       <li>Double-click (or long-press on touch) a cell to lock in your guess. A wrong guess just shakes — no penalty, try again.</li>
-      <li>Your score is the number of questions you asked — fewer is better.</li>
+      <li>Your score is the number of questions you asked — fewer is better. Never ask about color and you'll earn a bonus that lowers your score even further.</li>
       <li>One puzzle per day. Check the stats button to see today's average and best score.</li>
       <li>Want to keep playing after today's puzzle? Toggle unlimited mode for random practice boards that don't count toward the leaderboard.</li>
     </ul>
@@ -428,6 +463,8 @@ function startRandomBoard(mode) {
 }
 
 function handleWin() {
+  finalizeLastQuestionMarks();
+
   const questionsAsked = dailyState.questionsAsked;
 
   lockBoard();
@@ -443,9 +480,12 @@ function handleWin() {
   }
 
   const uuid = getPlayerUUID();
+  const usedColor = dailyState.history.some((entry) => entry.attribute === 'color');
+  const colorBonus = usedColor ? 0 : COLOR_BONUS;
+  const finalScore = Math.max(0, questionsAsked - colorBonus);
 
-  submitScore(dailyState.date, uuid, questionsAsked, playerName)
-    .then(() => renderStatsModal(dailyState.date, questionsAsked))
+  submitScore(dailyState.date, uuid, finalScore, playerName, { rawQuestionsAsked: questionsAsked, colorBonus })
+    .then(() => renderStatsModal(dailyState.date, finalScore, colorBonus))
     .catch(() => {
       const wrap = document.createElement('div');
       wrap.innerHTML = '<h2>Oops</h2><p>Could not submit your score. Please try again later.</p>';
@@ -466,6 +506,8 @@ function handleGuess(guessId, cell) {
 }
 
 function buildGame(date, rand) {
+  finalizeLastQuestionMarks();
+
   const playable = BLUTE_DATA.blutes.filter((b) => b.is_blute);
   const gridBlutes = shuffle(playable, rand).slice(0, 25);
   const secretIndex = Math.floor(rand() * 25);

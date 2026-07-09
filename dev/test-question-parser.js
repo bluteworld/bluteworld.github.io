@@ -194,7 +194,27 @@ const cases = [
   ['is it beach', 'is_at_beach', true],
 ];
 
+// Genuinely compound questions (two distinct attributes) that must be
+// rejected with reason: 'multiple' rather than silently answering only one.
+const multiQuestionCases = [
+  'is it yellow and wearing a hat',
+  'is it happy and holding a book',
+  'is it sitting and confused',
+];
+
+// Phrasings where a shorter keyword incidentally sits inside a longer,
+// higher-priority phrase for a DIFFERENT attribute — must NOT be flagged as
+// multiple (the overlap-dedup logic should suppress the shorter one).
+const overlapNotMultiCases = [
+  ['is it wearing an eye mask', 'wearing_glasses', true],
+  ['is it working out', 'is_doing_sport', true],
+  ['is it dressed up fancy', 'is_fancy_dressed', true],
+  ['is it playing an instrument', 'holding_musical_instrument', true],
+  ['is there a heart floating', 'has_hearts', true],
+];
+
 let pass = 0;
+let total = cases.length + multiQuestionCases.length + overlapNotMultiCases.length;
 const failures = [];
 
 for (const [text, expectedAttr, expectedValue] of cases) {
@@ -207,7 +227,27 @@ for (const [text, expectedAttr, expectedValue] of cases) {
   }
 }
 
-console.log(`${pass}/${cases.length} passed`);
+for (const text of multiQuestionCases) {
+  const result = interpretQuestion(text);
+  const ok = !result.ok && result.reason === 'multiple';
+  if (ok) {
+    pass += 1;
+  } else {
+    failures.push({ text, expectedAttr: 'reason=multiple', expectedValue: '', got: result });
+  }
+}
+
+for (const [text, expectedAttr, expectedValue] of overlapNotMultiCases) {
+  const result = interpretQuestion(text);
+  const ok = result.ok && result.attribute === expectedAttr && result.value === expectedValue;
+  if (ok) {
+    pass += 1;
+  } else {
+    failures.push({ text, expectedAttr, expectedValue, got: result });
+  }
+}
+
+console.log(`${pass}/${total} passed`);
 if (failures.length) {
   console.log('\nFailures:');
   failures.forEach((f) => {

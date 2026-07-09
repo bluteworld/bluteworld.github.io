@@ -52,7 +52,7 @@ const ATTRIBUTE_KEYWORDS = {
     no: ['not indoors', 'not inside'],
   },
   has_hearts: {
-    yes: ['hearts', 'heart', 'floating hearts', 'love hearts', 'heart shapes'],
+    yes: ['hearts', 'heart', 'floating hearts', 'heart floating', 'hearts floating', 'love hearts', 'heart shapes'],
     no: ['no hearts', 'without hearts'],
   },
   has_music_notes: {
@@ -543,15 +543,40 @@ function interpretQuestion(rawText) {
   const normalized = _normalize(rawText || '');
   if (!normalized) return { ok: false };
 
+  // Scan every candidate (not just the first hit) so a question that touches
+  // two different attributes ("is it yellow and wearing a hat") can be caught
+  // as a compound question rather than silently answering only the first.
+  // _candidates is sorted longest-phrase-first, so accepting matches in that
+  // order and skipping anything whose span overlaps an already-accepted match
+  // means a shorter phrase that's merely part of a longer one already claimed
+  // (e.g. "mask" inside "eye mask", "playing" inside "playing an instrument")
+  // doesn't get miscounted as a second, unrelated question.
+  const matches = [];
   for (const candidate of _candidates) {
     const match = candidate.regex.exec(normalized);
     if (!match) continue;
 
+    const start = match.index;
+    const end = start + match[0].length;
+    const overlapsAccepted = matches.some((m) => start < m.end && end > m.start);
+    if (overlapsAccepted) continue;
+
+    matches.push({ candidate, index: start, start, end });
+  }
+
+  const distinctAttributes = new Set(matches.map((m) => m.candidate.attribute));
+  if (distinctAttributes.size > 1) {
+    return { ok: false, reason: 'multiple' };
+  }
+
+  if (matches.length > 0) {
+    // _candidates is sorted by phrase length descending, and matches preserves
+    // that order, so the first entry is already the most specific phrase.
+    const { candidate, index } = matches[0];
     let { value } = candidate;
-    if (candidate.attribute !== 'color' && value === true && _hasNegationBefore(normalized, match.index)) {
+    if (candidate.attribute !== 'color' && value === true && _hasNegationBefore(normalized, index)) {
       value = false;
     }
-
     return { ok: true, attribute: candidate.attribute, value, matchedPhrase: candidate.phrase };
   }
 

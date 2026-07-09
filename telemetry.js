@@ -6,11 +6,12 @@ function logQuestionEvent(date, uuid, entry) {
   });
 }
 
-function logUnansweredQuestion(date, uuid, rawText, name) {
+function logUnansweredQuestion(date, uuid, rawText, name, reason) {
   return db.ref(`unansweredQuestions/${date}/${uuid}`).push({
     text: rawText,
     name,
     uuid,
+    reason: reason || 'unmatched',
     timestamp: firebase.database.ServerValue.TIMESTAMP,
   });
 }

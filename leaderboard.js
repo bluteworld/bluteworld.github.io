@@ -3,8 +3,8 @@ function extractScore(entry) {
   return typeof entry === 'number' ? entry : entry.questionsAsked;
 }
 
-function submitScore(date, uuid, questionsAsked, name) {
-  return db.ref(`leaderboard/${date}/${uuid}`).set({ questionsAsked, name, uuid });
+function submitScore(date, uuid, questionsAsked, name, extra = {}) {
+  return db.ref(`leaderboard/${date}/${uuid}`).set({ questionsAsked, name, uuid, ...extra });
 }
 
 function clearPlayerScore(date, uuid) {
