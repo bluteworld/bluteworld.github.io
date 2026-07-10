@@ -345,17 +345,18 @@ function renderStatsModal(date, yourScore, colorBonus) {
 
       const rows = [];
       if (typeof yourScore === 'number') {
-        rows.push(['Your score', yourScore]);
-        rows.push(['No-color bonus', colorBonus ? `-${colorBonus}` : 0]);
+        rows.push(['Your score', yourScore, true]);
+        rows.push(['No-color bonus', colorBonus ? `-${colorBonus}` : 0, Boolean(colorBonus)]);
       }
       rows.push(
         ['Best score', stats.best],
-        ['Average questions', stats.average.toFixed(1)],
+        ['Average questions', Math.round(stats.average)],
         ['Players today', stats.count]
       );
 
-      rows.forEach(([label, value]) => {
+      rows.forEach(([label, value, bold]) => {
         const li = document.createElement('li');
+        if (bold) li.classList.add('stat-highlight');
         const labelEl = document.createElement('span');
         labelEl.textContent = label;
         const valueEl = document.createElement('span');

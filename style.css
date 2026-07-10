@@ -462,6 +462,10 @@ body {
   color: #7a4b2a;
 }
 
+.leaderboard-list li.stat-highlight {
+  font-weight: bold;
+}
+
 .playtest-section {
   margin-top: 1vmin;
   padding-top: 2vmin;
