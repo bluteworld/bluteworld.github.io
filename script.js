@@ -11,13 +11,11 @@ const modalContent = document.getElementById('modalContent');
 const statsBtn = document.getElementById('statsBtn');
 const infoBtn = document.getElementById('infoBtn');
 const feedbackBtn = document.getElementById('feedbackBtn');
-const testModeBtn = document.getElementById('testModeBtn');
 const unlimitedModeBtn = document.getElementById('unlimitedModeBtn');
 const secretLabel = document.getElementById('secretLabel');
 
 let dailyState = null;
-let gameMode = 'daily'; // 'daily' | 'test' | 'unlimited'
-let testUUID = null;
+let gameMode = 'daily'; // 'daily' | 'unlimited'
 let playerName = localStorage.getItem('guessBluteName') || '';
 let lastQuestionRef = null;
 
@@ -71,20 +69,23 @@ function getPlayerUUID() {
   return uuid;
 }
 
-function getActiveUUID() {
-  return gameMode === 'test' ? testUUID : getPlayerUUID();
-}
+let modalOnDismiss = null;
 
 function closeModal() {
   modalOverlay.hidden = true;
   modalContent.innerHTML = '';
-  delete modalOverlay.dataset.blocking;
+  modalContent.classList.remove('tutorial-modal');
+  modalOnDismiss = null;
 }
 
-function openModal(contentEl) {
+// onDismiss (optional) fires if the modal is closed by clicking outside it —
+// use this when closing that way should still trigger whatever the modal's
+// buttons would have (e.g. the name prompt still starting the game).
+function openModal(contentEl, onDismiss) {
   modalContent.innerHTML = '';
   modalContent.appendChild(contentEl);
   modalOverlay.hidden = false;
+  modalOnDismiss = onDismiss || null;
 }
 
 function makeButton(label, onClick) {
@@ -281,14 +282,14 @@ function askQuestion() {
     if (result.reason === 'multiple') {
       showQuestionFeedback('One question at a time, please — try splitting that up.');
       shakeFeedback();
-      logUnansweredQuestion(dailyState.date, getActiveUUID(), rawText, playerName, 'multiple').catch(() => {});
+      logUnansweredQuestion(dailyState.date, getPlayerUUID(), rawText, playerName, 'multiple').catch(() => {});
       return;
     }
 
     questionInput.placeholder = `Try something like: "${randomExampleQuestion()}"`;
     showQuestionFeedback("Couldn't quite figure out what that's asking — try the example above.");
     shakeFeedback();
-    logUnansweredQuestion(dailyState.date, getActiveUUID(), rawText, playerName, 'unmatched').catch(() => {});
+    logUnansweredQuestion(dailyState.date, getPlayerUUID(), rawText, playerName, 'unmatched').catch(() => {});
     return;
   }
 
@@ -305,7 +306,7 @@ function askQuestion() {
   dailyState.history.push({ text: rawText, attribute: result.attribute, value: result.value, answer });
   dailyState.questionsAsked += 1;
 
-  const ref = logQuestionEvent(dailyState.date, getActiveUUID(), {
+  const ref = logQuestionEvent(dailyState.date, getPlayerUUID(), {
     name: playerName,
     secretId: dailyState.secretId,
     rawText,
@@ -336,34 +337,59 @@ function renderStatsModal(date, yourScore, colorBonus) {
         const p = document.createElement('p');
         p.textContent = 'No scores yet today.';
         wrap.appendChild(p);
-      } else {
-        const list = document.createElement('ul');
-        list.className = 'leaderboard-list';
-
-        const rows = [
-          ['Players today', stats.count],
-          ['Average questions', stats.average.toFixed(1)],
-          ['Best score', stats.best],
-        ];
-        if (typeof yourScore === 'number') {
-          rows.push(['Your score', yourScore]);
-          if (colorBonus) rows.push(['No-color bonus', `-${colorBonus}`]);
-        }
-
-        rows.forEach(([label, value]) => {
-          const li = document.createElement('li');
-          const labelEl = document.createElement('span');
-          labelEl.textContent = label;
-          const valueEl = document.createElement('span');
-          valueEl.textContent = value;
-          li.appendChild(labelEl);
-          li.appendChild(valueEl);
-          list.appendChild(li);
-        });
-
-        wrap.appendChild(list);
+        return;
       }
 
+      const list = document.createElement('ul');
+      list.className = 'leaderboard-list';
+
+      const rows = [];
+      if (typeof yourScore === 'number') {
+        rows.push(['Your score', yourScore]);
+        rows.push(['No-color bonus', colorBonus ? `-${colorBonus}` : 0]);
+      }
+      rows.push(
+        ['Best score', stats.best],
+        ['Average questions', stats.average.toFixed(1)],
+        ['Players today', stats.count]
+      );
+
+      rows.forEach(([label, value]) => {
+        const li = document.createElement('li');
+        const labelEl = document.createElement('span');
+        labelEl.textContent = label;
+        const valueEl = document.createElement('span');
+        valueEl.textContent = value;
+        li.appendChild(labelEl);
+        li.appendChild(valueEl);
+        list.appendChild(li);
+      });
+
+      wrap.appendChild(list);
+
+      // Playtesting only — remove before public launch.
+      return getBestScoreEntry(date)
+        .then((best) => (best ? getQuestionLog(date, best.uuid) : []))
+        .then((entries) => {
+          if (!entries.length) return;
+          const section = document.createElement('div');
+          section.className = 'playtest-section';
+          const heading = document.createElement('h3');
+          heading.textContent = "Playtesting only — best score's questions";
+          section.appendChild(heading);
+
+          const ol = document.createElement('ol');
+          entries.forEach((entry) => {
+            const li = document.createElement('li');
+            li.textContent = `${entry.rawText} — ${entry.answer ? 'Yes' : 'No'}`;
+            ol.appendChild(li);
+          });
+          section.appendChild(ol);
+          wrap.appendChild(section);
+        })
+        .catch(() => {});
+    })
+    .then(() => {
       wrap.appendChild(makeButton('Close', closeModal));
     })
     .catch(() => {
@@ -375,32 +401,47 @@ function renderStatsModal(date, yourScore, colorBonus) {
 function renderNameModal(onSubmit) {
   const wrap = document.createElement('div');
   wrap.innerHTML = `
+    <button type="button" class="modal-close" id="nameModalClose" aria-label="Close">&times;</button>
     <h2>Welcome!</h2>
     <p>What should we call you?</p>
     <input type="text" id="nameInput" placeholder="Your name" autocomplete="off" />
   `;
 
-  const submit = () => {
-    const input = document.getElementById('nameInput');
-    const name = input.value.trim() || 'Anonymous';
-    playerName = name;
-    localStorage.setItem('guessBluteName', name);
-    closeModal();
+  // Grab direct references now, before this content ever gets appended (and
+  // later removed by closeModal(), which would make a getElementById lookup
+  // at finish-time return null since the input would no longer be in the DOM).
+  const input = wrap.querySelector('#nameInput');
+  const closeBtn = wrap.querySelector('#nameModalClose');
+
+  // Called whether the player fills in a name, leaves it blank, or dismisses
+  // the dialog entirely (X button or clicking outside) — a name is a nice-to-
+  // have for identifying data later, not required to play.
+  const finish = () => {
+    const name = input.value.trim();
+    if (name) {
+      playerName = name;
+      localStorage.setItem('guessBluteName', name);
+    }
     onSubmit();
   };
 
-  wrap.appendChild(makeButton('Start', submit));
-  openModal(wrap);
-  modalOverlay.dataset.blocking = 'true';
+  const submitAndClose = () => {
+    closeModal();
+    finish();
+  };
 
-  const input = document.getElementById('nameInput');
+  wrap.appendChild(makeButton('Start', submitAndClose));
+  openModal(wrap, finish);
+
+  closeBtn.addEventListener('click', submitAndClose);
+
   input.value = playerName;
   input.focus();
   input.select();
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      submit();
+      submitAndClose();
     }
   });
 }
@@ -434,27 +475,150 @@ function renderFeedbackModal() {
   openModal(wrap);
 }
 
-function renderRulesModal() {
-  const wrap = document.createElement('div');
-  wrap.innerHTML = `
-    <h2>How to Play</h2>
-    <p>Every day there's one secret blute hiding among the 25 on the grid.</p>
-    <ul>
-      <li>Ask yes/no questions to narrow it down — type one question at a time and hit enter. Your answers show up below in History.</li>
-      <li>Click a cell to cycle it through red (eliminated), yellow (suspect), and green (likely).</li>
-      <li>Double-click (or long-press on touch) a cell to lock in your guess. A wrong guess just shakes — no penalty, try again.</li>
-      <li>Your score is the number of questions you asked — fewer is better. Never ask about color and you'll earn a bonus that lowers your score even further.</li>
-      <li>One puzzle per day. Check the stats button to see today's average and best score.</li>
-      <li>Want to keep playing after today's puzzle? Toggle unlimited mode for random practice boards that don't count toward the leaderboard.</li>
-    </ul>
-  `;
-  wrap.appendChild(makeButton('Close', closeModal));
-  openModal(wrap);
+const TUTORIAL_SLIDES = [
+  {
+    image: 'secret.png',
+    title: 'Guess the Secret Blute',
+    body: "Every day, one of the 25 blutes on the board is the secret one. Your job: figure out which, using as few questions as possible.",
+  },
+  {
+    visual: 'ask',
+    title: 'Ask Yes/No Questions',
+    body: 'Type any question and hit enter. Ask one question at a time; your answers show up in History.',
+  },
+  {
+    visual: 'marks',
+    title: 'Mark Your Suspects',
+    body: 'Click a cell to cycle it: red (eliminated), yellow (suspect), green (likely). This is just for you to keep track — it doesn’t affect your score.',
+  },
+  {
+    visual: 'shake',
+    title: 'Lock In Your Guess',
+    body: 'Double-click (or long-press on touch) a cell to guess. Guessed wrong? No penalty — the cell just shakes. Try again.',
+  },
+  {
+    image: 'blutes/gamer.png',
+    title: 'Score = Fewer Questions',
+    body: 'Your score is how many questions you asked — lower is better.',
+    highlight: 'Never ask about color and you’ll earn a bonus that lowers your score even further!',
+  },
+  {
+    image: 'blutes/party.png',
+    title: 'One Puzzle a Day',
+    body: 'There’s a new secret blute every day — check the stats button to see today’s average and best. Want more? Toggle unlimited mode anytime for random practice boards (they don’t affect the leaderboard).',
+  },
+];
+
+function renderTutorialSlideVisual(slide) {
+  if (slide.visual === 'marks') {
+    return `
+      <div class="tutorial-marks">
+        <div class="tutorial-mock-cell" data-mark="red"><img src="blutes/glad.PNG" alt="" /></div>
+        <div class="tutorial-mock-cell" data-mark="yellow"><img src="blutes/glad.PNG" alt="" /></div>
+        <div class="tutorial-mock-cell" data-mark="green"><img src="blutes/glad.PNG" alt="" /></div>
+      </div>
+      <div class="tutorial-mark-labels"><span>Eliminated</span><span>Suspect</span><span>Likely</span></div>
+    `;
+  }
+  if (slide.visual === 'shake') {
+    return `<div class="tutorial-mock-cell tutorial-shake-demo"><img src="blutes/glad.PNG" alt="" /></div>`;
+  }
+  if (slide.visual === 'ask') {
+    return `
+      <div class="tutorial-question-box">
+        <div class="tutorial-ask-demo">
+          <span>Is it yellow?</span>
+          <span class="tutorial-ask-cursor"></span>
+        </div>
+        <ul class="history-list tutorial-history-demo">
+          <li><span class="history-question">Does it wear glasses?</span><span class="history-dots"></span><span class="answer-no">No</span></li>
+          <li><span class="history-question">Is it playing a sport?</span><span class="history-dots"></span><span class="answer-yes">Yes</span></li>
+        </ul>
+      </div>
+    `;
+  }
+  return `<img class="tutorial-image" src="${slide.image}" alt="" />`;
 }
 
-function startRandomBoard(mode) {
-  gameMode = mode;
-  if (mode === 'test') testUUID = crypto.randomUUID();
+function renderTutorialModal(onDone) {
+  let index = 0;
+  const wrap = document.createElement('div');
+
+  const finish = () => {
+    closeModal();
+    onDone();
+  };
+
+  function draw() {
+    const slide = TUTORIAL_SLIDES[index];
+    const isLast = index === TUTORIAL_SLIDES.length - 1;
+
+    wrap.innerHTML = `
+      <button type="button" class="modal-close" id="tutorialClose" aria-label="Close">&times;</button>
+      <div class="tutorial-visual">
+        <button type="button" class="tutorial-arrow tutorial-arrow-prev" id="tutorialPrev" aria-label="Previous slide">&lsaquo;</button>
+        ${renderTutorialSlideVisual(slide)}
+        <button type="button" class="tutorial-arrow tutorial-arrow-next" id="tutorialNextArrow" aria-label="Next slide">&rsaquo;</button>
+      </div>
+      <h2>${slide.title}</h2>
+      <p>${slide.body}</p>
+      ${slide.highlight ? `<p class="tutorial-highlight">${slide.highlight}</p>` : ''}
+      <div class="tutorial-dots">
+        ${TUTORIAL_SLIDES.map((_, i) => `<span class="tutorial-dot${i === index ? ' active' : ''}" data-index="${i}"></span>`).join('')}
+      </div>
+      <div class="tutorial-nav"></div>
+    `;
+
+    const prevArrow = wrap.querySelector('#tutorialPrev');
+    const nextArrow = wrap.querySelector('#tutorialNextArrow');
+    prevArrow.disabled = index === 0;
+    prevArrow.addEventListener('click', () => {
+      index -= 1;
+      draw();
+    });
+    nextArrow.disabled = isLast;
+    nextArrow.addEventListener('click', () => {
+      index += 1;
+      draw();
+    });
+
+    if (isLast) {
+      wrap.querySelector('.tutorial-nav').appendChild(makeButton("Let's Play!", finish));
+    }
+
+    wrap.querySelector('.tutorial-dots').addEventListener('click', (e) => {
+      const dot = e.target.closest('.tutorial-dot');
+      if (!dot) return;
+      index = Number(dot.dataset.index);
+      draw();
+    });
+
+    wrap.querySelector('#tutorialClose').addEventListener('click', finish);
+  }
+
+  let touchStartX = null;
+  wrap.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  wrap.addEventListener('touchend', (e) => {
+    if (touchStartX === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX;
+    touchStartX = null;
+    const SWIPE_THRESHOLD = 40;
+    if (deltaX > SWIPE_THRESHOLD && index > 0) {
+      index -= 1;
+      draw();
+    } else if (deltaX < -SWIPE_THRESHOLD && index < TUTORIAL_SLIDES.length - 1) {
+      index += 1;
+      draw();
+    }
+  }, { passive: true });
+
+  draw();
+  openModal(wrap, finish);
+  modalContent.classList.add('tutorial-modal');
+}
+
+function startRandomBoard() {
+  gameMode = 'unlimited';
 
   closeModal();
   grid.classList.remove('locked');
@@ -467,30 +631,55 @@ function handleWin() {
 
   const questionsAsked = dailyState.questionsAsked;
 
-  lockBoard();
-
-  if (gameMode === 'test' || gameMode === 'unlimited') {
+  if (gameMode === 'unlimited') {
+    lockBoard();
     const wrap = document.createElement('div');
     const plural = questionsAsked === 1 ? '' : 's';
-    const label = gameMode === 'test' ? 'test' : 'practice';
-    wrap.innerHTML = `<h2>Solved!</h2><p>Got it in ${questionsAsked} question${plural}. Loading a new ${label} board…</p>`;
+    wrap.innerHTML = `<h2>Solved!</h2><p>Got it in ${questionsAsked} question${plural}. Loading a new practice board…</p>`;
     openModal(wrap);
-    setTimeout(() => startRandomBoard(gameMode), 1500);
+    setTimeout(() => startRandomBoard(), 1500);
+    return;
+  }
+
+  // Daily mode: don't lock the board — you can keep playing after solving it,
+  // only your earliest score of the day is ever recorded.
+  dailyState.finished = false;
+
+  if (dailyState.scoreRecorded) {
+    renderStatsModal(dailyState.date, dailyState.recordedScore, dailyState.recordedColorBonus);
     return;
   }
 
   const uuid = getPlayerUUID();
   const usedColor = dailyState.history.some((entry) => entry.attribute === 'color');
   const colorBonus = usedColor ? 0 : COLOR_BONUS;
-  const finalScore = Math.max(0, questionsAsked - colorBonus);
+  const finalScore = questionsAsked - colorBonus;
 
   submitScore(dailyState.date, uuid, finalScore, playerName, { rawQuestionsAsked: questionsAsked, colorBonus })
-    .then(() => renderStatsModal(dailyState.date, finalScore, colorBonus))
+    .then(() => {
+      dailyState.scoreRecorded = true;
+      dailyState.recordedScore = finalScore;
+      dailyState.recordedColorBonus = colorBonus;
+      renderStatsModal(dailyState.date, finalScore, colorBonus);
+    })
     .catch(() => {
-      const wrap = document.createElement('div');
-      wrap.innerHTML = '<h2>Oops</h2><p>Could not submit your score. Please try again later.</p>';
-      wrap.appendChild(makeButton('Close', closeModal));
-      openModal(wrap);
+      // Most likely cause: another tab/device already recorded today's score for
+      // this uuid first (writes are first-one-wins) — show that instead of an error.
+      getPlayerEntry(dailyState.date, uuid).then((entry) => {
+        if (entry !== null) {
+          const existingScore = extractScore(entry);
+          const existingColorBonus = entry.colorBonus || 0;
+          dailyState.scoreRecorded = true;
+          dailyState.recordedScore = existingScore;
+          dailyState.recordedColorBonus = existingColorBonus;
+          renderStatsModal(dailyState.date, existingScore, existingColorBonus);
+          return;
+        }
+        const wrap = document.createElement('div');
+        wrap.innerHTML = '<h2>Oops</h2><p>Could not submit your score. Please try again later.</p>';
+        wrap.appendChild(makeButton('Close', closeModal));
+        openModal(wrap);
+      });
     });
 }
 
@@ -523,6 +712,9 @@ function buildGame(date, rand) {
     history: [],
     questionsAsked: 0,
     askedKeys: new Set(),
+    scoreRecorded: false,
+    recordedScore: null,
+    recordedColorBonus: 0,
   };
 
   questionInput.value = '';
@@ -536,11 +728,14 @@ function initDailyGame() {
   const today = getTodayString();
   buildGame(today, seededRandom(dateToSeed(today)));
 
-  getPlayerScore(today, getPlayerUUID()).then((existingScore) => {
-    if (existingScore !== null) {
-      dailyState.finished = true;
-      lockBoard();
-      renderStatsModal(today, existingScore);
+  getPlayerEntry(today, getPlayerUUID()).then((entry) => {
+    if (entry !== null && dailyState.date === today) {
+      const existingScore = extractScore(entry);
+      const existingColorBonus = entry.colorBonus || 0;
+      dailyState.scoreRecorded = true;
+      dailyState.recordedScore = existingScore;
+      dailyState.recordedColorBonus = existingColorBonus;
+      renderStatsModal(today, existingScore, existingColorBonus);
     }
   });
 }
@@ -550,7 +745,7 @@ statsBtn.addEventListener('click', () => {
   renderStatsModal(dailyState.date);
 });
 
-infoBtn.addEventListener('click', renderRulesModal);
+infoBtn.addEventListener('click', () => renderTutorialModal(() => {}));
 feedbackBtn.addEventListener('click', renderFeedbackModal);
 
 questionForm.addEventListener('submit', (e) => {
@@ -559,36 +754,48 @@ questionForm.addEventListener('submit', (e) => {
 });
 
 function updateModeButtons() {
-  testModeBtn.classList.toggle('active', gameMode === 'test');
   unlimitedModeBtn.classList.toggle('active', gameMode === 'unlimited');
 }
 
-function toggleMode(mode) {
+function toggleUnlimitedMode() {
   closeModal();
   grid.classList.remove('locked');
   questionWrap.classList.remove('locked');
 
-  if (gameMode === mode) {
+  if (gameMode === 'unlimited') {
     gameMode = 'daily';
     initDailyGame();
   } else {
-    startRandomBoard(mode);
+    startRandomBoard();
   }
 
   updateModeButtons();
 }
 
-testModeBtn.addEventListener('click', () => toggleMode('test'));
-unlimitedModeBtn.addEventListener('click', () => toggleMode('unlimited'));
+unlimitedModeBtn.addEventListener('click', toggleUnlimitedMode);
 
 modalOverlay.addEventListener('click', (e) => {
-  if (e.target === modalOverlay && !modalOverlay.dataset.blocking) closeModal();
+  if (e.target !== modalOverlay) return;
+  const onDismiss = modalOnDismiss;
+  closeModal();
+  if (onDismiss) onDismiss();
 });
+
+const TUTORIAL_SEEN_KEY = 'guessBluteTutorialSeen';
+
+function startGameAfterOnboarding() {
+  if (localStorage.getItem(TUTORIAL_SEEN_KEY)) {
+    initDailyGame();
+    return;
+  }
+  localStorage.setItem(TUTORIAL_SEEN_KEY, 'true');
+  renderTutorialModal(initDailyGame);
+}
 
 const frameProbe = new Image();
 frameProbe.onload = () => {
   document.documentElement.style.setProperty('--card-ratio', frameProbe.naturalWidth / frameProbe.naturalHeight);
   new ResizeObserver(syncGridWidth).observe(grid);
-  renderNameModal(initDailyGame);
+  renderNameModal(startGameAfterOnboarding);
 };
 frameProbe.src = CARD_FRAME;

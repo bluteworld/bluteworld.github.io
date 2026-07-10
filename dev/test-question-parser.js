@@ -163,6 +163,15 @@ const cases = [
   ['are its hands visible', 'hands_visible', true],
   ['are its hands hidden', 'hands_visible', false],
 
+  // mouth_open
+  ['is its mouth open', 'mouth_open', true],
+  ['is its mouth closed', 'mouth_open', false],
+
+  // is_smiling
+  ['is it smiling', 'is_smiling', true],
+  ['is it grinning', 'is_smiling', true],
+  ['is it frowning', 'is_smiling', false],
+
   // newly added attributes (previously unanswerable questions from playtesting)
   ['is it angry', 'is_angry', true],
   ['is it yawning', 'is_sleepy', true],
@@ -200,6 +209,8 @@ const multiQuestionCases = [
   'is it yellow and wearing a hat',
   'is it happy and holding a book',
   'is it sitting and confused',
+  'is it red or green',
+  'is it blue or purple',
 ];
 
 // Phrasings where a shorter keyword incidentally sits inside a longer,
@@ -213,8 +224,16 @@ const overlapNotMultiCases = [
   ['is there a heart floating', 'has_hearts', true],
 ];
 
+// Words the fuzzy-typo fallback must never "correct" into an unrelated
+// keyword, because they're the game's own vocabulary and show up constantly
+// in real questions (e.g. "blute" is edit-distance 1 from "blue").
+const shouldBeUnanswerable = [
+  'which blute is the right one?',
+  'who is the secret blute?',
+];
+
 let pass = 0;
-let total = cases.length + multiQuestionCases.length + overlapNotMultiCases.length;
+let total = cases.length + multiQuestionCases.length + overlapNotMultiCases.length + shouldBeUnanswerable.length;
 const failures = [];
 
 for (const [text, expectedAttr, expectedValue] of cases) {
@@ -244,6 +263,15 @@ for (const [text, expectedAttr, expectedValue] of overlapNotMultiCases) {
     pass += 1;
   } else {
     failures.push({ text, expectedAttr, expectedValue, got: result });
+  }
+}
+
+for (const text of shouldBeUnanswerable) {
+  const result = interpretQuestion(text);
+  if (!result.ok) {
+    pass += 1;
+  } else {
+    failures.push({ text, expectedAttr: 'ok:false', expectedValue: '', got: result });
   }
 }
 

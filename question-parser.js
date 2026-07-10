@@ -111,6 +111,14 @@ const ATTRIBUTE_KEYWORDS = {
     yes: ['hands', 'visible hands', 'can you see its hands', 'hands showing', 'arms and hands'],
     no: ['no hands', 'hands hidden', 'hands not visible'],
   },
+  mouth_open: {
+    yes: ['mouth open', 'open mouth', 'mouth is open', 'mouth agape'],
+    no: ['mouth closed', 'closed mouth', 'mouth shut', 'mouth is closed'],
+  },
+  is_smiling: {
+    yes: ['smiling', 'smile', 'grinning', 'grin'],
+    no: ['not smiling', 'frowning', 'no smile', 'straight face'],
+  },
 
   is_happy: {
     yes: ['happy', 'joyful', 'cheerful', 'glad', 'pleased'],
@@ -515,10 +523,16 @@ function _wordsWithIndices(text) {
   return words;
 }
 
+// Words that must never be treated as a typo of some keyword, no matter how
+// close the edit distance — they're the game's own vocabulary, so they show
+// up constantly in real questions (e.g. "blute" is 1 edit from "blue").
+const FUZZY_IGNORE_WORDS = new Set(['blute', 'blutes']);
+
 function _fuzzyMatch(normalized) {
   let best = null;
 
   for (const { word, index } of _wordsWithIndices(normalized)) {
+    if (FUZZY_IGNORE_WORDS.has(word)) continue;
     const threshold = _typoThreshold(word.length);
     if (threshold === 0) continue;
 
@@ -564,8 +578,21 @@ function interpretQuestion(rawText) {
     matches.push({ candidate, index: start, start, end });
   }
 
-  const distinctAttributes = new Set(matches.map((m) => m.candidate.attribute));
-  if (distinctAttributes.size > 1) {
+  // Two matches can share an attribute but still be a compound question if
+  // they disagree on value ("is it red or green?" — both `color`, but can't
+  // both be true). Synonyms of the same value ("olive or khaki") land in the
+  // same set and are correctly left alone.
+  const valuesByAttribute = new Map();
+  matches.forEach((m) => {
+    const { attribute, value } = m.candidate;
+    if (!valuesByAttribute.has(attribute)) valuesByAttribute.set(attribute, new Set());
+    valuesByAttribute.get(attribute).add(value);
+  });
+
+  const distinctAttributes = valuesByAttribute.size;
+  const hasConflictingValues = Array.from(valuesByAttribute.values()).some((vals) => vals.size > 1);
+
+  if (distinctAttributes > 1 || hasConflictingValues) {
     return { ok: false, reason: 'multiple' };
   }
 

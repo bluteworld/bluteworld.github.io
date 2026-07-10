@@ -1,6 +1,9 @@
 function extractScore(entry) {
-  // Older entries were stored as a raw number; newer ones as { questionsAsked, name }.
-  return typeof entry === 'number' ? entry : entry.questionsAsked;
+  // Oldest entries were a raw number; newer ones are { questionsAsked, name }.
+  // A brief points-based experiment also wrote { points, name } — fall back to it.
+  if (typeof entry === 'number') return entry;
+  if (typeof entry.questionsAsked === 'number') return entry.questionsAsked;
+  return entry.points;
 }
 
 function submitScore(date, uuid, questionsAsked, name, extra = {}) {
@@ -11,11 +14,28 @@ function clearPlayerScore(date, uuid) {
   return db.ref(`leaderboard/${date}/${uuid}`).remove();
 }
 
-function getPlayerScore(date, uuid) {
+function getPlayerEntry(date, uuid) {
   return db
     .ref(`leaderboard/${date}/${uuid}`)
     .get()
-    .then((snapshot) => (snapshot.exists() ? extractScore(snapshot.val()) : null));
+    .then((snapshot) => (snapshot.exists() ? snapshot.val() : null));
+}
+
+function getBestScoreEntry(date) {
+  return db
+    .ref(`leaderboard/${date}`)
+    .get()
+    .then((snapshot) => {
+      const data = snapshot.val() || {};
+      let best = null;
+      Object.entries(data).forEach(([uuid, entry]) => {
+        const score = extractScore(entry);
+        if (best === null || score < best.score) {
+          best = { uuid, score, name: entry.name || '' };
+        }
+      });
+      return best;
+    });
 }
 
 function getStats(date) {

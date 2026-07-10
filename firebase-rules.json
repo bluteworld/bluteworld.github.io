@@ -4,8 +4,8 @@
       "$date": {
         ".read": true,
         "$uuid": {
-          ".write": true,
-          ".validate": "newData.hasChildren(['questionsAsked']) && newData.child('questionsAsked').isNumber() && newData.child('questionsAsked').val() >= 0 && newData.child('questionsAsked').val() <= 200"
+          ".write": "!data.exists()",
+          ".validate": "newData.hasChildren(['questionsAsked']) && newData.child('questionsAsked').isNumber() && newData.child('questionsAsked').val() >= -50 && newData.child('questionsAsked').val() <= 200"
         }
       }
     },
@@ -13,7 +13,7 @@
       "$date": {
         "$uuid": {
           ".write": true,
-          ".read": false
+          ".read": true
         }
       }
     },

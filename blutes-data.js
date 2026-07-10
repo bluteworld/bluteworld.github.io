@@ -795,7 +795,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -906,7 +908,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": false
       }
     },
     {
@@ -1017,7 +1021,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": true,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -1128,7 +1134,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -1239,7 +1247,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -1350,7 +1360,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -1461,7 +1473,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": false
       }
     },
     {
@@ -1572,7 +1586,9 @@ const BLUTE_DATA = {
         "one_eye_closed": true,
         "is_glowing": false,
         "has_bubbles": true,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -1683,7 +1699,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -1794,7 +1812,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": true
       }
     },
     {
@@ -1905,7 +1925,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": false
       }
     },
     {
@@ -2016,7 +2038,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -2127,7 +2151,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": false
       }
     },
     {
@@ -2238,7 +2264,9 @@ const BLUTE_DATA = {
         "one_eye_closed": true,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": true
       }
     },
     {
@@ -2349,7 +2377,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -2460,7 +2490,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -2571,7 +2603,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": true
       }
     },
     {
@@ -2682,7 +2716,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": true
       }
     },
     {
@@ -2793,7 +2829,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": true
       }
     },
     {
@@ -2904,7 +2942,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -3015,7 +3055,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": false
       }
     },
     {
@@ -3126,7 +3168,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -3237,7 +3281,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": true
       }
     },
     {
@@ -3348,7 +3394,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": true
+        "is_determined": true,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -3459,7 +3507,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": false
       }
     },
     {
@@ -3570,7 +3620,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -3681,7 +3733,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -3792,7 +3846,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": false
       }
     },
     {
@@ -3903,7 +3959,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": false
       }
     },
     {
@@ -4014,7 +4072,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -4125,7 +4185,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -4236,7 +4298,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -4347,7 +4411,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": true
       }
     },
     {
@@ -4458,7 +4524,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": false
       }
     },
     {
@@ -4569,7 +4637,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": true
       }
     },
     {
@@ -4680,7 +4750,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -4791,7 +4863,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -4902,7 +4976,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -5013,7 +5089,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -5124,7 +5202,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -5235,7 +5315,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": true
       }
     },
     {
@@ -5346,7 +5428,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": true
       }
     },
     {
@@ -5457,7 +5541,9 @@ const BLUTE_DATA = {
         "one_eye_closed": true,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -5568,7 +5654,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -5679,7 +5767,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -5790,7 +5880,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -5901,7 +5993,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -6012,7 +6106,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": false
       }
     },
     {
@@ -6123,7 +6219,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -6234,7 +6332,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": false
       }
     },
     {
@@ -6345,7 +6445,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": true
+        "is_determined": true,
+        "mouth_open": false,
+        "is_smiling": false
       }
     },
     {
@@ -6456,7 +6558,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": true
+        "is_determined": true,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -6567,7 +6671,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": false
       }
     },
     {
@@ -6678,7 +6784,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -6789,7 +6897,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": true,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -6900,7 +7010,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -7011,7 +7123,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -7122,7 +7236,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -7233,7 +7349,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -7344,7 +7462,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -7455,7 +7575,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -7566,7 +7688,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": true
+        "is_determined": true,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -7677,7 +7801,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": true
       }
     },
     {
@@ -7788,7 +7914,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": true
+        "is_determined": true,
+        "mouth_open": false,
+        "is_smiling": false
       }
     },
     {
@@ -7899,7 +8027,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -8010,7 +8140,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": true
       }
     },
     {
@@ -8121,7 +8253,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": true
       }
     },
     {
@@ -8232,7 +8366,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": true
       }
     },
     {
@@ -8343,7 +8479,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": true
       }
     },
     {
@@ -8454,7 +8592,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": true,
+        "is_smiling": false
       }
     },
     {
@@ -8565,7 +8705,9 @@ const BLUTE_DATA = {
         "one_eye_closed": false,
         "is_glowing": false,
         "has_bubbles": false,
-        "is_determined": false
+        "is_determined": false,
+        "mouth_open": false,
+        "is_smiling": false
       }
     }
   ]
