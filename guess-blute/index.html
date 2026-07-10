@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guess Blute</title>
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="title-bar">
+    <div class="title-group">
+      <span class="title">Guess Blute</span>
+      <span class="secret-label" id="secretLabel"></span>
+    </div>
+    <div class="icon-buttons">
+            <button class="icon-btn" id="infoBtn" aria-label="Rules / Info" data-tooltip="How to play">
+        <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor">
+          <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" />
+          <circle cx="12" cy="7.5" r="1.3" />
+          <rect x="10.75" y="10.5" width="2.5" height="7" rx="1" />
+        </svg>
+      </button>
+      <button class="icon-btn" id="statsBtn" aria-label="Stats" data-tooltip="Stats">
+        <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor">
+          <rect x="9" y="2" width="6" height="6" rx="1" />
+          <rect x="5.5" y="9" width="6" height="6" rx="1" />
+          <rect x="12.5" y="9" width="6" height="6" rx="1" />
+          <rect x="2" y="16" width="6" height="6" rx="1" />
+          <rect x="9" y="16" width="6" height="6" rx="1" />
+          <rect x="16" y="16" width="6" height="6" rx="1" />
+        </svg>
+      </button>
+      <button class="icon-btn" id="unlimitedModeBtn" aria-label="Toggle unlimited play" data-tooltip="Unlimited mode">
+        <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="8" cy="12" r="4" />
+          <circle cx="16" cy="12" r="4" />
+        </svg>
+      </button>
+      <button class="icon-btn" id="feedbackBtn" aria-label="Send feedback" data-tooltip="Feedback">
+        <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor">
+          <path d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-4.4 3.3A.5.5 0 0 1 3.8 20V17H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="grid-wrap">
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <footer class="question-wrap">
+    <div class="question-box">
+      <form class="question-header" id="questionForm">
+        <input
+          type="text"
+          id="questionInput"
+          class="question-live-input"
+          placeholder="Ask a question... e.g. Is it wearing glasses?"
+          autocomplete="off"
+          enterkeyhint="send"
+        />
+        <span class="blink-cursor" aria-hidden="true"></span>
+      </form>
+      <div class="question-body">
+        <div class="question-feedback" id="questionFeedback"></div>
+        <ul class="history-list" id="historyList"></ul>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal-overlay" id="modalOverlay" hidden>
+    <div class="modal" id="modalContent"></div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="leaderboard.js"></script>
+  <script src="telemetry.js"></script>
+  <script src="blutes-data.js"></script>
+  <script src="question-parser.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
