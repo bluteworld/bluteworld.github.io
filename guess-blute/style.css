@@ -537,6 +537,13 @@ body {
   margin: 0 auto;
 }
 
+.stats-lowest-note {
+  font-size: 0.75rem;
+  color: rgba(58, 46, 31, 0.6);
+  text-align: center;
+  margin-top: -1vmin;
+}
+
 .modal button.secondary {
   background: transparent;
   color: #6b5a3e;

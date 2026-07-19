@@ -378,6 +378,22 @@ function askQuestion() {
   updateScoreDisplay();
 }
 
+function appendLowestScoreNote(wrap) {
+  const note = document.createElement('p');
+  note.className = 'stats-lowest-note';
+  wrap.appendChild(note);
+
+  getStats(dailyState.date)
+    .then((stats) => {
+      if (!modalContent.contains(wrap)) return;
+      note.textContent = stats.count > 0 ? `Lowest score today: ${stats.best}` : '';
+    })
+    .catch(() => {
+      if (!modalContent.contains(wrap)) return;
+      note.remove();
+    });
+}
+
 function renderStatsModal(yourScore, colorBonus) {
   const wrap = document.createElement('div');
   wrap.innerHTML = `<h2>Today's Stats</h2>`;
@@ -386,6 +402,7 @@ function renderStatsModal(yourScore, colorBonus) {
     const p = document.createElement('p');
     p.textContent = "You haven't finished today's puzzle yet.";
     wrap.appendChild(p);
+    appendLowestScoreNote(wrap);
     const closeBtn = makeButton('Close', closeModal);
     closeBtn.classList.add('stats-close');
     wrap.appendChild(closeBtn);
@@ -417,6 +434,7 @@ function renderStatsModal(yourScore, colorBonus) {
   });
 
   wrap.appendChild(list);
+  appendLowestScoreNote(wrap);
   const closeBtn = makeButton('Close', closeModal);
   closeBtn.classList.add('stats-close');
   wrap.appendChild(closeBtn);
