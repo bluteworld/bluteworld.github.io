@@ -14,7 +14,10 @@
   <header class="title-bar">
     <div class="title-group">
       <span class="title">Guess Blute</span>
-      <span class="secret-label" id="secretLabel"></span>
+      <div class="subtitle-row">
+        <span class="score-display" id="scoreDisplay"></span>
+        <span class="secret-label" id="secretLabel"></span>
+      </div>
     </div>
     <div class="icon-buttons">
             <button class="icon-btn" id="infoBtn" aria-label="Rules / Info" data-tooltip="How to play">
@@ -38,6 +41,12 @@
         <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="8" cy="12" r="4" />
           <circle cx="16" cy="12" r="4" />
+        </svg>
+      </button>
+      <button class="icon-btn" id="quitBtn" aria-label="Give up and reveal answer" data-tooltip="Give up">
+        <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 21V4" />
+          <path d="M5 4h13l-3 4 3 4H5" />
         </svg>
       </button>
       <button class="icon-btn" id="feedbackBtn" aria-label="Send feedback" data-tooltip="Feedback">

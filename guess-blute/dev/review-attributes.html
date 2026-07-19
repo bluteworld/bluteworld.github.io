@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Blute Attribute Review</title>
+<script src="../blutes-data.js"></script>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+    margin: 0;
+    background: #f4f4f2;
+    color: #222;
+  }
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #222;
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  header h1 { font-size: 15px; margin: 0; margin-right: 8px; white-space: nowrap; }
+  header input[type=text], header select {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #555;
+    font-size: 13px;
+  }
+  header label { font-size: 12px; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+  header button {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #555;
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+  }
+  header button:disabled { opacity: 0.4; cursor: default; }
+  header button.primary { background: #2563eb; border-color: #2563eb; }
+  header button.primary:disabled { background: #444; border-color: #555; }
+  header .count { margin-left: auto; font-size: 12px; opacity: 0.8; white-space: nowrap; }
+  header .dirty-note { font-size: 12px; color: #ffd54a; white-space: nowrap; }
+  #grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    padding: 12px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid transparent;
+  }
+  .card.dim { opacity: 0.25; }
+  .card.dirty { border-color: #f5b400; }
+  .card img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: contain;
+    background: repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 50% / 16px 16px;
+  }
+  .card .body { padding: 8px 10px 10px; }
+  .card .name { font-weight: 700; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
+  .card .name-left { display: flex; align-items: center; gap: 6px; }
+  .card .color-swatch {
+    display: inline-block;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.3);
+  }
+  .card .flag {
+    font-size: 10px;
+    background: #ffe08a;
+    color: #664d00;
+    border-radius: 4px;
+    padding: 1px 5px;
+    margin-left: 6px;
+  }
+  .card .revert-btn {
+    font-size: 10px;
+    background: #fff3cd;
+    color: #7a5b00;
+    border: 1px solid #e2c060;
+    border-radius: 4px;
+    padding: 1px 6px;
+    cursor: pointer;
+  }
+  .tags { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px; }
+  .tag {
+    font-size: 10.5px;
+    border-radius: 10px;
+    padding: 2px 7px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .tag.is-true {
+    background: #dcfce7;
+    color: #14532d;
+    border: 1px solid #86d99a;
+  }
+  .tag.is-false {
+    background: #f3f3f3;
+    color: #888;
+    border: 1px dashed #ccc;
+  }
+  .tag.is-true:hover { background: #fecaca; border-color: #f08a8a; }
+  .tag.is-false:hover { background: #dbeafe; border-color: #93c5fd; color: #1e3a8a; }
+  .tag.focused { outline: 2px solid #f5b400; }
+  .empty-note { font-size: 10.5px; color: #999; font-style: italic; }
+  .id-note { font-size: 10px; color: #999; margin-top: 2px; }
+  .help {
+    font-size: 10.5px;
+    color: #777;
+    padding: 0 12px 6px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Blute Attribute Review</h1>
+  <input id="search" type="text" placeholder="Search name / id..." size="16" />
+  <select id="attrFilter">
+    <option value="">Focus attribute...</option>
+  </select>
+  <select id="colorFilter">
+    <option value="">All colors</option>
+  </select>
+  <label><input type="checkbox" id="onlyFocused" /> only show matches</label>
+  <label><input type="checkbox" id="showFalse" /> show false attributes</label>
+  <button id="linkFileBtn">Link blutes-data.js...</button>
+  <button id="saveBtn" class="primary" disabled>Save changes</button>
+  <button id="downloadBtn">Download .js</button>
+  <button id="revertAllBtn" disabled>Revert all</button>
+  <span class="dirty-note" id="dirtyNote"></span>
+  <span class="count" id="count"></span>
+</header>
+<div class="help">Click a green (true) tag to remove it, or a gray dashed (false) tag to add it. Toggle "show false attributes" to see everything available to add. Edits are only kept in this page until you save.</div>
+<div id="grid"></div>
+
+<script>
+const original = BLUTE_DATA;
+let data = JSON.parse(JSON.stringify(original));
+const dirtySet = new Set();
+let fileHandle = null;
+
+const allAttrKeys = [...new Set(data.blutes.flatMap(b => Object.keys(b.attributes)))];
+
+const attrFilter = document.getElementById('attrFilter');
+allAttrKeys.slice().sort().forEach(k => {
+  const opt = document.createElement('option');
+  opt.value = k;
+  opt.textContent = k;
+  attrFilter.appendChild(opt);
+});
+
+const colors = [...new Set(data.blutes.map(b => b.color))].sort();
+const colorFilter = document.getElementById('colorFilter');
+colors.forEach(c => {
+  const opt = document.createElement('option');
+  opt.value = c;
+  opt.textContent = c;
+  colorFilter.appendChild(opt);
+});
+
+const grid = document.getElementById('grid');
+const search = document.getElementById('search');
+const onlyFocused = document.getElementById('onlyFocused');
+const showFalse = document.getElementById('showFalse');
+const countEl = document.getElementById('count');
+const dirtyNote = document.getElementById('dirtyNote');
+const saveBtn = document.getElementById('saveBtn');
+const linkFileBtn = document.getElementById('linkFileBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+const revertAllBtn = document.getElementById('revertAllBtn');
+
+function colorToCss(c) {
+  const map = {
+    yellow: '#f5d327', blue: '#3b82f6', orange: '#f97316', pink: '#f472b6',
+    red: '#ef4444', green: '#22c55e', olive: '#808000', purple: '#a855f7',
+    gray: '#9ca3af', brown: '#92400e', teal: '#14b8a6', beige: '#e8dcc0'
+  };
+  return map[c] || '#ccc';
+}
+
+function toggleAttr(blute, key) {
+  blute.attributes[key] = !blute.attributes[key];
+  dirtySet.add(blute.id);
+  const scrollY = window.scrollY;
+  render();
+  window.scrollTo(0, scrollY);
+}
+
+function revertBlute(id) {
+  const orig = original.blutes.find(b => b.id === id);
+  const idx = data.blutes.findIndex(b => b.id === id);
+  data.blutes[idx] = JSON.parse(JSON.stringify(orig));
+  dirtySet.delete(id);
+  render();
+}
+
+function revertAll() {
+  if (dirtySet.size === 0) return;
+  if (!confirm(`Discard edits to ${dirtySet.size} blute(s)?`)) return;
+  data = JSON.parse(JSON.stringify(original));
+  dirtySet.clear();
+  render();
+}
+
+function buildFileContents() {
+  return 'const BLUTE_DATA = ' + JSON.stringify(data, null, 2) + ';\n';
+}
+
+async function linkFile() {
+  if (!('showOpenFilePicker' in window)) {
+    alert('This browser doesn\'t support direct file saving (use Chrome or Edge). Use "Download .js" instead and manually replace guess-blute/blutes-data.js with the downloaded file.');
+    return;
+  }
+  try {
+    const [handle] = await window.showOpenFilePicker({
+      types: [{ description: 'JS data file', accept: { 'text/javascript': ['.js'] } }],
+    });
+    const perm = await handle.requestPermission({ mode: 'readwrite' });
+    if (perm !== 'granted') {
+      alert('Write permission was not granted, so direct saving is unavailable. Use "Download .js" instead.');
+      return;
+    }
+    fileHandle = handle;
+    linkFileBtn.textContent = 'Linked: ' + handle.name;
+    updateSaveUi();
+  } catch (e) {
+    if (e.name !== 'AbortError') {
+      console.error(e);
+      alert('Could not link the file: ' + e.message);
+    }
+  }
+}
+
+async function saveChanges() {
+  const content = buildFileContents();
+  if (fileHandle) {
+    try {
+      const writable = await fileHandle.createWritable();
+      await writable.write(content);
+      await writable.close();
+      dirtySet.clear();
+      render();
+      dirtyNote.textContent = 'Saved.';
+      setTimeout(() => { if (dirtySet.size === 0) dirtyNote.textContent = ''; }, 3000);
+    } catch (e) {
+      console.error(e);
+      alert('Save failed: ' + e.message);
+    }
+  } else {
+    downloadFile(content);
+  }
+}
+
+function downloadFile(content) {
+  const blob = new Blob([content], { type: 'text/javascript' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'blutes-data.js';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function updateSaveUi() {
+  saveBtn.disabled = dirtySet.size === 0;
+  revertAllBtn.disabled = dirtySet.size === 0;
+  dirtyNote.textContent = dirtySet.size > 0 ? `${dirtySet.size} unsaved edit(s)` : '';
+}
+
+window.addEventListener('beforeunload', (e) => {
+  if (dirtySet.size > 0) { e.preventDefault(); e.returnValue = ''; }
+});
+
+function render() {
+  const q = search.value.trim().toLowerCase();
+  const focusAttr = attrFilter.value;
+  const focusColor = colorFilter.value;
+  const hideNonMatches = onlyFocused.checked;
+  const revealFalse = showFalse.checked;
+
+  grid.innerHTML = '';
+
+  data.blutes.forEach(b => {
+    const matchesSearch = !q || b.name.toLowerCase().includes(q) || b.id.toLowerCase().includes(q);
+    const matchesAttr = !focusAttr || b.attributes[focusAttr] === true;
+    const matchesColor = !focusColor || b.color === focusColor;
+    const isMatch = matchesSearch && matchesAttr && matchesColor;
+
+    if (hideNonMatches && !isMatch) return;
+
+    const trueAttrs = allAttrKeys.filter(k => b.attributes[k] === true).sort();
+    const falseAttrs = allAttrKeys.filter(k => b.attributes[k] !== true).sort();
+    const isDirty = dirtySet.has(b.id);
+
+    const card = document.createElement('div');
+    card.className = 'card' + (!isMatch && !hideNonMatches ? ' dim' : '') + (isDirty ? ' dirty' : '');
+
+    const img = document.createElement('img');
+    img.src = '../' + b.image;
+    img.loading = 'lazy';
+    img.alt = b.name;
+
+    const body = document.createElement('div');
+    body.className = 'body';
+
+    const nameRow = document.createElement('div');
+    nameRow.className = 'name';
+    const left = document.createElement('span');
+    left.className = 'name-left';
+    const swatch = document.createElement('span');
+    swatch.className = 'color-swatch';
+    swatch.style.background = colorToCss(b.color);
+    swatch.title = b.color;
+    left.appendChild(document.createTextNode(b.name));
+    left.appendChild(swatch);
+    if (!b.is_blute) {
+      const flag = document.createElement('span');
+      flag.className = 'flag';
+      flag.textContent = 'not a blute';
+      left.appendChild(flag);
+    }
+    nameRow.appendChild(left);
+    if (isDirty) {
+      const revertBtn = document.createElement('span');
+      revertBtn.className = 'revert-btn';
+      revertBtn.textContent = 'revert';
+      revertBtn.addEventListener('click', () => revertBlute(b.id));
+      nameRow.appendChild(revertBtn);
+    }
+    body.appendChild(nameRow);
+
+    const idNote = document.createElement('div');
+    idNote.className = 'id-note';
+    idNote.textContent = `${b.id}  ·  ${trueAttrs.length} true attrs`;
+    body.appendChild(idNote);
+
+    const tags = document.createElement('div');
+    tags.className = 'tags';
+
+    function makeChip(key, isTrue) {
+      const tag = document.createElement('span');
+      tag.className = 'tag ' + (isTrue ? 'is-true' : 'is-false') + (key === focusAttr ? ' focused' : '');
+      tag.textContent = (isTrue ? '✓ ' : '+ ') + key;
+      tag.title = isTrue ? 'click to remove' : 'click to add';
+      tag.addEventListener('click', () => toggleAttr(b, key));
+      return tag;
+    }
+
+    if (trueAttrs.length === 0 && !revealFalse) {
+      const note = document.createElement('div');
+      note.className = 'empty-note';
+      note.textContent = 'no true attributes set';
+      tags.appendChild(note);
+    } else {
+      trueAttrs.forEach(k => tags.appendChild(makeChip(k, true)));
+      if (revealFalse) falseAttrs.forEach(k => tags.appendChild(makeChip(k, false)));
+    }
+    body.appendChild(tags);
+
+    card.appendChild(img);
+    card.appendChild(body);
+    grid.appendChild(card);
+  });
+
+  const totalMatch = data.blutes.filter(b => {
+    const matchesSearch = !q || b.name.toLowerCase().includes(q) || b.id.toLowerCase().includes(q);
+    const matchesAttr = !focusAttr || b.attributes[focusAttr] === true;
+    const matchesColor = !focusColor || b.color === focusColor;
+    return matchesSearch && matchesAttr && matchesColor;
+  }).length;
+
+  countEl.textContent = `${totalMatch} match${totalMatch === 1 ? '' : 'es'} / ${data.blutes.length} total  ·  ${allAttrKeys.length} attributes`;
+  updateSaveUi();
+}
+
+search.addEventListener('input', render);
+attrFilter.addEventListener('change', render);
+colorFilter.addEventListener('change', render);
+onlyFocused.addEventListener('change', render);
+showFalse.addEventListener('change', render);
+linkFileBtn.addEventListener('click', linkFile);
+saveBtn.addEventListener('click', saveChanges);
+downloadBtn.addEventListener('click', () => downloadFile(buildFileContents()));
+revertAllBtn.addEventListener('click', revertAll);
+
+render();
+</script>
+</body>
+</html>

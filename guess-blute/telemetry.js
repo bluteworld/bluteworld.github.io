@@ -16,13 +16,6 @@ function logUnansweredQuestion(date, uuid, rawText, name, reason) {
   });
 }
 
-function getQuestionLog(date, uuid) {
-  return db
-    .ref(`questionLog/${date}/${uuid}`)
-    .get()
-    .then((snapshot) => Object.values(snapshot.val() || {}));
-}
-
 function submitFeedback(date, uuid, message, name) {
   return db.ref(`feedback/${date}/${uuid}`).push({
     message,

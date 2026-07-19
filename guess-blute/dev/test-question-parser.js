@@ -123,6 +123,7 @@ const cases = [
   // holding_tool_or_prop
   ['is it holding a tool', 'holding_tool_or_prop', true],
   ['is it holding an object', 'holding_tool_or_prop', true],
+  ['holding object?', 'holding_tool_or_prop', true],
 
   // is_at_beach
   ['is it at the beach', 'is_at_beach', true],
@@ -230,6 +231,7 @@ const overlapNotMultiCases = [
 const shouldBeUnanswerable = [
   'which blute is the right one?',
   'who is the secret blute?',
+  'holding',
 ];
 
 let pass = 0;

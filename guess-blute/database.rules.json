@@ -1,0 +1,133 @@
+{
+  "rules": {
+    "leaderboard": {
+      "$date": {
+        ".read": true,
+        "$uuid": {
+          ".write": "!data.exists()",
+          ".validate": "newData.hasChildren(['questionsAsked', 'name', 'uuid'])",
+          "questionsAsked": {
+            ".validate": "newData.isNumber() && newData.val() >= -50 && newData.val() <= 200"
+          },
+          "name": {
+            ".validate": "newData.isString() && newData.val().length <= 40"
+          },
+          "uuid": {
+            ".validate": "newData.isString() && newData.val() == $uuid"
+          },
+          "rawQuestionsAsked": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 200"
+          },
+          "colorBonus": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+
+    "questionLog": {
+      "$date": {
+        "$uuid": {
+          ".read": false,
+          ".write": true,
+          "$pushId": {
+            ".validate": "newData.hasChildren(['rawText', 'attribute', 'value', 'answer', 'uuid', 'timestamp'])",
+            "name": {
+              ".validate": "newData.isString() && newData.val().length <= 40"
+            },
+            "secretId": {
+              ".validate": "newData.val() != null"
+            },
+            "rawText": {
+              ".validate": "newData.isString() && newData.val().length <= 200"
+            },
+            "attribute": {
+              ".validate": "newData.isString() && newData.val().length <= 30"
+            },
+            "value": {
+              ".validate": "(newData.isString() && newData.val().length <= 60) || newData.isBoolean()"
+            },
+            "answer": {
+              ".validate": "newData.isBoolean()"
+            },
+            "boardAnswers": {
+              ".validate": true
+            },
+            "marksBefore": {
+              ".validate": true
+            },
+            "uuid": {
+              ".validate": "newData.isString() && newData.val() == $uuid"
+            },
+            "timestamp": {
+              ".validate": "newData.isNumber()"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        }
+      }
+    },
+
+    "unansweredQuestions": {
+      "$date": {
+        "$uuid": {
+          ".read": false,
+          ".write": true,
+          "$pushId": {
+            ".validate": "newData.hasChildren(['text', 'uuid', 'reason', 'timestamp'])",
+            "text": {
+              ".validate": "newData.isString() && newData.val().length <= 200"
+            },
+            "name": {
+              ".validate": "newData.isString() && newData.val().length <= 40"
+            },
+            "uuid": {
+              ".validate": "newData.isString() && newData.val() == $uuid"
+            },
+            "reason": {
+              ".validate": "newData.val() == 'multiple' || newData.val() == 'unmatched'"
+            },
+            "timestamp": {
+              ".validate": "newData.isNumber()"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        }
+      }
+    },
+
+    "feedback": {
+      "$date": {
+        "$uuid": {
+          ".read": false,
+          ".write": true,
+          "$pushId": {
+            ".validate": "newData.hasChildren(['message', 'uuid', 'timestamp'])",
+            "message": {
+              ".validate": "newData.isString() && newData.val().length <= 2000"
+            },
+            "name": {
+              ".validate": "newData.isString() && newData.val().length <= 40"
+            },
+            "uuid": {
+              ".validate": "newData.isString() && newData.val() == $uuid"
+            },
+            "timestamp": {
+              ".validate": "newData.isNumber()"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        }
+      }
+    }
+  }
+}

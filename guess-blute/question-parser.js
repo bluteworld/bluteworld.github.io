@@ -35,6 +35,10 @@ const ATTRIBUTE_KEYWORDS = {
     yes: ['creative', 'art', 'artistic', 'making art', 'painting', 'drawing', 'crafting', 'creating something'],
     no: ['not creative', 'no art'],
   },
+  is_doing_activity: {
+    yes: ['doing an activity', 'an activity', 'doing something active', 'doing some activity'],
+    no: ['not doing an activity', 'no activity', 'not doing anything', 'inactive'],
+  },
   is_relaxing: {
     yes: ['relaxing', 'resting', 'relaxed', 'chilling', 'lounging', 'taking it easy', 'at ease'],
     no: ['not relaxing', 'not resting'],
@@ -42,6 +46,46 @@ const ATTRIBUTE_KEYWORDS = {
   is_working: {
     yes: ['working', 'job', 'employed', 'at work', 'working a job', 'on the job', 'occupation'],
     no: ['not working', 'unemployed', 'off work'],
+  },
+  is_chef: {
+    yes: ['chef', 'a chef', 'cook', 'a cook'],
+    no: ['not a chef', 'not a cook'],
+  },
+  is_doctor: {
+    yes: ['doctor', 'a doctor', 'physician'],
+    no: ['not a doctor'],
+  },
+  is_farmer: {
+    yes: ['farmer', 'a farmer'],
+    no: ['not a farmer'],
+  },
+  is_artist: {
+    yes: ['artist', 'an artist', 'painter'],
+    no: ['not an artist'],
+  },
+  is_programmer: {
+    yes: ['programmer', 'a programmer', 'coder', 'software engineer'],
+    no: ['not a programmer'],
+  },
+  is_photographer: {
+    yes: ['photographer', 'a photographer'],
+    no: ['not a photographer'],
+  },
+  is_singer: {
+    yes: ['singer', 'a singer', 'musician'],
+    no: ['not a singer'],
+  },
+  is_miner: {
+    yes: ['miner', 'a miner'],
+    no: ['not a miner'],
+  },
+  is_construction_worker: {
+    yes: ['construction worker', 'builder', 'a builder', 'construction'],
+    no: ['not a builder', 'not a construction worker'],
+  },
+  is_potter: {
+    yes: ['potter', 'a potter', 'pottery'],
+    no: ['not a potter'],
   },
   is_outdoors: {
     yes: ['outdoors', 'outside', 'out in nature', 'in the outdoors'],
@@ -68,8 +112,104 @@ const ATTRIBUTE_KEYWORDS = {
     no: ['not traveling', 'not travelling', 'staying still'],
   },
   holding_tool_or_prop: {
-    yes: ['holding a tool', 'holding an object', 'holding something', 'carrying a tool', 'holding a prop', 'has a tool', 'holding an item'],
+    yes: ['holding a tool', 'holding an object', 'holding object', 'holding something', 'carrying a tool', 'holding a prop', 'has a tool', 'holding an item', 'holding item'],
     no: ['not holding anything', 'empty handed', 'no tool'],
+  },
+  holding_shovel: {
+    yes: ['shovel', 'holding a shovel', 'spade'],
+    no: ['no shovel', 'without a shovel'],
+  },
+  holding_pickaxe: {
+    yes: ['pickaxe', 'pick axe', 'holding a pickaxe'],
+    no: ['no pickaxe', 'without a pickaxe'],
+  },
+  holding_spoon: {
+    yes: ['spoon', 'holding a spoon', 'wooden spoon'],
+    no: ['no spoon', 'without a spoon'],
+  },
+  holding_pan: {
+    yes: ['frying pan', 'holding a pan', 'skillet'],
+    no: ['no pan', 'without a pan'],
+  },
+  holding_clipboard: {
+    yes: ['clipboard', 'holding a clipboard'],
+    no: ['no clipboard', 'without a clipboard'],
+  },
+  holding_pitchfork: {
+    yes: ['pitchfork', 'holding a pitchfork'],
+    no: ['no pitchfork', 'without a pitchfork'],
+  },
+  holding_paintbrush: {
+    yes: ['paintbrush', 'paint brush', 'holding a paintbrush'],
+    no: ['no paintbrush', 'without a paintbrush'],
+  },
+  holding_mouse: {
+    yes: ['computer mouse', 'holding a mouse'],
+    no: ['no computer mouse'],
+  },
+  holding_microphone: {
+    yes: ['microphone', 'a mic', 'holding a mic', 'holding a microphone'],
+    no: ['no microphone', 'without a microphone'],
+  },
+  holding_trowel: {
+    yes: ['trowel', 'holding a trowel'],
+    no: ['no trowel', 'without a trowel'],
+  },
+  holding_racket: {
+    yes: ['tennis racket', 'racket', 'racquet', 'holding a racket'],
+    no: ['no racket', 'without a racket'],
+  },
+  holding_kite: {
+    yes: ['kite', 'flying a kite', 'holding a kite'],
+    no: ['no kite', 'without a kite'],
+  },
+  holding_jump_rope: {
+    yes: ['jump rope', 'jumping rope', 'skipping rope'],
+    no: ['no jump rope', 'without a jump rope'],
+  },
+  holding_walking_stick: {
+    yes: ['walking stick', 'hiking stick', 'trekking pole'],
+    no: ['no walking stick', 'without a walking stick'],
+  },
+  holding_cane: {
+    yes: ['cane', 'holding a cane', 'walking cane'],
+    no: ['no cane', 'without a cane'],
+  },
+  holding_basket: {
+    yes: ['picnic basket', 'holding a basket', 'basket'],
+    no: ['no basket', 'without a basket'],
+  },
+  holding_grocery_bag: {
+    yes: ['grocery bag', 'paper bag', 'bag of groceries'],
+    no: ['no grocery bag', 'without a grocery bag'],
+  },
+  holding_envelope: {
+    yes: ['envelope', 'holding an envelope', 'holding a letter'],
+    no: ['no envelope', 'without an envelope'],
+  },
+  holding_suitcase: {
+    yes: ['suitcase', 'holding a suitcase', 'luggage', 'rolling suitcase'],
+    no: ['no suitcase', 'without a suitcase'],
+  },
+  holding_briefcase: {
+    yes: ['briefcase', 'holding a briefcase', 'work bag'],
+    no: ['no briefcase', 'without a briefcase'],
+  },
+  holding_noisemaker: {
+    yes: ['party horn', 'noisemaker', 'party blower', 'kazoo'],
+    no: ['no noisemaker', 'without a noisemaker'],
+  },
+  holding_bubble_wand: {
+    yes: ['bubble wand', 'holding a bubble wand'],
+    no: ['no bubble wand', 'without a bubble wand'],
+  },
+  holding_chopsticks: {
+    yes: ['chopsticks', 'holding chopsticks'],
+    no: ['no chopsticks', 'without chopsticks'],
+  },
+  holding_photo_prop: {
+    yes: ['photo prop', 'photobooth prop'],
+    no: ['no photo prop'],
   },
   is_at_beach: {
     yes: ['beach', 'at the beach', 'sand', 'seaside', 'shore'],
@@ -136,10 +276,6 @@ const ATTRIBUTE_KEYWORDS = {
     yes: ['surprised', 'shocked', 'startled', 'wide eyed'],
     no: ['not surprised'],
   },
-  is_scared: {
-    yes: ['scared', 'afraid', 'frightened', 'terrified'],
-    no: ['not scared'],
-  },
   is_confused: {
     yes: ['confused', 'puzzled', 'perplexed', 'baffled'],
     no: ['not confused'],
@@ -192,37 +328,13 @@ const ATTRIBUTE_KEYWORDS = {
     yes: ['waving', 'wave hello'],
     no: ['not waving'],
   },
-  is_pointing: {
-    yes: ['pointing', 'points at'],
-    no: ['not pointing'],
-  },
-  is_hugging: {
-    yes: ['hugging', 'hug', 'embracing'],
-    no: ['not hugging'],
-  },
   is_lying_down: {
     yes: ['lying down', 'laying down', 'lying flat'],
     no: ['not lying down'],
   },
-  is_crouching: {
-    yes: ['crouching', 'crouched', 'squatting'],
-    no: ['not crouching'],
-  },
   is_flying: {
     yes: ['flying', 'flies', 'hot air balloon', 'in a balloon', 'riding a balloon', 'in a hot air balloon'],
     no: ['not flying'],
-  },
-  is_floating: {
-    yes: ['floating', 'drifting'],
-    no: ['not floating'],
-  },
-  is_falling: {
-    yes: ['falling', 'tumbling'],
-    no: ['not falling'],
-  },
-  is_spinning: {
-    yes: ['spinning', 'twirling', 'twirl'],
-    no: ['not spinning'],
   },
   is_stretching: {
     yes: ['stretching', 'stretch'],
@@ -256,14 +368,6 @@ const ATTRIBUTE_KEYWORDS = {
     yes: ['holding a flower', 'holding flowers', 'has a flower'],
     no: ['no flower', 'without a flower'],
   },
-  holding_balloon: {
-    yes: ['holding a balloon', 'has a balloon'],
-    no: ['no balloon', 'without a balloon'],
-  },
-  holding_gift: {
-    yes: ['holding a gift', 'holding a present', 'has a gift', 'wrapped present'],
-    no: ['no gift', 'without a gift'],
-  },
   holding_drink: {
     yes: ['holding a drink', 'holding a cup', 'holding a mug', 'holding a glass'],
     no: ['no drink', 'without a drink'],
@@ -271,10 +375,6 @@ const ATTRIBUTE_KEYWORDS = {
   wearing_scarf: {
     yes: ['scarf', 'wearing a scarf'],
     no: ['no scarf', 'without a scarf'],
-  },
-  wearing_backpack: {
-    yes: ['backpack', 'wearing a backpack'],
-    no: ['no backpack', 'without a backpack'],
   },
   wearing_shoes: {
     yes: ['shoes', 'boots', 'wearing shoes'],
@@ -284,109 +384,25 @@ const ATTRIBUTE_KEYWORDS = {
     yes: ['bow tie', 'bowtie'],
     no: ['no bow tie', 'without a bow tie'],
   },
-  wearing_apron: {
-    yes: ['apron', 'wearing an apron'],
-    no: ['no apron', 'without an apron'],
-  },
-  wearing_mask: {
-    yes: ['mask', 'wearing a mask', 'masquerade mask'],
-    no: ['no mask', 'without a mask'],
-  },
-  has_wings: {
-    yes: ['wings', 'has wings'],
-    no: ['no wings', 'without wings'],
-  },
-  has_tail: {
-    yes: ['tail', 'has a tail'],
-    no: ['no tail', 'without a tail'],
-  },
-  has_bandage: {
-    yes: ['bandage', 'bandaged', 'has a bandage', 'band aid'],
-    no: ['no bandage', 'without a bandage'],
-  },
   is_at_home: {
     yes: ['at home', 'in a house'],
     no: ['not at home'],
-  },
-  is_in_kitchen: {
-    yes: ['kitchen', 'in the kitchen'],
-    no: ['not in the kitchen'],
   },
   is_in_bathroom: {
     yes: ['bathroom', 'in the bathroom'],
     no: ['not in the bathroom'],
   },
-  is_in_forest: {
-    yes: ['forest', 'woods', 'in the woods'],
-    no: ['not in the forest'],
-  },
   is_on_mountain: {
     yes: ['mountain', 'mountains', 'on a mountain'],
     no: ['not on a mountain'],
-  },
-  is_in_snow: {
-    yes: ['snow', 'snowy', 'in the snow'],
-    no: ['no snow', 'not snowy'],
-  },
-  is_in_desert: {
-    yes: ['desert', 'in the desert'],
-    no: ['not in the desert'],
-  },
-  is_in_space: {
-    yes: ['outer space', 'in space', 'on the moon', 'in orbit'],
-    no: ['not in space'],
-  },
-  is_on_road: {
-    yes: ['on the road', 'on a street', 'on the street'],
-    no: ['not on the road'],
-  },
-  is_at_night: {
-    yes: ['at night', 'nighttime', 'night time'],
-    no: ['not at night', 'daytime'],
-  },
-  is_in_city: {
-    yes: ['in the city', 'urban', 'cityscape'],
-    no: ['not in the city'],
-  },
-  is_camping: {
-    yes: ['camping', 'tent', 'campfire'],
-    no: ['not camping'],
   },
   is_in_garden: {
     yes: ['garden', 'backyard', 'in the garden'],
     no: ['not in the garden'],
   },
-  is_underground: {
-    yes: ['underground', 'in a cave', 'tunnel', 'mine shaft'],
-    no: ['not underground'],
-  },
-  is_in_vehicle: {
-    yes: ['in a car', 'in a boat', 'in an airplane', 'driving', 'riding in a car'],
-    no: ['not in a vehicle'],
-  },
   is_winter_themed: {
     yes: ['winter themed', 'christmas themed', 'holiday themed', 'santa hat'],
     no: ['not winter themed'],
-  },
-  is_raining: {
-    yes: ['raining', 'rainy', 'rain'],
-    no: ['not raining'],
-  },
-  is_sunny: {
-    yes: ['sunny', 'sunshine'],
-    no: ['not sunny'],
-  },
-  has_sparkles: {
-    yes: ['sparkles', 'sparkly', 'glitter'],
-    no: ['no sparkles'],
-  },
-  has_stars_around: {
-    yes: ['stars around it', 'floating stars', 'star shapes', 'sparkling stars'],
-    no: ['no stars around it'],
-  },
-  has_freckles: {
-    yes: ['freckles', 'freckled'],
-    no: ['no freckles'],
   },
   teeth_showing: {
     yes: ['teeth', 'showing teeth', 'teeth showing'],
@@ -403,10 +419,6 @@ const ATTRIBUTE_KEYWORDS = {
   one_eye_closed: {
     yes: ['one eye closed', 'one eye shut'],
     no: ['both eyes open'],
-  },
-  is_glowing: {
-    yes: ['glowing', 'glow', 'radiant', 'shining'],
-    no: ['not glowing'],
   },
   has_bubbles: {
     yes: ['bubbles', 'bubble', 'soap bubbles', 'floating bubbles'],
@@ -433,6 +445,13 @@ const COLOR_KEYWORDS = {
   beige: ['beige', 'light tan', 'cream'],
 };
 
+// "is the hat yellow" mentions a color word and a hat word, but it's asking
+// about one thing (the hat's color), not two ("is it yellow" + "is it
+// wearing a hat"). These compound phrases are added as their own longer
+// candidates so they win over the separate color/wearing_hat matches instead
+// of the question getting flagged as multiple.
+const HAT_WORDS = ['hat', 'cap', 'beanie'];
+
 let _candidates = null;
 let _singleWordCandidates = null;
 
@@ -451,6 +470,15 @@ function _buildCandidates() {
 
   Object.keys(COLOR_KEYWORDS).forEach((color) => {
     COLOR_KEYWORDS[color].forEach((phrase) => list.push({ attribute: 'color', value: color, phrase }));
+  });
+
+  Object.keys(COLOR_KEYWORDS).forEach((color) => {
+    COLOR_KEYWORDS[color].forEach((colorPhrase) => {
+      HAT_WORDS.forEach((hatWord) => {
+        list.push({ attribute: 'hat_color', value: color, phrase: `${colorPhrase} ${hatWord}` });
+        list.push({ attribute: 'hat_color', value: color, phrase: `${hatWord} ${colorPhrase}` });
+      });
+    });
   });
 
   list.forEach((candidate) => {
@@ -526,7 +554,7 @@ function _wordsWithIndices(text) {
 // Words that must never be treated as a typo of some keyword, no matter how
 // close the edit distance — they're the game's own vocabulary, so they show
 // up constantly in real questions (e.g. "blute" is 1 edit from "blue").
-const FUZZY_IGNORE_WORDS = new Set(['blute', 'blutes']);
+const FUZZY_IGNORE_WORDS = new Set(['blute', 'blutes', 'holding', 'carrying']);
 
 function _fuzzyMatch(normalized) {
   let best = null;

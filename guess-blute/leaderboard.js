@@ -21,23 +21,6 @@ function getPlayerEntry(date, uuid) {
     .then((snapshot) => (snapshot.exists() ? snapshot.val() : null));
 }
 
-function getBestScoreEntry(date) {
-  return db
-    .ref(`leaderboard/${date}`)
-    .get()
-    .then((snapshot) => {
-      const data = snapshot.val() || {};
-      let best = null;
-      Object.entries(data).forEach(([uuid, entry]) => {
-        const score = extractScore(entry);
-        if (best === null || score < best.score) {
-          best = { uuid, score, name: entry.name || '' };
-        }
-      });
-      return best;
-    });
-}
-
 function getStats(date) {
   return db
     .ref(`leaderboard/${date}`)

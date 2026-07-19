@@ -1,0 +1,5 @@
+
+- Instead of the color cycling through, lets make it so when you click a card, you get an overlay that shows all 3 colors and an option to pick that as your final answer
+- Each wrong guess should count as a question and thus add 1 to the score
+- Score should be visible at the top
+- Remove shake for a wrong answer and add a small modal that pops up with something like "Wrong guess"

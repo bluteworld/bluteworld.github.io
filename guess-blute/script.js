@@ -8,10 +8,12 @@ const questionFeedback = document.getElementById('questionFeedback');
 const historyList = document.getElementById('historyList');
 const modalOverlay = document.getElementById('modalOverlay');
 const modalContent = document.getElementById('modalContent');
+const scoreDisplay = document.getElementById('scoreDisplay');
 const statsBtn = document.getElementById('statsBtn');
 const infoBtn = document.getElementById('infoBtn');
 const feedbackBtn = document.getElementById('feedbackBtn');
 const unlimitedModeBtn = document.getElementById('unlimitedModeBtn');
+const quitBtn = document.getElementById('quitBtn');
 const secretLabel = document.getElementById('secretLabel');
 
 let dailyState = null;
@@ -21,19 +23,12 @@ let lastQuestionRef = null;
 
 const DEFAULT_PLACEHOLDER = questionInput.placeholder;
 
-const MARK_STATES = ['none', 'red', 'yellow', 'green'];
+const MARK_COLORS = ['red', 'yellow', 'green'];
 const MARK_LABELS = { none: '', red: 'eliminated', yellow: 'suspect', green: 'likely' };
-const DOUBLE_CLICK_MS = 300;
-const LONG_PRESS_MS = 500;
 const WRONG_GUESS_SHAKE_MS = 400;
+const WRONG_GUESS_MODAL_MS = 1000;
 const COLOR_BONUS = 2;
-
-function shakeWrongGuess(cell) {
-  cell.classList.remove('wrong-guess');
-  void cell.offsetWidth; // restart the animation if it's already mid-shake
-  cell.classList.add('wrong-guess');
-  setTimeout(() => cell.classList.remove('wrong-guess'), WRONG_GUESS_SHAKE_MS);
-}
+const QUIT_DATE_KEY = 'guessBluteQuitDate';
 
 function shakeFeedback() {
   questionFeedback.classList.remove('shake');
@@ -47,18 +42,93 @@ function randomExampleQuestion() {
   return list[Math.floor(Math.random() * list.length)].text;
 }
 
-function cycleMark(cell, blute) {
-  const current = cell.dataset.mark || 'none';
-  const next = MARK_STATES[(MARK_STATES.indexOf(current) + 1) % MARK_STATES.length];
-  cell.dataset.mark = next;
-  const suffix = MARK_LABELS[next] ? ` – ${MARK_LABELS[next]}` : '';
+function setMark(cell, blute, mark) {
+  cell.dataset.mark = mark;
+  const suffix = MARK_LABELS[mark] ? ` – ${MARK_LABELS[mark]}` : '';
   cell.setAttribute('aria-label', `${blute.name}${suffix}`);
 }
 
-function lockBoard() {
-  grid.classList.add('locked');
-  questionWrap.classList.add('locked');
+let openPopupCell = null;
+
+function closeCardPopup() {
+  if (!openPopupCell) return;
+  const overlay = openPopupCell.querySelector('.card-overlay');
+  if (overlay) overlay.hidden = true;
+  openPopupCell = null;
 }
+
+function openCardPopup(cell) {
+  if (openPopupCell === cell) {
+    closeCardPopup();
+    return;
+  }
+  closeCardPopup();
+  openPopupCell = cell;
+  const overlay = cell.querySelector('.card-overlay');
+  if (overlay) overlay.hidden = false;
+}
+
+// Built once per cell in renderGrid and toggled hidden/visible from then on —
+// it sits directly on top of the card art (see overlay-layout.png) rather
+// than floating in a separately-positioned box.
+function buildCardOverlay(cell, blute) {
+  const overlay = document.createElement('div');
+  overlay.className = 'card-overlay';
+  overlay.hidden = true;
+
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'card-overlay-close';
+  closeBtn.setAttribute('aria-label', 'Close');
+  closeBtn.textContent = '✕';
+  closeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeCardPopup();
+  });
+  overlay.appendChild(closeBtn);
+
+  const swatches = document.createElement('div');
+  swatches.className = 'card-overlay-swatches';
+  MARK_COLORS.forEach((color) => {
+    const swatch = document.createElement('button');
+    swatch.type = 'button';
+    swatch.className = 'card-overlay-swatch';
+    swatch.dataset.color = color;
+    swatch.setAttribute('aria-label', MARK_LABELS[color]);
+    swatch.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const nextMark = cell.dataset.mark === color ? 'none' : color;
+      setMark(cell, blute, nextMark);
+      swatches.querySelectorAll('.card-overlay-swatch').forEach((s) => s.classList.toggle('active', s === swatch && nextMark !== 'none'));
+      closeCardPopup();
+    });
+    swatches.appendChild(swatch);
+  });
+  overlay.appendChild(swatches);
+
+  const guessBtn = document.createElement('button');
+  guessBtn.type = 'button';
+  guessBtn.className = 'card-overlay-guess';
+  guessBtn.textContent = 'Guess';
+  guessBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeCardPopup();
+    handleGuess(blute.id, cell);
+  });
+  overlay.appendChild(guessBtn);
+
+  cell.appendChild(overlay);
+}
+
+document.addEventListener('click', (e) => {
+  if (!openPopupCell) return;
+  if (openPopupCell.contains(e.target)) return;
+  closeCardPopup();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeCardPopup();
+});
 
 function getPlayerUUID() {
   let uuid = localStorage.getItem('guessBluteUUID');
@@ -88,9 +158,9 @@ function openModal(contentEl, onDismiss) {
   modalOnDismiss = onDismiss || null;
 }
 
-function makeButton(label, onClick) {
+function makeButton(label, onClick, variant = 'primary') {
   const btn = document.createElement('button');
-  btn.className = 'primary';
+  btn.className = variant;
   btn.textContent = label;
   btn.addEventListener('click', onClick);
   return btn;
@@ -139,49 +209,18 @@ function renderGrid(gridBlutes) {
     art.alt = blute.name;
 
     cell.appendChild(art);
+    buildCardOverlay(cell, blute);
 
-    let clickTimer = null;
     cell.addEventListener('click', () => {
       if (!dailyState || dailyState.finished) return;
-      if (clickTimer) {
-        clearTimeout(clickTimer);
-        clickTimer = null;
-        handleGuess(blute.id, cell);
-      } else {
-        clickTimer = setTimeout(() => {
-          clickTimer = null;
-          cycleMark(cell, blute);
-        }, DOUBLE_CLICK_MS);
-      }
-    });
-
-    let pressTimer = null;
-    let longPressFired = false;
-    cell.addEventListener(
-      'touchstart',
-      () => {
-        longPressFired = false;
-        pressTimer = setTimeout(() => {
-          longPressFired = true;
-          if (dailyState && !dailyState.finished) handleGuess(blute.id, cell);
-        }, LONG_PRESS_MS);
-      },
-      { passive: true }
-    );
-    cell.addEventListener('touchmove', () => clearTimeout(pressTimer), { passive: true });
-    cell.addEventListener('touchend', (e) => {
-      clearTimeout(pressTimer);
-      if (longPressFired) e.preventDefault();
+      openCardPopup(cell);
     });
 
     cell.addEventListener('keydown', (e) => {
       if (!dailyState || dailyState.finished) return;
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        handleGuess(blute.id, cell);
-      } else if (e.key === ' ') {
-        e.preventDefault();
-        cycleMark(cell, blute);
+        openCardPopup(cell);
       }
     });
 
@@ -265,6 +304,20 @@ function showQuestionFeedback(message) {
   questionFeedback.textContent = message;
 }
 
+function updateScoreDisplay() {
+  scoreDisplay.textContent = dailyState ? `Score: ${dailyState.questionsAsked}` : '';
+}
+
+function showWrongGuessModal() {
+  const wrap = document.createElement('div');
+  wrap.className = 'toast-modal';
+  wrap.innerHTML = '<p>Wrong guess</p>';
+  openModal(wrap);
+  setTimeout(() => {
+    if (modalContent.contains(wrap)) closeModal();
+  }, WRONG_GUESS_MODAL_MS);
+}
+
 function askQuestion() {
   if (!dailyState || dailyState.finished) return;
 
@@ -322,81 +375,52 @@ function askQuestion() {
   questionInput.value = '';
   showQuestionFeedback('');
   renderHistory();
+  updateScoreDisplay();
 }
 
-function renderStatsModal(date, yourScore, colorBonus) {
+function renderStatsModal(yourScore, colorBonus) {
   const wrap = document.createElement('div');
-  wrap.innerHTML = `<h2>Today's Stats</h2><p>Loading…</p>`;
+  wrap.innerHTML = `<h2>Today's Stats</h2>`;
+
+  if (typeof yourScore !== 'number') {
+    const p = document.createElement('p');
+    p.textContent = "You haven't finished today's puzzle yet.";
+    wrap.appendChild(p);
+    const closeBtn = makeButton('Close', closeModal);
+    closeBtn.classList.add('stats-close');
+    wrap.appendChild(closeBtn);
+    openModal(wrap);
+    return;
+  }
+
+  const rawScore = yourScore + (colorBonus || 0);
+
+  const list = document.createElement('ul');
+  list.className = 'leaderboard-list';
+
+  const rows = [
+    ['Score', rawScore],
+    ['No-color bonus', colorBonus ? `-${colorBonus}` : 0],
+    ['Total score', yourScore, true],
+  ];
+
+  rows.forEach(([label, value, bold]) => {
+    const li = document.createElement('li');
+    if (bold) li.classList.add('stat-highlight');
+    const labelEl = document.createElement('span');
+    labelEl.textContent = label;
+    const valueEl = document.createElement('span');
+    valueEl.textContent = value;
+    li.appendChild(labelEl);
+    li.appendChild(valueEl);
+    list.appendChild(li);
+  });
+
+  wrap.appendChild(list);
+  const closeBtn = makeButton('Close', closeModal);
+  closeBtn.classList.add('stats-close');
+  wrap.appendChild(closeBtn);
   openModal(wrap);
-
-  getStats(date)
-    .then((stats) => {
-      wrap.innerHTML = `<h2>Today's Stats</h2>`;
-
-      if (stats.count === 0) {
-        const p = document.createElement('p');
-        p.textContent = 'No scores yet today.';
-        wrap.appendChild(p);
-        return;
-      }
-
-      const list = document.createElement('ul');
-      list.className = 'leaderboard-list';
-
-      const rows = [];
-      if (typeof yourScore === 'number') {
-        rows.push(['Your score', yourScore, true]);
-        rows.push(['No-color bonus', colorBonus ? `-${colorBonus}` : 0, Boolean(colorBonus)]);
-      }
-      rows.push(
-        ['Best score', stats.best],
-        ['Average questions', Math.round(stats.average)],
-        ['Players today', stats.count]
-      );
-
-      rows.forEach(([label, value, bold]) => {
-        const li = document.createElement('li');
-        if (bold) li.classList.add('stat-highlight');
-        const labelEl = document.createElement('span');
-        labelEl.textContent = label;
-        const valueEl = document.createElement('span');
-        valueEl.textContent = value;
-        li.appendChild(labelEl);
-        li.appendChild(valueEl);
-        list.appendChild(li);
-      });
-
-      wrap.appendChild(list);
-
-      // Playtesting only — remove before public launch.
-      return getBestScoreEntry(date)
-        .then((best) => (best ? getQuestionLog(date, best.uuid) : []))
-        .then((entries) => {
-          if (!entries.length) return;
-          const section = document.createElement('div');
-          section.className = 'playtest-section';
-          const heading = document.createElement('h3');
-          heading.textContent = "Playtesting only — best score's questions";
-          section.appendChild(heading);
-
-          const ol = document.createElement('ol');
-          entries.forEach((entry) => {
-            const li = document.createElement('li');
-            li.textContent = `${entry.rawText} — ${entry.answer ? 'Yes' : 'No'}`;
-            ol.appendChild(li);
-          });
-          section.appendChild(ol);
-          wrap.appendChild(section);
-        })
-        .catch(() => {});
-    })
-    .then(() => {
-      wrap.appendChild(makeButton('Close', closeModal));
-    })
-    .catch(() => {
-      wrap.innerHTML = "<h2>Today's Stats</h2><p>Could not load stats right now.</p>";
-      wrap.appendChild(makeButton('Close', closeModal));
-    });
 }
 
 function renderNameModal(onSubmit) {
@@ -452,7 +476,7 @@ function renderFeedbackModal() {
   wrap.innerHTML = `
     <h2>Feedback</h2>
     <p>Found a bug, have a question idea, or just want to say hi?</p>
-    <textarea id="feedbackText" rows="4" placeholder="Type your feedback here..."></textarea>
+    <textarea id="feedbackText" rows="4" maxlength="2000" placeholder="Type your feedback here..."></textarea>
   `;
 
   wrap.appendChild(
@@ -488,14 +512,14 @@ const TUTORIAL_SLIDES = [
     body: 'Type any question and hit enter. Ask one question at a time; your answers show up in History.',
   },
   {
-    visual: 'marks',
+    visual: 'popup',
     title: 'Mark Your Suspects',
-    body: 'Click a cell to cycle it: red (eliminated), yellow (suspect), green (likely). This is just for you to keep track — it doesn’t affect your score.',
+    body: 'Click a card to open its popup, then tap red (eliminated), yellow (suspect), or green (likely) to mark it. This is just for you to keep track — it doesn’t affect your score.',
   },
   {
-    visual: 'shake',
+    visual: 'popup',
     title: 'Lock In Your Guess',
-    body: 'Double-click (or long-press on touch) a cell to guess. Guessed wrong? No penalty — the cell just shakes. Try again.',
+    body: 'In that same popup, tap “Guess this Blute” to lock in your answer. A wrong guess still counts as a question, so guess when you’re confident.',
   },
   {
     image: 'blutes/gamer.png',
@@ -511,18 +535,21 @@ const TUTORIAL_SLIDES = [
 ];
 
 function renderTutorialSlideVisual(slide) {
-  if (slide.visual === 'marks') {
+  if (slide.visual === 'popup') {
     return `
-      <div class="tutorial-marks">
-        <div class="tutorial-mock-cell" data-mark="red"><img src="blutes/glad.PNG" alt="" /></div>
-        <div class="tutorial-mock-cell" data-mark="yellow"><img src="blutes/glad.PNG" alt="" /></div>
-        <div class="tutorial-mock-cell" data-mark="green"><img src="blutes/glad.PNG" alt="" /></div>
+      <div class="tutorial-mock-cell">
+        <img src="blutes/glad.PNG" alt="" />
+        <div class="card-overlay">
+          <button type="button" class="card-overlay-close">✕</button>
+          <div class="card-overlay-swatches">
+            <button type="button" class="card-overlay-swatch" data-color="red"></button>
+            <button type="button" class="card-overlay-swatch active" data-color="yellow"></button>
+            <button type="button" class="card-overlay-swatch" data-color="green"></button>
+          </div>
+          <button type="button" class="card-overlay-guess">Guess</button>
+        </div>
       </div>
-      <div class="tutorial-mark-labels"><span>Eliminated</span><span>Suspect</span><span>Likely</span></div>
     `;
-  }
-  if (slide.visual === 'shake') {
-    return `<div class="tutorial-mock-cell tutorial-shake-demo"><img src="blutes/glad.PNG" alt="" /></div>`;
   }
   if (slide.visual === 'ask') {
     return `
@@ -622,8 +649,6 @@ function startRandomBoard() {
   gameMode = 'unlimited';
 
   closeModal();
-  grid.classList.remove('locked');
-  questionWrap.classList.remove('locked');
   buildGame(getTodayString(), Math.random);
 }
 
@@ -633,7 +658,6 @@ function handleWin() {
   const questionsAsked = dailyState.questionsAsked;
 
   if (gameMode === 'unlimited') {
-    lockBoard();
     const wrap = document.createElement('div');
     const plural = questionsAsked === 1 ? '' : 's';
     wrap.innerHTML = `<h2>Solved!</h2><p>Got it in ${questionsAsked} question${plural}. Loading a new practice board…</p>`;
@@ -646,8 +670,15 @@ function handleWin() {
   // only your earliest score of the day is ever recorded.
   dailyState.finished = false;
 
+  if (dailyState.quit) {
+    // Gave up earlier this round — still fully playable, just excluded from
+    // today's leaderboard, so a correct guess now doesn't submit a score.
+    renderStatsModal();
+    return;
+  }
+
   if (dailyState.scoreRecorded) {
-    renderStatsModal(dailyState.date, dailyState.recordedScore, dailyState.recordedColorBonus);
+    renderStatsModal(dailyState.recordedScore, dailyState.recordedColorBonus);
     return;
   }
 
@@ -661,7 +692,7 @@ function handleWin() {
       dailyState.scoreRecorded = true;
       dailyState.recordedScore = finalScore;
       dailyState.recordedColorBonus = colorBonus;
-      renderStatsModal(dailyState.date, finalScore, colorBonus);
+      renderStatsModal(finalScore, colorBonus);
     })
     .catch(() => {
       // Most likely cause: another tab/device already recorded today's score for
@@ -673,7 +704,7 @@ function handleWin() {
           dailyState.scoreRecorded = true;
           dailyState.recordedScore = existingScore;
           dailyState.recordedColorBonus = existingColorBonus;
-          renderStatsModal(dailyState.date, existingScore, existingColorBonus);
+          renderStatsModal(existingScore, existingColorBonus);
           return;
         }
         const wrap = document.createElement('div');
@@ -684,6 +715,43 @@ function handleWin() {
     });
 }
 
+function showQuitState(persist) {
+  dailyState.quit = true;
+
+  const secretBlute = getSecretBlute();
+  const cell = Array.from(grid.children).find((c) => c.dataset.id === secretBlute.id);
+  if (cell) cell.classList.add('revealed-secret');
+
+  if (persist) localStorage.setItem(QUIT_DATE_KEY, dailyState.date);
+
+  const wrap = document.createElement('div');
+  if (gameMode === 'unlimited') {
+    wrap.innerHTML = `<h2>The answer was ${secretBlute.name}</h2><p>No worries — practice boards don't affect any leaderboard.</p>`;
+    wrap.appendChild(makeButton('New Board', startRandomBoard));
+  } else {
+    wrap.innerHTML = `<h2>The answer was ${secretBlute.name}</h2><p>You won't appear on today's leaderboard for this round.</p>`;
+    wrap.appendChild(makeButton('See Stats', () => renderStatsModal()));
+  }
+  openModal(wrap);
+}
+
+function handleQuit() {
+  if (!dailyState || dailyState.scoreRecorded || dailyState.quit) return;
+  finalizeLastQuestionMarks();
+  showQuitState(gameMode === 'daily');
+}
+
+function renderQuitConfirmModal() {
+  const wrap = document.createElement('div');
+  wrap.innerHTML = `
+    <h2>Give up?</h2>
+    <p>This reveals today's secret blute and disqualifies you from today's leaderboard.</p>
+  `;
+  wrap.appendChild(makeButton('Cancel', closeModal, 'secondary'));
+  wrap.appendChild(makeButton('Give Up', () => { closeModal(); handleQuit(); }));
+  openModal(wrap);
+}
+
 function handleGuess(guessId, cell) {
   if (!dailyState || dailyState.finished) return;
 
@@ -691,12 +759,15 @@ function handleGuess(guessId, cell) {
     dailyState.finished = true;
     handleWin();
   } else if (cell) {
-    shakeWrongGuess(cell);
+    dailyState.questionsAsked += 1;
+    updateScoreDisplay();
+    showWrongGuessModal();
   }
 }
 
 function buildGame(date, rand) {
   finalizeLastQuestionMarks();
+  closeCardPopup();
 
   const playable = BLUTE_DATA.blutes.filter((b) => b.is_blute);
   const gridBlutes = shuffle(playable, rand).slice(0, 25);
@@ -722,12 +793,18 @@ function buildGame(date, rand) {
   questionInput.placeholder = DEFAULT_PLACEHOLDER;
   showQuestionFeedback('');
   renderHistory();
+  updateScoreDisplay();
   syncGridWidth();
 }
 
 function initDailyGame() {
   const today = getTodayString();
   buildGame(today, seededRandom(dateToSeed(today)));
+
+  if (localStorage.getItem(QUIT_DATE_KEY) === today) {
+    showQuitState(false);
+    return;
+  }
 
   getPlayerEntry(today, getPlayerUUID()).then((entry) => {
     if (entry !== null && dailyState.date === today) {
@@ -736,14 +813,14 @@ function initDailyGame() {
       dailyState.scoreRecorded = true;
       dailyState.recordedScore = existingScore;
       dailyState.recordedColorBonus = existingColorBonus;
-      renderStatsModal(today, existingScore, existingColorBonus);
+      renderStatsModal(existingScore, existingColorBonus);
     }
   });
 }
 
 statsBtn.addEventListener('click', () => {
   if (!dailyState) return;
-  renderStatsModal(dailyState.date);
+  renderStatsModal(dailyState.scoreRecorded ? dailyState.recordedScore : undefined, dailyState.recordedColorBonus);
 });
 
 infoBtn.addEventListener('click', () => renderTutorialModal(() => {}));
@@ -760,8 +837,6 @@ function updateModeButtons() {
 
 function toggleUnlimitedMode() {
   closeModal();
-  grid.classList.remove('locked');
-  questionWrap.classList.remove('locked');
 
   if (gameMode === 'unlimited') {
     gameMode = 'daily';
@@ -774,6 +849,11 @@ function toggleUnlimitedMode() {
 }
 
 unlimitedModeBtn.addEventListener('click', toggleUnlimitedMode);
+
+quitBtn.addEventListener('click', () => {
+  if (!dailyState || dailyState.scoreRecorded || dailyState.quit) return;
+  renderQuitConfirmModal();
+});
 
 modalOverlay.addEventListener('click', (e) => {
   if (e.target !== modalOverlay) return;

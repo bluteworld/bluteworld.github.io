@@ -13,7 +13,7 @@
       "$date": {
         "$uuid": {
           ".write": true,
-          ".read": true
+          ".read": false
         }
       }
     },
