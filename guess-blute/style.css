@@ -24,13 +24,21 @@ body {
 .title-bar {
   flex: 0 0 auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  gap: 1vmin;
   width: var(--grid-width);
   margin: 0 auto;
   padding: 2.5vmin 0 1vmin;
   font-family: 'Bubblegum Sans', sans-serif;
   color: #E3D0A7;
+}
+
+.title-bar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .title-group {
@@ -61,21 +69,23 @@ body {
   color: #E3D0A7;
 }
 
-.icon-buttons {
+.header-actions {
   display: flex;
-  gap: 1.5vmin;
+  align-items: center;
+  gap: max(1.5vmin, 7.85px);
 }
 
 .icon-btn {
   position: relative;
-  width: 4vmin;
-  height: 4vmin;
+  width: 32px;
+  height: 32px;
   aspect-ratio: 1;
+  flex-shrink: 0;
   border: none;
-  border-radius: 1vmin;
+  border-radius: 8px;
   background: #8C8C5F;
   color: #F0E6C8;
-  font-size: 2.4vmin;
+  font-size: 18px;
   line-height: 1;
   display: flex;
   align-items: center;
@@ -107,7 +117,19 @@ body {
   opacity: 1;
 }
 
-.icon-btn.active {
+.final-guess-btn {
+  border: none;
+  border-radius: max(0.6vmin, 4px);
+  background: #f0e6c8;
+  color: #3a2e1f;
+  font-family: 'Bubblegum Sans', sans-serif;
+  font-size: max(1.3vmin, 20px);
+  padding: max(0.6vmin, 4px) max(1.4vmin, 9px);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.final-guess-btn.active {
   background: #c0392b;
   color: #fff;
 }
@@ -321,12 +343,34 @@ body {
   background: rgba(200, 60, 60, 0.5);
 }
 
-.cell[data-mark='yellow']::after {
-  background: rgba(230, 200, 60, 0.5);
+.grid.guess-mode .cell::after {
+  background: rgba(200, 60, 60, 0.5);
 }
 
-.cell[data-mark='green']::after {
+.grid.guess-mode .cell.guess-selected::after {
   background: rgba(70, 160, 90, 0.5);
+}
+
+.guess-confirm-btn {
+  position: absolute;
+  bottom: 6%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  background: #f0e6c8;
+  color: #3a2e1f;
+  border: 1px solid #3a2e1f;
+  border-radius: 999px;
+  padding: max(0.4vmin, 3px) max(2vmin, 10px);
+  font-family: 'Bubblegum Sans', sans-serif;
+  font-weight: bold;
+  font-size: max(1.1vmin, 10px);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.guess-confirm-btn:hover {
+  background: #e3d0a7;
 }
 
 @keyframes wrong-guess-shake {
@@ -350,89 +394,6 @@ body {
   min-height: 0;
   object-fit: contain;
   pointer-events: none;
-}
-
-.card-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  border-radius: 8px;
-  background: rgba(58, 46, 31, 0.55);
-  font-family: 'Bubblegum Sans', sans-serif;
-}
-
-.card-overlay[hidden] {
-  display: none;
-}
-
-.card-overlay-close {
-  position: absolute;
-  top: 5%;
-  left: 6%;
-  border: none;
-  background: transparent;
-  color: #f0e6c8;
-  font-size: 2.2vmin;
-  line-height: 1;
-  padding: 0.5vmin;
-  cursor: pointer;
-}
-
-.card-overlay-swatches {
-  position: absolute;
-  top: 6%;
-  right: 6%;
-  width: 16%;
-  display: flex;
-  flex-direction: column;
-  gap: 4%;
-}
-
-.card-overlay-swatch {
-  width: 100%;
-  aspect-ratio: 1;
-  min-width: 14px;
-  border-radius: 50%;
-  border: 2px solid rgba(58, 46, 31, 0.4);
-  padding: 0;
-  cursor: pointer;
-}
-
-.card-overlay-swatch[data-color='red'] {
-  background: #d94f3d;
-}
-
-.card-overlay-swatch[data-color='yellow'] {
-  background: #e8c93c;
-}
-
-.card-overlay-swatch[data-color='green'] {
-  background: #4caf60;
-}
-
-.card-overlay-swatch.active {
-  box-shadow: 0 0 0 2px #f0e6c8, 0 0 0 4px #3a2e1f;
-}
-
-.card-overlay-guess {
-  position: absolute;
-  bottom: 4%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #f0e6c8;
-  color: #3a2e1f;
-  border: 1px solid #3a2e1f;
-  border-radius: 999px;
-  padding: 0.3vmin 1.6vmin;
-  font-family: inherit;
-  font-weight: bold;
-  font-size: 1vmin;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.card-overlay-guess:hover {
-  background: #e3d0a7;
 }
 
 .modal-overlay {
@@ -512,6 +473,7 @@ body {
 .modal textarea {
   display: block;
   width: 100%;
+  text-align: left;
   padding: 1.2vmin;
   border-radius: 0.5vmin;
   border: 1px solid #ac9366;
@@ -555,9 +517,32 @@ body {
   margin-right: 1vmin;
 }
 
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1vmin;
+  margin-bottom: 2.5vmin;
+}
+
+.modal button.menu-item {
+  width: 100%;
+  margin-right: 0;
+  text-align: center;
+}
+
+.modal button.menu-item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .modal:has(> .toast-modal) {
   padding: 3vmin 5vmin;
   min-width: unset;
+  text-align: center;
+}
+
+.modal:has(> .name-modal),
+.modal:has(> .menu-modal) {
   text-align: center;
 }
 
@@ -657,14 +642,21 @@ body {
   padding: 10%;
 }
 
-.tutorial-mock-cell .card-overlay-close {
-  font-size: 11px;
-  padding: 2px;
+.tutorial-mock-cell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  pointer-events: none;
+  background: transparent;
 }
 
-.tutorial-mock-cell .card-overlay-guess {
-  font-size: 6px;
-  padding: 2px 8px;
+.tutorial-mock-cell[data-mark='red']::after {
+  background: rgba(200, 60, 60, 0.5);
+}
+
+.tutorial-mock-cell.guess-selected::after {
+  background: rgba(70, 160, 90, 0.5);
 }
 
 .tutorial-mock-cell img {
@@ -672,6 +664,13 @@ body {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.tutorial-guess-demo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5vmin;
 }
 
 .tutorial-question-box {
