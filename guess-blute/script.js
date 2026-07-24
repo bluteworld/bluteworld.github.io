@@ -303,7 +303,7 @@ function showWrongGuessModal() {
 
 const CONFETTI_COLORS = ['#e6c84a', '#c0392b', '#3f7a3f', '#4a90c8', '#ac9366', '#f0e6c8'];
 const CONFETTI_PIECE_COUNT = 120;
-const CONFETTI_LIFETIME_MS = 3500;
+const CONFETTI_LIFETIME_MS = 10500;
 
 function launchConfetti() {
   const container = document.createElement('div');
@@ -314,8 +314,8 @@ function launchConfetti() {
     piece.className = 'confetti-piece';
     piece.style.left = `${Math.random() * 100}vw`;
     piece.style.backgroundColor = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
-    piece.style.animationDelay = `${Math.random() * 0.5}s`;
-    piece.style.animationDuration = `${2 + Math.random() * 1.5}s`;
+    piece.style.animationDelay = `${Math.random() * 1.5}s`;
+    piece.style.animationDuration = `${6 + Math.random() * 4.5}s`;
     piece.style.setProperty('--start-rotate', `${Math.random() * 360}deg`);
     container.appendChild(piece);
   }
