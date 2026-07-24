@@ -35,8 +35,10 @@ function shakeFeedback() {
   setTimeout(() => questionFeedback.classList.remove('shake'), WRONG_GUESS_SHAKE_MS);
 }
 
+// Color questions are excluded from hints since asking one costs the
+// no-color score bonus — hints shouldn't nudge players into giving it up.
 function randomExampleQuestion() {
-  const list = BLUTE_DATA.questions;
+  const list = BLUTE_DATA.questions.filter((q) => q.attribute !== 'color');
   return list[Math.floor(Math.random() * list.length)].text;
 }
 
@@ -299,6 +301,29 @@ function showWrongGuessModal() {
   }, WRONG_GUESS_MODAL_MS);
 }
 
+const CONFETTI_COLORS = ['#e6c84a', '#c0392b', '#3f7a3f', '#4a90c8', '#ac9366', '#f0e6c8'];
+const CONFETTI_PIECE_COUNT = 120;
+const CONFETTI_LIFETIME_MS = 3500;
+
+function launchConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+
+  for (let i = 0; i < CONFETTI_PIECE_COUNT; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = `${Math.random() * 100}vw`;
+    piece.style.backgroundColor = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+    piece.style.animationDelay = `${Math.random() * 0.5}s`;
+    piece.style.animationDuration = `${2 + Math.random() * 1.5}s`;
+    piece.style.setProperty('--start-rotate', `${Math.random() * 360}deg`);
+    container.appendChild(piece);
+  }
+
+  document.body.appendChild(container);
+  setTimeout(() => container.remove(), CONFETTI_LIFETIME_MS);
+}
+
 function askQuestion() {
   if (!dailyState || dailyState.finished) return;
 
@@ -371,7 +396,7 @@ function appendPlayerList(wrap, before) {
   wrap.insertBefore(heading, before);
 
   const note = document.createElement('p');
-  note.className = 'stats-lowest-note';
+  note.className = 'leaderboard-note';
   note.textContent = 'Loading…';
   wrap.insertBefore(note, before);
 
@@ -410,16 +435,16 @@ function appendPlayerList(wrap, before) {
     });
 }
 
-function renderStatsModal(yourScore, colorBonus) {
+function renderLeaderboardModal(yourScore, colorBonus) {
   const wrap = document.createElement('div');
-  wrap.innerHTML = `<h2>Today's Stats</h2>`;
+  wrap.innerHTML = `<h2>Today's Leaderboard</h2>`;
 
   if (typeof yourScore !== 'number') {
     const p = document.createElement('p');
     p.textContent = "You haven't finished today's puzzle yet.";
     wrap.appendChild(p);
     const closeBtn = makeButton('Close', closeModal);
-    closeBtn.classList.add('stats-close');
+    closeBtn.classList.add('leaderboard-close');
     wrap.appendChild(closeBtn);
     appendPlayerList(wrap, closeBtn);
     openModal(wrap);
@@ -451,7 +476,7 @@ function renderStatsModal(yourScore, colorBonus) {
 
   wrap.appendChild(list);
   const closeBtn = makeButton('Close', closeModal);
-  closeBtn.classList.add('stats-close');
+  closeBtn.classList.add('leaderboard-close');
   wrap.appendChild(closeBtn);
   appendPlayerList(wrap, closeBtn);
   openModal(wrap);
@@ -565,7 +590,7 @@ const TUTORIAL_SLIDES = [
   {
     image: 'blutes/party.png',
     title: 'One Puzzle a Day',
-    body: 'There’s a new secret blute every day — open the menu to check Stats, or switch to Unlimited Mode anytime for random practice boards (they don’t affect the leaderboard).',
+    body: 'There’s a new secret blute every day — open the menu to check the Leaderboard, or switch to Unlimited Mode anytime for random practice boards (they don’t affect the leaderboard).',
   },
 ];
 
@@ -706,12 +731,12 @@ function handleWin() {
   if (dailyState.quit) {
     // Gave up earlier this round — still fully playable, just excluded from
     // today's leaderboard, so a correct guess now doesn't submit a score.
-    renderStatsModal();
+    renderLeaderboardModal();
     return;
   }
 
   if (dailyState.scoreRecorded) {
-    renderStatsModal(dailyState.recordedScore, dailyState.recordedColorBonus);
+    renderLeaderboardModal(dailyState.recordedScore, dailyState.recordedColorBonus);
     return;
   }
 
@@ -725,7 +750,7 @@ function handleWin() {
       dailyState.scoreRecorded = true;
       dailyState.recordedScore = finalScore;
       dailyState.recordedColorBonus = colorBonus;
-      renderStatsModal(finalScore, colorBonus);
+      renderLeaderboardModal(finalScore, colorBonus);
     })
     .catch(() => {
       // Most likely cause: another tab/device already recorded today's score for
@@ -737,7 +762,7 @@ function handleWin() {
           dailyState.scoreRecorded = true;
           dailyState.recordedScore = existingScore;
           dailyState.recordedColorBonus = existingColorBonus;
-          renderStatsModal(existingScore, existingColorBonus);
+          renderLeaderboardModal(existingScore, existingColorBonus);
           return;
         }
         const wrap = document.createElement('div');
@@ -763,7 +788,7 @@ function showQuitState(persist) {
     wrap.appendChild(makeButton('New Board', startRandomBoard));
   } else {
     wrap.innerHTML = `<h2>The answer was ${secretBlute.name}</h2><p>You won't appear on today's leaderboard for this round.</p>`;
-    wrap.appendChild(makeButton('See Stats', () => renderStatsModal()));
+    wrap.appendChild(makeButton('See Leaderboard', () => renderLeaderboardModal()));
   }
   openModal(wrap);
 }
@@ -791,6 +816,7 @@ function handleGuess(guessId, cell) {
   if (guessId === dailyState.secretId) {
     dailyState.finished = true;
     if (cell) cell.classList.add('correct-guess');
+    launchConfetti();
     handleWin();
   } else if (cell) {
     dailyState.questionsAsked += 1;
@@ -847,7 +873,7 @@ function initDailyGame() {
       dailyState.scoreRecorded = true;
       dailyState.recordedScore = existingScore;
       dailyState.recordedColorBonus = existingColorBonus;
-      renderStatsModal(existingScore, existingColorBonus);
+      renderLeaderboardModal(existingScore, existingColorBonus);
     }
   });
 }
@@ -882,10 +908,10 @@ function renderMenuModal() {
 
   const items = [
     ['Give Up', () => { closeModal(); renderQuitConfirmModal(); }, !canGiveUp],
-    ['Stats', () => {
+    ['Leaderboard', () => {
       if (!dailyState) return;
       closeModal();
-      renderStatsModal(dailyState.scoreRecorded ? dailyState.recordedScore : undefined, dailyState.recordedColorBonus);
+      renderLeaderboardModal(dailyState.scoreRecorded ? dailyState.recordedScore : undefined, dailyState.recordedColorBonus);
     }],
     ['How to Play', () => { closeModal(); renderTutorialModal(() => {}); }],
     [gameMode === 'unlimited' ? 'Back to Daily Puzzle' : 'Unlimited Mode', () => { closeModal(); toggleUnlimitedMode(); }],

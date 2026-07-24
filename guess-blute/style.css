@@ -391,6 +391,30 @@ body {
   80% { transform: translateX(3%); }
 }
 
+.confetti-container {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 45;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -12px;
+  width: 8px;
+  height: 14px;
+  opacity: 0.9;
+  animation-name: confetti-fall;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(0) rotate(var(--start-rotate)); opacity: 1; }
+  100% { transform: translateY(105vh) rotate(calc(var(--start-rotate) + 720deg)); opacity: 0.85; }
+}
+
 .cell.revealed-secret::after {
   box-shadow: inset 0 0 0 3px #e6c84a;
   background: rgba(230, 200, 74, 0.25);
@@ -512,12 +536,12 @@ body {
   cursor: pointer;
 }
 
-.modal button.stats-close {
+.modal button.leaderboard-close {
   display: block;
   margin: 0 auto;
 }
 
-.stats-lowest-note {
+.leaderboard-note {
   font-size: 0.75rem;
   color: rgba(58, 46, 31, 0.6);
   text-align: center;

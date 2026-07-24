@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <title>Blute Attribute Review</title>
-<script src="../blutes-data.js"></script>
+<script src="../../blutes-data.js"></script>
 <style>
   :root { color-scheme: light dark; }
   body {
@@ -310,7 +310,7 @@ function render() {
     card.className = 'card' + (!isMatch && !hideNonMatches ? ' dim' : '') + (isDirty ? ' dirty' : '');
 
     const img = document.createElement('img');
-    img.src = '../' + b.image;
+    img.src = '../../' + b.image;
     img.loading = 'lazy';
     img.alt = b.name;
 

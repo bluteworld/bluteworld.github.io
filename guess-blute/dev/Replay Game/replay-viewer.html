@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Guess Blute Replay Viewer</title>
+<script src="../../blutes-data.js"></script>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+    margin: 0;
+    background: #f4f4f2;
+    color: #222;
+  }
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #222;
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  header h1 { font-size: 15px; margin: 0; margin-right: 8px; white-space: nowrap; }
+  header input[type=file] { font-size: 12px; color: #fff; }
+  header input[type=text] {
+    font-size: 12px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    border: 1px solid #555;
+    background: #333;
+    color: #fff;
+  }
+  header button {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #555;
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+  }
+  header button:disabled { opacity: 0.4; cursor: default; }
+  #fetchStatus { font-size: 12px; color: #ffb4b4; }
+  #summary {
+    padding: 10px 16px;
+    font-size: 13px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    display: none;
+  }
+  #summary b { font-weight: 600; }
+  #app { display: none; padding: 16px; gap: 20px; }
+  #app.ready { display: flex; flex-wrap: wrap; }
+  #board {
+    display: grid;
+    grid-template-columns: repeat(5, 70px);
+    grid-auto-rows: 70px;
+    gap: 6px;
+  }
+  .cell {
+    position: relative;
+    border-radius: 8px;
+    background-image: url('../../card_bg.PNG');
+    background-size: 100% 100%;
+    padding: 8%;
+    box-sizing: border-box;
+  }
+  .cell img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .cell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    pointer-events: none;
+  }
+  .cell.marked::after { background: rgba(200, 60, 60, 0.5); }
+  .cell.secret::after { box-shadow: inset 0 0 0 3px #e6c84a; background: rgba(230, 200, 74, 0.2); }
+  .cell .cell-name {
+    position: absolute;
+    bottom: -16px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 9px;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #side { flex: 1 1 320px; min-width: 280px; }
+  #stepControls { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  #stepLabel { font-size: 13px; font-weight: 600; }
+  #stepText { font-size: 15px; margin: 10px 0; min-height: 40px; }
+  #stepText .answer-yes { color: #2f7a2f; font-weight: bold; }
+  #stepText .answer-no { color: #a03; font-weight: bold; }
+  #stepText .answer-na { color: #8a7a2f; font-weight: bold; }
+  #history { font-size: 12px; border-collapse: collapse; width: 100%; }
+  #history td, #history th { padding: 4px 6px; border-bottom: 1px solid #e2e2e2; text-align: left; }
+  #history tr.current { background: #fff3c4; }
+  #unanswered { font-size: 12px; margin-top: 16px; }
+  #unanswered li { margin-bottom: 4px; color: #a03; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Guess Blute Replay Viewer</h1>
+  <input type="text" id="dateInput" placeholder="YYYY-MM-DD" size="10" />
+  <input type="text" id="uuidInput" placeholder="uuid" size="24" />
+  <button id="fetchBtn">Fetch</button>
+  <span id="fetchStatus"></span>
+  <span style="opacity:0.6;">or</span>
+  <input type="file" id="fileInput" accept="application/json" />
+</header>
+<div id="summary"></div>
+<div id="app">
+  <div id="board"></div>
+  <div id="side">
+    <div id="stepControls">
+      <button id="prevBtn">&larr; Prev</button>
+      <span id="stepLabel"></span>
+      <button id="nextBtn">Next &rarr;</button>
+    </div>
+    <div id="stepText"></div>
+    <table id="history">
+      <thead><tr><th>#</th><th>Question</th><th>Answer</th></tr></thead>
+      <tbody id="historyBody"></tbody>
+    </table>
+    <ul id="unanswered"></ul>
+  </div>
+</div>
+
+<script>
+  const fileInput = document.getElementById('fileInput');
+  const dateInput = document.getElementById('dateInput');
+  const uuidInput = document.getElementById('uuidInput');
+  const fetchBtn = document.getElementById('fetchBtn');
+  const fetchStatus = document.getElementById('fetchStatus');
+  const summaryEl = document.getElementById('summary');
+  const appEl = document.getElementById('app');
+  const boardEl = document.getElementById('board');
+  const stepLabelEl = document.getElementById('stepLabel');
+  const stepTextEl = document.getElementById('stepText');
+  const historyBody = document.getElementById('historyBody');
+  const unansweredEl = document.getElementById('unanswered');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  const ANSWER_LABELS = { yes: 'Yes', no: 'No', na: 'N/A' };
+
+  let entries = [];
+  let boardIds = [];
+  let secretId = null;
+  let step = 0; // 0..entries.length ; entries.length is the "final state" step
+
+  function bluteById(id) {
+    return BLUTE_DATA.blutes.find((b) => b.id === id);
+  }
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        loadReplay(JSON.parse(reader.result));
+      } catch (err) {
+        alert('Could not parse that file: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  });
+
+  function fetchReplay() {
+    const date = dateInput.value.trim();
+    const uuid = uuidInput.value.trim();
+    if (!date || !uuid) {
+      fetchStatus.textContent = 'Enter both a date and a uuid.';
+      return;
+    }
+    fetchStatus.textContent = 'Loading…';
+    fetchBtn.disabled = true;
+    fetch(`/api/replay?date=${encodeURIComponent(date)}&uuid=${encodeURIComponent(uuid)}`)
+      .then((r) => r.json().then((body) => ({ ok: r.ok, body })))
+      .then(({ ok, body }) => {
+        fetchBtn.disabled = false;
+        if (!ok) {
+          fetchStatus.textContent = body.error || 'Failed to load.';
+          return;
+        }
+        fetchStatus.textContent = '';
+        loadReplay(body);
+      })
+      .catch(() => {
+        fetchBtn.disabled = false;
+        fetchStatus.textContent = 'Could not reach the local replay server — is dev/replay-server.js running?';
+      });
+  }
+
+  fetchBtn.addEventListener('click', fetchReplay);
+  uuidInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') fetchReplay(); });
+  dateInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') fetchReplay(); });
+
+  function loadReplay(data) {
+    entries = (data.questionLog || []).slice().sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+    const unanswered = (data.unansweredQuestions || []).slice().sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+    if (entries.length === 0) {
+      summaryEl.style.display = 'block';
+      summaryEl.textContent = 'No answered questions in this log — nothing to replay.';
+      appEl.classList.remove('ready');
+      return;
+    }
+
+    secretId = entries[0].secretId;
+    const idSet = new Set();
+    entries.forEach((e) => Object.keys(e.boardAnswers || {}).forEach((id) => idSet.add(id)));
+    boardIds = Array.from(idSet)
+      .map(bluteById)
+      .filter(Boolean)
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((b) => b.id);
+
+    const lb = data.leaderboard;
+    const name = entries[0].name || (lb && lb.name) || 'Anonymous';
+    const secretBlute = bluteById(secretId);
+    summaryEl.style.display = 'block';
+    summaryEl.innerHTML =
+      `<b>${escapeHtml(name)}</b> — ${escapeHtml(data.date)} — secret: <b>${secretBlute ? escapeHtml(secretBlute.name) : secretId}</b>` +
+      (lb ? ` — final score: <b>${lb.questionsAsked}</b>${lb.colorBonus ? ` (no-color bonus: -${lb.colorBonus})` : ''}` : ' — no leaderboard entry (didn’t finish or score not recorded)');
+
+    unansweredEl.innerHTML = '';
+    if (unanswered.length) {
+      const heading = document.createElement('li');
+      heading.style.color = '#555';
+      heading.textContent = `${unanswered.length} question(s) that didn't parse:`;
+      unansweredEl.appendChild(heading);
+      unanswered.forEach((u) => {
+        const li = document.createElement('li');
+        li.textContent = `"${u.text}" (${u.reason})`;
+        unansweredEl.appendChild(li);
+      });
+    }
+
+    appEl.classList.add('ready');
+    step = 0;
+    renderHistoryTable();
+    renderStep();
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  function renderHistoryTable() {
+    historyBody.innerHTML = '';
+    entries.forEach((entry, i) => {
+      const tr = document.createElement('tr');
+      tr.dataset.step = i;
+      const answerKey = entry.answer === true ? 'yes' : entry.answer === false ? 'no' : entry.answer;
+      tr.innerHTML = `<td>${i + 1}</td><td>${escapeHtml(entry.rawText)}</td><td class="answer-${answerKey}">${ANSWER_LABELS[answerKey] || answerKey}</td>`;
+      tr.addEventListener('click', () => { step = i; renderStep(); });
+      historyBody.appendChild(tr);
+    });
+  }
+
+  function currentMarks() {
+    if (step < entries.length) return entries[step].marksBefore || {};
+    const last = entries[entries.length - 1];
+    return last.marksAfter || last.marksBefore || {};
+  }
+
+  function renderStep() {
+    const isFinal = step >= entries.length;
+    stepLabelEl.textContent = isFinal ? `Final board state` : `Question ${step + 1} of ${entries.length}`;
+    prevBtn.disabled = step === 0;
+    nextBtn.disabled = step >= entries.length;
+
+    if (isFinal) {
+      stepTextEl.textContent = 'This is how the board was marked when the session ended.';
+    } else {
+      const entry = entries[step];
+      const answerKey = entry.answer === true ? 'yes' : entry.answer === false ? 'no' : entry.answer;
+      stepTextEl.innerHTML = `"${escapeHtml(entry.rawText)}" &rarr; <span class="answer-${answerKey}">${ANSWER_LABELS[answerKey] || answerKey}</span>`;
+    }
+
+    const marks = currentMarks();
+    boardEl.innerHTML = '';
+    boardIds.forEach((id) => {
+      const blute = bluteById(id);
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      if (marks[id] === 'red') cell.classList.add('marked');
+      if (id === secretId) cell.classList.add('secret');
+      const img = document.createElement('img');
+      img.src = '../../' + blute.image;
+      img.alt = blute.name;
+      cell.appendChild(img);
+      const label = document.createElement('div');
+      label.className = 'cell-name';
+      label.textContent = blute.name;
+      cell.appendChild(label);
+      boardEl.appendChild(cell);
+    });
+
+    Array.from(historyBody.children).forEach((tr) => {
+      tr.classList.toggle('current', Number(tr.dataset.step) === step);
+    });
+  }
+
+  prevBtn.addEventListener('click', () => { if (step > 0) { step -= 1; renderStep(); } });
+  nextBtn.addEventListener('click', () => { if (step < entries.length) { step += 1; renderStep(); } });
+</script>
+</body>
+</html>
