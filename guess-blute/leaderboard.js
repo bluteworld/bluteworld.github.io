@@ -7,37 +7,32 @@ function extractScore(entry) {
 }
 
 function submitScore(date, uuid, questionsAsked, name, extra = {}) {
-  return db.ref(`leaderboard/${date}/${uuid}`).set({ questionsAsked, name, uuid, ...extra });
+  return db.ref(`${date}/leaderboard/${uuid}`).set({ questionsAsked, name, uuid, ...extra });
 }
 
 function clearPlayerScore(date, uuid) {
-  return db.ref(`leaderboard/${date}/${uuid}`).remove();
+  return db.ref(`${date}/leaderboard/${uuid}`).remove();
 }
 
 function getPlayerEntry(date, uuid) {
   return db
-    .ref(`leaderboard/${date}/${uuid}`)
+    .ref(`${date}/leaderboard/${uuid}`)
     .get()
     .then((snapshot) => (snapshot.exists() ? snapshot.val() : null));
 }
 
-function getStats(date) {
+function getLeaderboard(date) {
   return db
-    .ref(`leaderboard/${date}`)
+    .ref(`${date}/leaderboard`)
     .get()
     .then((snapshot) => {
       const data = snapshot.val() || {};
-      const scores = Object.values(data).map(extractScore);
-
-      if (scores.length === 0) {
-        return { count: 0, average: null, best: null };
-      }
-
-      const sum = scores.reduce((a, b) => a + b, 0);
-      return {
-        count: scores.length,
-        average: sum / scores.length,
-        best: Math.min(...scores),
-      };
+      return Object.entries(data)
+        .map(([uuid, entry]) => ({
+          uuid,
+          name: (entry && typeof entry === 'object' && entry.name) || 'Anonymous',
+          score: extractScore(entry),
+        }))
+        .sort((a, b) => a.score - b.score);
     });
 }

@@ -1,7 +1,7 @@
 {
   "rules": {
-    "leaderboard": {
-      "$date": {
+    "$date": {
+      "leaderboard": {
         ".read": true,
         "$uuid": {
           ".write": "!data.exists()",
@@ -25,11 +25,9 @@
             ".validate": false
           }
         }
-      }
-    },
+      },
 
-    "questionLog": {
-      "$date": {
+      "questionLog": {
         "$uuid": {
           ".read": false,
           ".write": true,
@@ -51,7 +49,7 @@
               ".validate": "(newData.isString() && newData.val().length <= 60) || newData.isBoolean()"
             },
             "answer": {
-              ".validate": "newData.isBoolean()"
+              ".validate": "newData.val() == 'yes' || newData.val() == 'no' || newData.val() == 'na' || newData.isBoolean()"
             },
             "boardAnswers": {
               ".validate": true
@@ -70,11 +68,9 @@
             }
           }
         }
-      }
-    },
+      },
 
-    "unansweredQuestions": {
-      "$date": {
+      "unansweredQuestions": {
         "$uuid": {
           ".read": false,
           ".write": true,
@@ -100,11 +96,9 @@
             }
           }
         }
-      }
-    },
+      },
 
-    "feedback": {
-      "$date": {
+      "feedback": {
         "$uuid": {
           ".read": false,
           ".write": true,

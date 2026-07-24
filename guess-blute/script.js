@@ -22,6 +22,7 @@ let guessModeActive = false;
 const DEFAULT_PLACEHOLDER = questionInput.placeholder;
 
 const MARK_LABELS = { none: '', red: 'marked' };
+const ANSWER_LABELS = { yes: 'Yes', no: 'No', na: 'N/A' };
 const WRONG_GUESS_SHAKE_MS = 400;
 const WRONG_GUESS_MODAL_MS = 1000;
 const COLOR_BONUS = 2;
@@ -212,9 +213,13 @@ function getSecretBlute() {
   return BLUTE_DATA.blutes.find((b) => b.id === dailyState.secretId);
 }
 
+// Most attributes are plain booleans, so the answer is a straight yes/no.
+// A few (like hat_color) are null when the underlying thing doesn't exist at
+// all (no hat), which isn't really a "no" — it's not applicable.
 function evaluateQuestion(blute, question) {
-  if (question.attribute === 'color') return blute.color === question.value;
-  return blute.attributes[question.attribute] === question.value;
+  const value = question.attribute === 'color' ? blute.color : blute.attributes[question.attribute];
+  if (value === null || value === undefined) return 'na';
+  return value === question.value ? 'yes' : 'no';
 }
 
 function getBoardAnswers(question) {
@@ -265,8 +270,8 @@ function renderHistory() {
     const dots = document.createElement('span');
     dots.className = 'history-dots';
     const a = document.createElement('span');
-    a.textContent = entry.answer ? 'Yes' : 'No';
-    a.className = entry.answer ? 'answer-yes' : 'answer-no';
+    a.textContent = ANSWER_LABELS[entry.answer];
+    a.className = `answer-${entry.answer}`;
     li.appendChild(q);
     li.appendChild(dots);
     li.appendChild(a);
@@ -349,20 +354,55 @@ function askQuestion() {
   lastQuestionRef = ref;
 
   questionInput.value = '';
+  questionInput.placeholder = `Ask a question... e.g. ${randomExampleQuestion()}`;
   showQuestionFeedback('');
   renderHistory();
   updateScoreDisplay();
 }
 
-function appendLowestScoreNote(wrap) {
+// The player list loads asynchronously, so it's inserted before `before`
+// (the Close button, already in the DOM) rather than appended — otherwise it
+// would always land after the button regardless of visual intent, since the
+// fetch resolves later than the synchronous render that adds the button.
+function appendPlayerList(wrap, before) {
+  const heading = document.createElement('h3');
+  heading.className = 'players-heading';
+  heading.textContent = "Today's Players";
+  wrap.insertBefore(heading, before);
+
   const note = document.createElement('p');
   note.className = 'stats-lowest-note';
-  wrap.appendChild(note);
+  note.textContent = 'Loading…';
+  wrap.insertBefore(note, before);
 
-  getStats(dailyState.date)
-    .then((stats) => {
+  const uuid = getPlayerUUID();
+
+  getLeaderboard(dailyState.date)
+    .then((players) => {
       if (!modalContent.contains(wrap)) return;
-      note.textContent = stats.count > 0 ? `Lowest score today: ${stats.best}` : '';
+      note.remove();
+
+      if (players.length === 0) {
+        const p = document.createElement('p');
+        p.textContent = 'No scores yet today.';
+        wrap.insertBefore(p, before);
+        return;
+      }
+
+      const list = document.createElement('ul');
+      list.className = 'leaderboard-list players-list';
+      players.forEach((player) => {
+        const li = document.createElement('li');
+        if (player.uuid === uuid) li.classList.add('me');
+        const nameEl = document.createElement('span');
+        nameEl.textContent = player.name;
+        const scoreEl = document.createElement('span');
+        scoreEl.textContent = player.score;
+        li.appendChild(nameEl);
+        li.appendChild(scoreEl);
+        list.appendChild(li);
+      });
+      wrap.insertBefore(list, before);
     })
     .catch(() => {
       if (!modalContent.contains(wrap)) return;
@@ -378,10 +418,10 @@ function renderStatsModal(yourScore, colorBonus) {
     const p = document.createElement('p');
     p.textContent = "You haven't finished today's puzzle yet.";
     wrap.appendChild(p);
-    appendLowestScoreNote(wrap);
     const closeBtn = makeButton('Close', closeModal);
     closeBtn.classList.add('stats-close');
     wrap.appendChild(closeBtn);
+    appendPlayerList(wrap, closeBtn);
     openModal(wrap);
     return;
   }
@@ -410,10 +450,10 @@ function renderStatsModal(yourScore, colorBonus) {
   });
 
   wrap.appendChild(list);
-  appendLowestScoreNote(wrap);
   const closeBtn = makeButton('Close', closeModal);
   closeBtn.classList.add('stats-close');
   wrap.appendChild(closeBtn);
+  appendPlayerList(wrap, closeBtn);
   openModal(wrap);
 }
 
@@ -750,6 +790,7 @@ function handleGuess(guessId, cell) {
 
   if (guessId === dailyState.secretId) {
     dailyState.finished = true;
+    if (cell) cell.classList.add('correct-guess');
     handleWin();
   } else if (cell) {
     dailyState.questionsAsked += 1;
@@ -887,7 +928,6 @@ const frameProbe = new Image();
 frameProbe.onload = () => {
   document.documentElement.style.setProperty('--card-ratio', frameProbe.naturalWidth / frameProbe.naturalHeight);
   new ResizeObserver(syncGridWidth).observe(grid);
-  // renderNameModal(startGameAfterOnboarding);
-  startGameAfterOnboarding();
+  renderNameModal(startGameAfterOnboarding);
 };
 frameProbe.src = CARD_FRAME;

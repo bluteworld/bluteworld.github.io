@@ -3324,7 +3324,7 @@ const BLUTE_DATA = {
         "has_music_notes": false,
         "is_fancy_dressed": false,
         "is_traveling": false,
-        "holding_tool_or_prop": true,
+        "holding_tool_or_prop": false,
         "holding_pickaxe": false,
         "holding_shovel": false,
         "holding_spoon": false,

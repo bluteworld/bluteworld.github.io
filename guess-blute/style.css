@@ -310,6 +310,12 @@ body {
   font-weight: bold;
 }
 
+.history-list .answer-na {
+  flex: 0 0 auto;
+  color: #8a7a4a;
+  font-weight: bold;
+}
+
 .cell {
   position: relative;
   width: 100%;
@@ -343,8 +349,12 @@ body {
   background: rgba(200, 60, 60, 0.5);
 }
 
+.cell.correct-guess::after {
+  background: rgba(70, 160, 90, 0.5);
+}
+
 .grid.guess-mode .cell::after {
-  background: rgba(200, 60, 60, 0.5);
+  background: rgba(60, 120, 200, 0.5);
 }
 
 .grid.guess-mode .cell.guess-selected::after {
@@ -431,6 +441,14 @@ body {
 
 .modal h2 {
   margin-bottom: 2vmin;
+}
+
+.players-heading {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #7a6a4a;
+  margin: 3.5vmin 0 0.8vmin;
 }
 
 .modal p {
