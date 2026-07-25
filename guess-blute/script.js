@@ -139,7 +139,14 @@ function makeButton(label, onClick, variant = 'primary') {
 }
 
 function getTodayString() {
-  return new Date().toISOString().split('T')[0];
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Los_Angeles',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(new Date());
+  const lookup = Object.fromEntries(parts.map((p) => [p.type, p.value]));
+  return `${lookup.year}-${lookup.month}-${lookup.day}`;
 }
 
 function dateToSeed(dateStr) {
