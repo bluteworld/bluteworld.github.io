@@ -595,6 +595,31 @@ function downloadShareFile(file) {
   URL.revokeObjectURL(url);
 }
 
+function renderSharePreviewModal(file) {
+  const wrap = document.createElement('div');
+  wrap.className = 'share-preview-modal';
+  wrap.innerHTML = '<h2>Your score card</h2>';
+
+  const url = URL.createObjectURL(file);
+  const img = document.createElement('img');
+  img.className = 'share-preview-img';
+  img.src = url;
+  img.alt = 'Guess Blute score card';
+  wrap.appendChild(img);
+
+  const actions = document.createElement('div');
+  actions.className = 'share-preview-actions';
+  const revokeAndClose = () => {
+    URL.revokeObjectURL(url);
+    closeModal();
+  };
+  actions.appendChild(makeButton('Download', () => downloadShareFile(file)));
+  actions.appendChild(makeButton('Close', revokeAndClose, 'secondary'));
+  wrap.appendChild(actions);
+
+  openModal(wrap, () => URL.revokeObjectURL(url));
+}
+
 async function shareScoreCard(filePromise, score, triggerBtn) {
   const originalLabel = triggerBtn.textContent;
   triggerBtn.disabled = true;
@@ -613,11 +638,11 @@ async function shareScoreCard(filePromise, score, triggerBtn) {
         return;
       } catch (err) {
         if (err && err.name === 'AbortError') return; // player closed the share sheet
-        // Sharing failed for some other reason (e.g. activation expired) — fall back to download.
+        // Sharing failed for some other reason (e.g. activation expired) — fall back to a preview.
       }
     }
 
-    downloadShareFile(file);
+    renderSharePreviewModal(file);
   } catch (err) {
     console.error('Share card failed:', err);
     alert('Could not generate the share image. Please try again.');
