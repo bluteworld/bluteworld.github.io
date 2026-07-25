@@ -499,8 +499,39 @@ function loadImageAsync(src) {
   });
 }
 
+// Share cards only use this hand-picked set of blutes (share-images/), not
+// the full roster — these are the ones that actually look good at card size.
+const SHARE_IMAGE_FILES = [
+  'blushing.PNG',
+  'bubbles.PNG',
+  'cozy.PNG',
+  'dancing.PNG',
+  'daydreaming.png',
+  'envelope.PNG',
+  'excited.PNG',
+  'eye_mask.PNG',
+  'flying_kite.png',
+  'glad.PNG',
+  'icecream.png',
+  'in_love.PNG',
+  'jumprope.PNG',
+  'party.png',
+  'photobooth.PNG',
+  'photographer.png',
+  'runner.PNG',
+  'sitting_under_flower.PNG',
+  'swing.png',
+  'umbrella.png',
+  'winter_blushing.png',
+];
+
 function pickShareBlute() {
-  const pool = BLUTE_DATA.blutes.filter((b) => b.is_blute && b.id !== dailyState.secretId);
+  const pool = SHARE_IMAGE_FILES.map((filename) => {
+    const id = filename.replace(/\.[^.]+$/, '');
+    const blute = BLUTE_DATA.blutes.find((b) => b.id === id);
+    return blute && { id, name: blute.name, image: `share-images/${filename}` };
+  }).filter((entry) => entry && entry.id !== dailyState.secretId);
+
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
