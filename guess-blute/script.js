@@ -511,8 +511,7 @@ function formatShareDate(dateStr) {
   return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
-async function buildShareCard(score) {
-  const blute = pickShareBlute();
+async function buildShareCard(blute, rawScore, colorBonus, totalScore) {
   const [frameImg, bluteImg] = await Promise.all([
     loadImageAsync(CARD_FRAME),
     loadImageAsync(blute.image),
@@ -556,10 +555,16 @@ async function buildShareCard(score) {
 
   ctx.fillStyle = '#E3D0A7';
   ctx.font = '700 60px "Bubblegum Sans", sans-serif';
-  ctx.fillText(String(score), SHARE_CARD_WIDTH / 2, panelY + panelSize + 90);
+  ctx.fillText(String(totalScore), SHARE_CARD_WIDTH / 2, panelY + panelSize + 90);
 
   ctx.font = '400 24px "Bubblegum Sans", sans-serif';
-  ctx.fillText(score === 1 ? 'question asked' : 'questions asked', SHARE_CARD_WIDTH / 2, panelY + panelSize + 124);
+  ctx.fillText(totalScore === 1 ? 'question asked' : 'questions asked', SHARE_CARD_WIDTH / 2, panelY + panelSize + 124);
+
+  if (colorBonus) {
+    ctx.font = '400 20px "Bubblegum Sans", sans-serif';
+    ctx.fillStyle = 'rgba(227, 208, 167, 0.75)';
+    ctx.fillText(`(${rawScore} score − ${colorBonus} no-color bonus)`, SHARE_CARD_WIDTH / 2, panelY + panelSize + 154);
+  }
 
   ctx.font = '400 20px "Bubblegum Sans", sans-serif';
   ctx.fillStyle = 'rgba(227, 208, 167, 0.65)';
@@ -577,8 +582,8 @@ function canvasToBlob(canvas) {
 // image loads inside the click handler burns the browser's user-activation
 // window and silently breaks navigator.share on strict browsers (mobile
 // Safari in particular).
-function createShareFilePromise(score) {
-  return buildShareCard(score)
+function createShareFilePromise(blute, rawScore, colorBonus, totalScore) {
+  return buildShareCard(blute, rawScore, colorBonus, totalScore)
     .then((canvas) => canvasToBlob(canvas))
     .then((blob) => {
       if (!blob) throw new Error('Canvas produced no image data');
@@ -669,6 +674,19 @@ function renderLeaderboardModal(yourScore, colorBonus) {
   }
 
   const rawScore = yourScore + (colorBonus || 0);
+  const shareBlute = pickShareBlute();
+
+  const scoreCard = document.createElement('div');
+  scoreCard.className = 'score-card';
+
+  const frame = document.createElement('div');
+  frame.className = 'score-card-frame';
+  const bluteImg = document.createElement('img');
+  bluteImg.className = 'score-card-blute';
+  bluteImg.src = shareBlute.image;
+  bluteImg.alt = shareBlute.name;
+  frame.appendChild(bluteImg);
+  scoreCard.appendChild(frame);
 
   const list = document.createElement('ul');
   list.className = 'leaderboard-list';
@@ -690,13 +708,14 @@ function renderLeaderboardModal(yourScore, colorBonus) {
     li.appendChild(valueEl);
     list.appendChild(li);
   });
+  scoreCard.appendChild(list);
 
-  wrap.appendChild(list);
+  wrap.appendChild(scoreCard);
   const closeBtn = makeButton('Close', closeModal);
   closeBtn.classList.add('leaderboard-close');
   wrap.appendChild(closeBtn);
 
-  const shareFilePromise = createShareFilePromise(yourScore);
+  const shareFilePromise = createShareFilePromise(shareBlute, rawScore, colorBonus || 0, yourScore);
   const shareBtn = makeButton('Share', () => shareScoreCard(shareFilePromise, yourScore, shareBtn), 'secondary');
   shareBtn.classList.add('share-btn');
   wrap.insertBefore(shareBtn, closeBtn);

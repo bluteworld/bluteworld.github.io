@@ -604,6 +604,37 @@ body {
   color: #8a4a4a;
 }
 
+.score-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(172, 147, 102, 0.12);
+  border: 1px solid rgba(172, 147, 102, 0.35);
+  border-radius: 1.2vmin;
+  padding: 2.5vmin 1.5vmin 0.5vmin;
+  margin-bottom: 2vmin;
+}
+
+.score-card-frame {
+  width: 42%;
+  max-width: 190px;
+  aspect-ratio: 1;
+  background-image: url('card_bg.PNG');
+  background-size: 100% 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10%;
+  border-radius: 8px;
+  margin-bottom: 1vmin;
+}
+
+.score-card-blute {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
 .leaderboard-list {
   list-style: none;
   width: calc(100% - 3.5vmin);
