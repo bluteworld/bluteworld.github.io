@@ -452,6 +452,38 @@ body {
   max-width: 95vw;
 }
 
+/* The leaderboard modal keeps the score/share header and Close button
+   fixed in place and scrolls only the player list between them. */
+.modal:has(> .leaderboard-modal) {
+  display: flex;
+  overflow: hidden;
+}
+
+.leaderboard-modal {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+.leaderboard-top {
+  flex: 0 0 auto;
+}
+
+.leaderboard-scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.leaderboard-modal .leaderboard-close {
+  flex: 0 0 auto;
+  margin-top: 1.5vmin;
+  padding-top: 1.5vmin;
+  border-top: 1px solid rgba(172, 147, 102, 0.3);
+}
+
 .modal h2 {
   margin-bottom: 2vmin;
 }

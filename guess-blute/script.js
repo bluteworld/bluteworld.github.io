@@ -439,32 +439,30 @@ function askQuestion() {
   updateScoreDisplay();
 }
 
-// The player list loads asynchronously, so it's inserted before `before`
-// (the Close button, already in the DOM) rather than appended — otherwise it
-// would always land after the button regardless of visual intent, since the
-// fetch resolves later than the synchronous render that adds the button.
-function appendPlayerList(wrap, before) {
+// Appends into `container` — the scrollable region of the leaderboard modal,
+// separate from the sticky score/share header and the sticky Close footer.
+function appendPlayerList(container) {
   const heading = document.createElement('h3');
   heading.className = 'players-heading';
   heading.textContent = "Today's Players";
-  wrap.insertBefore(heading, before);
+  container.appendChild(heading);
 
   const note = document.createElement('p');
   note.className = 'leaderboard-note';
   note.textContent = 'Loading…';
-  wrap.insertBefore(note, before);
+  container.appendChild(note);
 
   const uuid = getPlayerUUID();
 
   getLeaderboard(dailyState.date)
     .then((players) => {
-      if (!modalContent.contains(wrap)) return;
+      if (!container.isConnected) return;
       note.remove();
 
       if (players.length === 0) {
         const p = document.createElement('p');
         p.textContent = 'No scores yet today.';
-        wrap.insertBefore(p, before);
+        container.appendChild(p);
         return;
       }
 
@@ -481,10 +479,10 @@ function appendPlayerList(wrap, before) {
         li.appendChild(scoreEl);
         list.appendChild(li);
       });
-      wrap.insertBefore(list, before);
+      container.appendChild(list);
     })
     .catch(() => {
-      if (!modalContent.contains(wrap)) return;
+      if (!container.isConnected) return;
       note.remove();
     });
 }
@@ -659,68 +657,72 @@ async function shareScoreCard(filePromise, score, triggerBtn) {
 
 function renderLeaderboardModal(yourScore, colorBonus) {
   const wrap = document.createElement('div');
-  wrap.innerHTML = `<h2>Today's Leaderboard</h2>`;
+  wrap.className = 'leaderboard-modal';
+
+  const top = document.createElement('div');
+  top.className = 'leaderboard-top';
+  top.innerHTML = `<h2>Today's Leaderboard</h2>`;
+
+  const scroll = document.createElement('div');
+  scroll.className = 'leaderboard-scroll';
+
+  const closeBtn = makeButton('Close', closeModal);
+  closeBtn.classList.add('leaderboard-close');
 
   if (typeof yourScore !== 'number') {
     const p = document.createElement('p');
     p.textContent = "You haven't finished today's puzzle yet.";
-    wrap.appendChild(p);
-    const closeBtn = makeButton('Close', closeModal);
-    closeBtn.classList.add('leaderboard-close');
-    wrap.appendChild(closeBtn);
-    appendPlayerList(wrap, closeBtn);
-    openModal(wrap);
-    return;
+    top.appendChild(p);
+  } else {
+    const rawScore = yourScore + (colorBonus || 0);
+    const shareBlute = pickShareBlute();
+
+    const scoreCard = document.createElement('div');
+    scoreCard.className = 'score-card';
+
+    const frame = document.createElement('div');
+    frame.className = 'score-card-frame';
+    const bluteImg = document.createElement('img');
+    bluteImg.className = 'score-card-blute';
+    bluteImg.src = shareBlute.image;
+    bluteImg.alt = shareBlute.name;
+    frame.appendChild(bluteImg);
+    scoreCard.appendChild(frame);
+
+    const list = document.createElement('ul');
+    list.className = 'leaderboard-list';
+
+    const rows = [
+      ['Score', rawScore],
+      ['No-color bonus', colorBonus ? `-${colorBonus}` : 0],
+      ['Total score', yourScore, true],
+    ];
+
+    rows.forEach(([label, value, bold]) => {
+      const li = document.createElement('li');
+      if (bold) li.classList.add('stat-highlight');
+      const labelEl = document.createElement('span');
+      labelEl.textContent = label;
+      const valueEl = document.createElement('span');
+      valueEl.textContent = value;
+      li.appendChild(labelEl);
+      li.appendChild(valueEl);
+      list.appendChild(li);
+    });
+    scoreCard.appendChild(list);
+    top.appendChild(scoreCard);
+
+    const shareFilePromise = createShareFilePromise(shareBlute, rawScore, colorBonus || 0, yourScore);
+    const shareBtn = makeButton('Share', () => shareScoreCard(shareFilePromise, yourScore, shareBtn), 'secondary');
+    shareBtn.classList.add('share-btn');
+    top.appendChild(shareBtn);
   }
 
-  const rawScore = yourScore + (colorBonus || 0);
-  const shareBlute = pickShareBlute();
-
-  const scoreCard = document.createElement('div');
-  scoreCard.className = 'score-card';
-
-  const frame = document.createElement('div');
-  frame.className = 'score-card-frame';
-  const bluteImg = document.createElement('img');
-  bluteImg.className = 'score-card-blute';
-  bluteImg.src = shareBlute.image;
-  bluteImg.alt = shareBlute.name;
-  frame.appendChild(bluteImg);
-  scoreCard.appendChild(frame);
-
-  const list = document.createElement('ul');
-  list.className = 'leaderboard-list';
-
-  const rows = [
-    ['Score', rawScore],
-    ['No-color bonus', colorBonus ? `-${colorBonus}` : 0],
-    ['Total score', yourScore, true],
-  ];
-
-  rows.forEach(([label, value, bold]) => {
-    const li = document.createElement('li');
-    if (bold) li.classList.add('stat-highlight');
-    const labelEl = document.createElement('span');
-    labelEl.textContent = label;
-    const valueEl = document.createElement('span');
-    valueEl.textContent = value;
-    li.appendChild(labelEl);
-    li.appendChild(valueEl);
-    list.appendChild(li);
-  });
-  scoreCard.appendChild(list);
-
-  wrap.appendChild(scoreCard);
-  const closeBtn = makeButton('Close', closeModal);
-  closeBtn.classList.add('leaderboard-close');
+  wrap.appendChild(top);
+  wrap.appendChild(scroll);
   wrap.appendChild(closeBtn);
+  appendPlayerList(scroll);
 
-  const shareFilePromise = createShareFilePromise(shareBlute, rawScore, colorBonus || 0, yourScore);
-  const shareBtn = makeButton('Share', () => shareScoreCard(shareFilePromise, yourScore, shareBtn), 'secondary');
-  shareBtn.classList.add('share-btn');
-  wrap.insertBefore(shareBtn, closeBtn);
-
-  appendPlayerList(wrap, closeBtn);
   openModal(wrap);
 }
 
