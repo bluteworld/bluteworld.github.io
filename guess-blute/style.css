@@ -548,6 +548,11 @@ body {
   margin-right: 1vmin;
 }
 
+.modal button.share-btn {
+  display: block;
+  margin: 0 auto 2vmin;
+}
+
 .menu-list {
   display: flex;
   flex-direction: column;

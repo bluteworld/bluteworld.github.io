@@ -489,6 +489,144 @@ function appendPlayerList(wrap, before) {
     });
 }
 
+const SHARE_CARD_WIDTH = 640;
+const SHARE_CARD_HEIGHT = 800;
+
+function loadImageAsync(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+function pickShareBlute() {
+  const pool = BLUTE_DATA.blutes.filter((b) => b.is_blute && b.id !== dailyState.secretId);
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function formatShareDate(dateStr) {
+  const date = new Date(`${dateStr}T00:00:00`);
+  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+async function buildShareCard(score) {
+  const blute = pickShareBlute();
+  const [frameImg, bluteImg] = await Promise.all([
+    loadImageAsync(CARD_FRAME),
+    loadImageAsync(blute.image),
+  ]);
+  await document.fonts.ready;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = SHARE_CARD_WIDTH;
+  canvas.height = SHARE_CARD_HEIGHT;
+  const ctx = canvas.getContext('2d');
+
+  ctx.fillStyle = '#585931';
+  ctx.fillRect(0, 0, SHARE_CARD_WIDTH, SHARE_CARD_HEIGHT);
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#E3D0A7';
+  ctx.font = '700 46px "Bubblegum Sans", sans-serif';
+  ctx.fillText('Guess Blute', SHARE_CARD_WIDTH / 2, 78);
+
+  ctx.font = '400 22px "Bubblegum Sans", sans-serif';
+  ctx.fillStyle = 'rgba(227, 208, 167, 0.8)';
+  ctx.fillText(formatShareDate(dailyState.date), SHARE_CARD_WIDTH / 2, 112);
+
+  const panelSize = 420;
+  const panelX = (SHARE_CARD_WIDTH - panelSize) / 2;
+  const panelY = 150;
+  ctx.drawImage(frameImg, panelX, panelY, panelSize, panelSize);
+
+  const pad = panelSize * 0.1;
+  const innerSize = panelSize - pad * 2;
+  const scale = Math.min(innerSize / bluteImg.width, innerSize / bluteImg.height);
+  const drawW = bluteImg.width * scale;
+  const drawH = bluteImg.height * scale;
+  ctx.drawImage(
+    bluteImg,
+    panelX + (panelSize - drawW) / 2,
+    panelY + (panelSize - drawH) / 2,
+    drawW,
+    drawH
+  );
+
+  ctx.fillStyle = '#E3D0A7';
+  ctx.font = '700 60px "Bubblegum Sans", sans-serif';
+  ctx.fillText(String(score), SHARE_CARD_WIDTH / 2, panelY + panelSize + 90);
+
+  ctx.font = '400 24px "Bubblegum Sans", sans-serif';
+  ctx.fillText(score === 1 ? 'question asked' : 'questions asked', SHARE_CARD_WIDTH / 2, panelY + panelSize + 124);
+
+  ctx.font = '400 20px "Bubblegum Sans", sans-serif';
+  ctx.fillStyle = 'rgba(227, 208, 167, 0.65)';
+  ctx.fillText('bluteworld.com', SHARE_CARD_WIDTH / 2, SHARE_CARD_HEIGHT - 32);
+
+  return canvas;
+}
+
+function canvasToBlob(canvas) {
+  return new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+}
+
+// Kicked off as soon as the leaderboard modal opens (not on click) so the
+// file is already resolved by the time the player taps Share — waiting on
+// image loads inside the click handler burns the browser's user-activation
+// window and silently breaks navigator.share on strict browsers (mobile
+// Safari in particular).
+function createShareFilePromise(score) {
+  return buildShareCard(score)
+    .then((canvas) => canvasToBlob(canvas))
+    .then((blob) => {
+      if (!blob) throw new Error('Canvas produced no image data');
+      return new File([blob], 'guess-blute-score.png', { type: 'image/png' });
+    });
+}
+
+function downloadShareFile(file) {
+  const url = URL.createObjectURL(file);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = file.name;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function shareScoreCard(filePromise, score, triggerBtn) {
+  const originalLabel = triggerBtn.textContent;
+  triggerBtn.disabled = true;
+  triggerBtn.textContent = 'Preparing…';
+
+  try {
+    const file = await filePromise;
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: 'Guess Blute',
+          text: `I scored ${score} on today's Guess Blute!`,
+        });
+        return;
+      } catch (err) {
+        if (err && err.name === 'AbortError') return; // player closed the share sheet
+        // Sharing failed for some other reason (e.g. activation expired) — fall back to download.
+      }
+    }
+
+    downloadShareFile(file);
+  } catch (err) {
+    console.error('Share card failed:', err);
+    alert('Could not generate the share image. Please try again.');
+  } finally {
+    triggerBtn.disabled = false;
+    triggerBtn.textContent = originalLabel;
+  }
+}
+
 function renderLeaderboardModal(yourScore, colorBonus) {
   const wrap = document.createElement('div');
   wrap.innerHTML = `<h2>Today's Leaderboard</h2>`;
@@ -532,6 +670,12 @@ function renderLeaderboardModal(yourScore, colorBonus) {
   const closeBtn = makeButton('Close', closeModal);
   closeBtn.classList.add('leaderboard-close');
   wrap.appendChild(closeBtn);
+
+  const shareFilePromise = createShareFilePromise(yourScore);
+  const shareBtn = makeButton('Share', () => shareScoreCard(shareFilePromise, yourScore, shareBtn), 'secondary');
+  shareBtn.classList.add('share-btn');
+  wrap.insertBefore(shareBtn, closeBtn);
+
   appendPlayerList(wrap, closeBtn);
   openModal(wrap);
 }
