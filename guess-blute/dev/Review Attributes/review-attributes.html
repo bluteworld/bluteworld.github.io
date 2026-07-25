@@ -32,6 +32,33 @@
     font-size: 13px;
   }
   header label { font-size: 12px; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .combo { position: relative; }
+  .combo input { width: 150px; }
+  .combo-list {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    min-width: 100%;
+    max-height: 220px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #555;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    z-index: 20;
+  }
+  .combo-option {
+    padding: 6px 10px;
+    font-size: 13px;
+    color: #222;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .combo-option:hover { background: #eef2ff; }
+  .combo-option.selected { background: #dbeafe; font-weight: 600; }
+  .combo-option.empty, .combo-option.clear { color: #888; font-style: italic; }
+  .combo-option.clear { border-bottom: 1px solid #eee; }
   header button {
     font-size: 12px;
     padding: 6px 10px;
@@ -129,9 +156,10 @@
 <header>
   <h1>Blute Attribute Review</h1>
   <input id="search" type="text" placeholder="Search name / id..." size="16" />
-  <select id="attrFilter">
-    <option value="">Focus attribute...</option>
-  </select>
+  <div class="combo" id="attrCombo">
+    <input id="attrFilterInput" type="text" placeholder="Focus attribute..." autocomplete="off" />
+    <div class="combo-list" id="attrComboList"></div>
+  </div>
   <select id="colorFilter">
     <option value="">All colors</option>
   </select>
@@ -155,12 +183,60 @@ let fileHandle = null;
 
 const allAttrKeys = [...new Set(data.blutes.flatMap(b => Object.keys(b.attributes)))];
 
-const attrFilter = document.getElementById('attrFilter');
-allAttrKeys.slice().sort().forEach(k => {
-  const opt = document.createElement('option');
-  opt.value = k;
-  opt.textContent = k;
-  attrFilter.appendChild(opt);
+let focusAttr = '';
+const attrCombo = document.getElementById('attrCombo');
+const attrFilterInput = document.getElementById('attrFilterInput');
+const attrComboList = document.getElementById('attrComboList');
+
+function renderAttrOptions(filterText) {
+  const q = filterText.trim().toLowerCase();
+  const matches = allAttrKeys.filter(k => k.toLowerCase().includes(q)).sort();
+  attrComboList.innerHTML = '';
+
+  if (focusAttr) {
+    const clearOpt = document.createElement('div');
+    clearOpt.className = 'combo-option clear';
+    clearOpt.textContent = '✕ Clear focus';
+    clearOpt.addEventListener('mousedown', (e) => { e.preventDefault(); setFocusAttr(''); });
+    attrComboList.appendChild(clearOpt);
+  }
+
+  if (matches.length === 0) {
+    const none = document.createElement('div');
+    none.className = 'combo-option empty';
+    none.textContent = 'No matching attributes';
+    attrComboList.appendChild(none);
+  } else {
+    matches.forEach(k => {
+      const opt = document.createElement('div');
+      opt.className = 'combo-option' + (k === focusAttr ? ' selected' : '');
+      opt.textContent = k;
+      opt.addEventListener('mousedown', (e) => { e.preventDefault(); setFocusAttr(k); });
+      attrComboList.appendChild(opt);
+    });
+  }
+}
+
+function setFocusAttr(key) {
+  focusAttr = key;
+  attrFilterInput.value = key;
+  attrComboList.style.display = 'none';
+  render();
+}
+
+attrFilterInput.addEventListener('input', () => {
+  renderAttrOptions(attrFilterInput.value);
+  attrComboList.style.display = 'block';
+});
+attrFilterInput.addEventListener('focus', () => {
+  renderAttrOptions('');
+  attrComboList.style.display = 'block';
+});
+attrFilterInput.addEventListener('blur', () => {
+  attrFilterInput.value = focusAttr;
+});
+document.addEventListener('click', (e) => {
+  if (!attrCombo.contains(e.target)) attrComboList.style.display = 'none';
 });
 
 const colors = [...new Set(data.blutes.map(b => b.color))].sort();
@@ -287,7 +363,6 @@ window.addEventListener('beforeunload', (e) => {
 
 function render() {
   const q = search.value.trim().toLowerCase();
-  const focusAttr = attrFilter.value;
   const focusColor = colorFilter.value;
   const hideNonMatches = onlyFocused.checked;
   const revealFalse = showFalse.checked;
@@ -388,7 +463,6 @@ function render() {
 }
 
 search.addEventListener('input', render);
-attrFilter.addEventListener('change', render);
 colorFilter.addEventListener('change', render);
 onlyFocused.addEventListener('change', render);
 showFalse.addEventListener('change', render);

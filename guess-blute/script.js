@@ -308,27 +308,74 @@ function showWrongGuessModal() {
   }, WRONG_GUESS_MODAL_MS);
 }
 
-const CONFETTI_COLORS = ['#e6c84a', '#c0392b', '#3f7a3f', '#4a90c8', '#ac9366', '#f0e6c8'];
-const CONFETTI_PIECE_COUNT = 120;
-const CONFETTI_LIFETIME_MS = 10500;
+const CONFETTI_COLORS = ['#f94144', '#f3722c', '#f9c74f', '#90be6d', '#43aa8b', '#577590'];
+const CONFETTI_PIECE_COUNT = 150;
+const CONFETTI_RAIN_MS = 10000;
+const CONFETTI_FADE_MS = 1800;
 
 function launchConfetti() {
-  const container = document.createElement('div');
-  container.className = 'confetti-container';
+  const canvas = document.createElement('canvas');
+  canvas.className = 'confetti-canvas';
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
 
-  for (let i = 0; i < CONFETTI_PIECE_COUNT; i++) {
-    const piece = document.createElement('div');
-    piece.className = 'confetti-piece';
-    piece.style.left = `${Math.random() * 100}vw`;
-    piece.style.backgroundColor = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
-    piece.style.animationDelay = `${Math.random() * 1.5}s`;
-    piece.style.animationDuration = `${6 + Math.random() * 4.5}s`;
-    piece.style.setProperty('--start-rotate', `${Math.random() * 360}deg`);
-    container.appendChild(piece);
+  let pieces = [];
+  function makePieces(n) {
+    for (let i = 0; i < n; i++) {
+      pieces.push({
+        x: Math.random() * canvas.width,
+        y: -20 - Math.random() * canvas.height,
+        w: 6 + Math.random() * 6,
+        h: 10 + Math.random() * 6,
+        color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+        speedY: 2 + Math.random() * 3,
+        speedX: -2 + Math.random() * 4,
+        rotation: Math.random() * 360,
+        spin: -10 + Math.random() * 20,
+      });
+    }
+  }
+  makePieces(CONFETTI_PIECE_COUNT);
+
+  let wrapping = true;
+  let rafId;
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const p of pieces) {
+      p.y += p.speedY;
+      p.x += p.speedX;
+      p.rotation += p.spin;
+      if (p.y > canvas.height + 20 && wrapping) p.y = -20;
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    }
+    rafId = requestAnimationFrame(animate);
   }
 
-  document.body.appendChild(container);
-  setTimeout(() => container.remove(), CONFETTI_LIFETIME_MS);
+  function handleResize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', handleResize);
+
+  animate();
+
+  setTimeout(() => {
+    wrapping = false;
+    canvas.classList.add('fade-out');
+    setTimeout(() => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', handleResize);
+      canvas.remove();
+    }, CONFETTI_FADE_MS);
+  }, CONFETTI_RAIN_MS);
 }
 
 function askQuestion() {
