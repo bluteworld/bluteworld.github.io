@@ -3446,7 +3446,7 @@ const BLUTE_DATA = {
         "wearing_hat": false,
         "hat_color": null,
         "has_mustache": false,
-        "wearing_clothing": false,
+        "wearing_clothing": true,
         "with_animal": false,
         "is_eating_or_drinking": false,
         "holding_food": false,
