@@ -256,6 +256,10 @@ body {
   overflow-y: auto;
   list-style: none;
   scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.history-list:hover {
   scrollbar-color: rgba(172, 147, 102, 0.6) transparent;
 }
 
@@ -268,8 +272,12 @@ body {
 }
 
 .history-list::-webkit-scrollbar-thumb {
-  background-color: rgba(172, 147, 102, 0.6);
+  background-color: transparent;
   border-radius: 999px;
+}
+
+.history-list:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(172, 147, 102, 0.6);
 }
 
 .history-list li.question-empty {
@@ -445,6 +453,34 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   font-family: 'Bubblegum Sans', sans-serif;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.modal:hover,
+.leaderboard-scroll:hover {
+  scrollbar-color: rgba(172, 147, 102, 0.6) transparent;
+}
+
+.modal::-webkit-scrollbar,
+.leaderboard-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal::-webkit-scrollbar-track,
+.leaderboard-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal::-webkit-scrollbar-thumb,
+.leaderboard-scroll::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 999px;
+}
+
+.modal:hover::-webkit-scrollbar-thumb,
+.leaderboard-scroll:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(172, 147, 102, 0.6);
 }
 
 .modal.tutorial-modal {
@@ -475,6 +511,8 @@ body {
   flex: 1 1 auto;
   overflow-y: auto;
   min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
 }
 
 .leaderboard-modal .leaderboard-close {
@@ -648,7 +686,7 @@ body {
 }
 
 .score-card-frame {
-  width: 42%;
+  width: 55%;
   max-width: 190px;
   aspect-ratio: 1;
   background-image: url('card_bg.PNG');
