@@ -555,13 +555,10 @@ async function buildShareCard(blute, rawScore, colorBonus, totalScore) {
   ctx.font = '700 60px "Bubblegum Sans", sans-serif';
   ctx.fillText(String(totalScore), SHARE_CARD_WIDTH / 2, panelY + panelSize + 90);
 
-  ctx.font = '400 24px "Bubblegum Sans", sans-serif';
-  ctx.fillText(totalScore === 1 ? 'question asked' : 'questions asked', SHARE_CARD_WIDTH / 2, panelY + panelSize + 124);
-
   if (colorBonus) {
-    ctx.font = '400 20px "Bubblegum Sans", sans-serif';
+    ctx.font = '400 22px "Bubblegum Sans", sans-serif';
     ctx.fillStyle = 'rgba(227, 208, 167, 0.75)';
-    ctx.fillText(`(${rawScore} score − ${colorBonus} no-color bonus)`, SHARE_CARD_WIDTH / 2, panelY + panelSize + 154);
+    ctx.fillText(`(${rawScore} score − ${colorBonus} no-color bonus)`, SHARE_CARD_WIDTH / 2, panelY + panelSize + 128);
   }
 
   ctx.font = '400 20px "Bubblegum Sans", sans-serif';
