@@ -1,0 +1,902 @@
+BLUTES — IMAGE DESCRIPTIONS
+==========================
+
+Every image in this folder is a "blute": a small, cloud-shaped creature drawn as a
+scalloped blob of rounded lobes, outlined in a thick, hand-drawn dark brown stroke.
+Blutes have no separate head or body — the whole silhouette is the face. Features are
+minimal: two eyes (dots, ovals, or closed curved lashes), a pair of arched brows,
+optional cheek dimples, a simple curved mouth, plus thin noodle arms that end in small
+round knobs and two thin legs that end in little rounded feet. Every drawing sits on a
+transparent background and uses the same restrained palette — muted sage and olive
+greens, dusty blue-grey, mustard yellow, terracotta, rosy mauve, soft lavender, and
+warm tan — all outlined in the same dark brown. Blute body color varies image to image
+and does not indicate a different character. A few images are signed "@blute_world" or
+"@bloot_world" in faint pencil-style script.
+
+HOW BLUTE EXPRESSIONS WORK
+--------------------------
+
+Because a blute has no body language above the shoulders — the silhouette *is* the face —
+almost all of the emotional range in these 71 images is carried by four things: the eyes,
+the brows, the mouth, and a small set of external symbols floating nearby. The vocabulary
+is consistent enough across the folder to treat as a system.
+
+EYES. Six recurring forms, in rough order of frequency:
+  • Two solid dark dots or ovals — eyes open, attentive, emotionally neutral. The default
+    for "doing a task": doctor, chef, farmer, mining, groceries, picnic, pickaxe, hiker.
+  • Closed lashes arcing UPWARD (∪) — active happiness, laughing, celebrating:
+    glad, dancing, jumprope, icecream, swing, envelope-adjacent, photobooth, waving.
+  • Closed lashes arcing DOWNWARD (∩) — calm, blissful, absorbed, savouring:
+    bathtub, ramen, pizza, singer, headphones, shower, pottery, daydreaming, cozy.
+  • Drooping / sagging lashes with the brows sloping down — sadness or sleepiness:
+    sad, sobbing, yawning, sighing, moving.
+  • Narrow flat slits — focus and determination: gamer, chef_pan, photographer, surfer,
+    yoga, tennis.
+  • Hard angled slits, scrunched — strain or physical reaction: lemon, runner.
+Two special cases sit outside the system: ghost.PNG uses hollow ringed eyes with floating
+pupils (the only genuinely eerie face in the set), and several blutes have their eyes
+concealed by a prop — binoculars in birdwatching, a sleep mask in eye_mask, tinted lenses
+in glasses, a camera body in photographer, a monocle over one eye in monocle.
+
+BROWS. Thin high arches read as pleasant or curious and pair with most neutral faces.
+Brows angled down and inward into a V signal determination or displeasure (gamer, tennis,
+surfer, reluctant_agreement, suitcase_late, lemon, runner). Brows sloping down toward the
+outside of the face signal sadness (sad, sobbing). Asymmetric brows — one flat, one raised
+— signal doubt, skepticism, or appraisal (confused, sandcastles, monocle, blushing).
+
+MOUTHS. The single most expressive element, and the widest vocabulary:
+  • Small symmetrical upward arc — plain contentment (glad).
+  • Very wide sweeping smile, nearly the full width of the body — deep comfort or bliss
+    (armchair, yoga, daydreaming, jumprope, pottery).
+  • Open solid half-moon — shouting, cheering, laughing out loud (excited, envelope, swing,
+    photobooth, waving, umbrella, flying_kite).
+  • Small round "o" — singing, humming, quiet awe (shower, headphones, singer,
+    birdwatching, surfer).
+  • Flat dash or straight line — withholding, guarded, or purely focused (curtain, tennis,
+    gamer, photographer, sandcastles).
+  • Wavering S-curve — confusion or discomfort (confused, i_dont_know,
+    reluctant_agreement).
+  • Downward arc — sadness (sad); small open wail with tears — crying (sobbing).
+  • Jagged open rectangle — panic or gritted effort (suitcase_late, runner).
+  • Twisted grimace — sourness (lemon).
+  • Puckered loop — a kiss (blowing_a_kiss). Tall open oval — a yawn (yawning).
+  • A small dark knob or dot resting at one end of the smile is a recurring shorthand for
+    a hand raised to the blute's own face: bashfulness, dreaminess, or "where do I start"
+    (blushing, in_love, winter_blushing, dancing, moving, yoga, sighing).
+
+CHEEKS. Soft orange or red blush patches appear on roughly a dozen blutes and always add
+warmth rather than embarrassment on their own — affection, shyness, cosiness, or simple
+good cheer (blowing_a_kiss, blushing, in_love, icecream, work, doctor, hot_air_balloon,
+winter_blushing, bathtub, bubbles).
+
+FLOATING SYMBOLS. A small set of external marks do work the face can't:
+  • Hearts — red or terracotta hearts mean active, directed affection (blowing_a_kiss,
+    in_love); dark brown hearts drawn in the outline colour mean vague, unfocused
+    infatuation (daydreaming).
+  • Musical notes — singing aloud (singer). Lettered "Z"s — sleepiness (yawning).
+  • Curved motion arcs — speed or repetition (dancing, jumprope, runner, tennis,
+    dog_fetch, surfer's spray).
+  • A small scalloped puff-cloud at the mouth — an audible exhale (sighing).
+
+ONE THING THAT IS NOT AN EXPRESSION: body colour. The same emotion appears in sage green,
+blue-grey, mauve, mustard, and terracotta across different images, and the same colour
+carries opposite moods (sage green is both yawning and jumprope). Colour varies for visual
+variety, not to encode feeling or to distinguish separate characters.
+
+
+OTHER ATTRIBUTES THAT VARY ACROSS THE SET
+-----------------------------------------
+
+The face carries the emotion, but several other axes vary image to image and are worth
+cataloguing on their own.
+
+ARMS AND HANDS. The noodle arms are the second most expressive element after the mouth,
+and they have their own small vocabulary:
+  • Both arms flung up and out in a V — celebration (excited, hot_air_balloon).
+  • One arm raised, one relaxed — greeting or presenting (waving, envelope, icecream,
+    pickaxe, farmer, mining, hiker, blowing_a_kiss).
+  • Both arms raised and bent, knob hands turned palm-up — the shrug (i_dont_know).
+  • Arms crossed over the body — refusal, defensiveness (reluctant_agreement).
+  • One arm looped up and over the top of the head — scratching in confusion (confused),
+    or slack and deflated (sighing, yawning).
+  • Both arms brought forward to cradle or hug an object — armchair, groceries, ramen,
+    pottery, photographer, sandcastles.
+  • Arms tucked away entirely, nothing breaking the silhouette — stillness and interiority
+    (daydreaming, yoga, cozy, sad).
+Hands are never drawn with fingers; every arm terminates in the same round knob, so grip
+is always implied by contact alone.
+
+LEGS AND STANCE. Four recurring postures: planted and even (the neutral default — glad,
+waving, sad); mid-stride with one leg forward (any blute going somewhere — hiker,
+groceries, work, suitcase_late); both feet clearly off the ground mid-jump (excited, swing,
+runner, jumprope, dancing); and braced wide for effort (chef_pan, pickaxe, surfer, tennis).
+yoga is the sole outlier, balancing on one leg with the other folded up. In roughly a dozen
+images the legs are hidden altogether — under bathwater (bathtub), behind a wheel housing
+(pottery), inside a quilt (cozy), below a basket rim (hot_air_balloon), or behind stacked
+props (moving, groceries, sobbing).
+
+BODY TILT. Several blutes are drawn rotated off-vertical rather than upright, and the tilt
+consistently signals a destabilised state — sleepiness in yawning, swooning in in_love,
+shyness in winter_blushing, momentum in dancing and excited, bashfulness in blushing. An
+upright blute is a composed blute.
+
+HEADWEAR. Ten images put something on the blute's head: pleated chef's toque (chef,
+chef_pan), top hat (fancy, monocle), straw sun hat (farmer), bush hat with chin cord
+(hiker), hard hat (mining), striped party cone (party), knitted pom-pom beanie
+(winter_blushing), sweatband (runner), flower crown (skirt), and a small bow (picnic).
+Headwear is frequently drawn nearly as large as the blute wearing it.
+
+EYEWEAR AND FACE GEAR. Rectangular reading glasses (armchair), round tinted glasses
+(glasses), monocle on a chain (monocle), binoculars (birdwatching), a lash-painted sleep
+mask (eye_mask), a camera pressed to one eye (photographer), and an over-ear headset with
+boom mic (headphones). In every case the gear covers or replaces at least one eye, which is
+why these blutes read differently from the rest of the set.
+
+FACIAL HAIR. A large dark curled handlebar moustache recurs on exactly five blutes — chef,
+chef_pan, fancy, monocle, and photobooth, where it is a stick-held prop rather than real
+hair. It reads as status or performance every time it appears.
+
+CLOTHING. Most blutes are bare, so the seven that wear real garments stand out sharply:
+doctor's white coat (doctor), dungarees (farmer), top and skirt with a crossbody bag
+(skirt), tailcoat and waistcoat with bow tie (fancy), a wrapped quilt (cozy), scarf and
+boots (winter_blushing), and a climbing harness (rock_climber). runner adds a pinned race
+bib without any other clothing.
+
+PROPS BY DOMAIN. Food and drink (icecream, pizza, ramen, lemon, groceries, work's coffee,
+armchair's teacup); tools and work (pickaxe, mining's spade, brick_laying's trowel,
+farmer's pitchfork, artist's easel and palette, pottery's wheel, programmer's mouse and
+screen, doctor's stethoscope and prescription, photographer's camera); play and sport
+(jumprope, tennis, surfer, swing, flying_kite, sandcastles, bubbles, rock_climber);
+performance (singer's mic, party's blower, photobooth's props, headphones); travel and
+transit (suitcase_late, hot_air_balloon, umbrella, hiker's pole, moving's boxes); and
+domestic life (bathtub, shower, cozy, envelope, picnic's basket and flower).
+
+SCALE PLAY. A recurring comic device: the prop is deliberately drawn far too big for the
+blute holding it. The pizza slice spans half the image width; the tennis racquet and the
+chef's toque are each about as tall as the blute; the party hat matches the blute's own
+height; the skipping rope arcs to roughly twice it; the grocery bag nearly swallows the
+carrier. In the most extreme cases — sitting_under_flower, hot_air_balloon, surfer,
+armchair — the blute is a small figure inside a much larger object.
+
+VIEWPOINT AND CROP. Most blutes face the viewer straight on. A handful are three-quarter
+(blushing, chef_pan, confused, sandcastles) or in profile (brick_laying, bathtub, surfer,
+and both trotting dogs). Four are drawn entirely from behind with no face at all — artist,
+brick_laying, rock_climber, programmer — which makes them the only images in the folder
+with no expression to read. Separately, about a third of the set crops or occludes the
+figure: half-hidden behind a curtain (curtain), cut off at the waterline (bathtub), behind
+a wheel (pottery), inside a quilt (cozy), over a basket rim (hot_air_balloon), or behind
+piled props (moving, groceries, sobbing, sandcastles).
+
+CAST AND STAGING. Blutes are always alone. No image in this folder contains two blutes, and
+no blute ever appears alongside the dog. The dog gets three solo images of its own
+(dog_fetch, golden_dog, tiny_dog), and the only cross-species interaction anywhere is the
+bird perched on the binoculars in birdwatching. Likewise, most images have no environment
+at all — the blute floats on transparency with no ground line, no horizon, and no
+background fill. Only a minority are genuinely staged: armchair, bathtub, rock_climber,
+sandcastles, moving, hot_air_balloon, surfer, sitting_under_flower, pottery, swing, and
+brick_laying.
+
+TEXT AND SIGNATURES. In-image text is nearly always deliberately illegible scribble — the
+race bib number (runner), the prescription (doctor), the code or notes on the screen
+(programmer). The single exception is the book in armchair, hand-lettered "THE BLOOT IN THE
+HAT." Three images carry a faint pencil-script watermark: cozy and rock_climber are signed
+"@blute_world", while flying_kite is signed "@bloot_world" — note the different spelling.
+
+SHADING. Fills are flat almost everywhere. The few images that model light do it with a
+single simple device: a translucent wedge of lamp-glow (armchair), a diagonal shadow band
+where the canopy edge falls across the face (umbrella), a soft shadow pool on the ground
+(bathtub), panel seams on a curved surface (hot_air_balloon), and fabric fold shading
+(cozy, fancy).
+
+Below, one paragraph per file, in alphabetical order.
+
+--------------------------------------------------------------------------------
+
+armchair.png
+A mustard-yellow blute sits sunk deep into an oversized olive-green wing-back armchair,
+reading. It wears rectangular wire-frame glasses, its brows are relaxed, and its mouth
+is a wide contented smile that stretches almost the full width of its face. Both noodle
+arms come forward to hold open a small dusty-pink hardback book, whose right-hand page
+carries hand-lettered text reading "THE BLOOT IN THE HAT." Behind and above, an arched
+floor lamp with a slate-blue shade leans over the chair, and a pale translucent wedge of
+lampglow falls diagonally across the whole scene. To the left, a tiny round side table
+holds a blue-grey teacup on a saucer with three curls of steam rising. The overall read
+is a cozy evening in — one of the most fully staged scenes in the set.
+
+artist.png
+A dusty blue-grey blute is drawn from behind, so no face is visible at all — just the
+scalloped silhouette of its back and two thin legs. It stands at a tall wooden A-frame
+easel on the left, one arm reaching up and around to touch a paintbrush to the canvas.
+The cream-colored canvas already shows a painting in progress: a scallop-outlined blute
+shape with a blue-grey blob inside it, plus a loose red dot and a green dot floating
+nearby — the blute is painting a portrait of a blute. In its other hand, on the right
+side, it holds a cream oval palette dabbed with blue, orange-red, and olive-green paint.
+The composition is almost entirely line-work and negative space.
+
+bathtub.png
+A terracotta-orange blute is submerged up to its cheeks in a slate-blue, claw-footed
+freestanding bathtub, seen from the side. Only the top few lobes of its silhouette rise
+above the waterline. Its eyes are closed into gentle downward lashes, its mouth is a
+small satisfied curve, and both cheeks carry little curved dimple marks. Heaped mounds
+of pale lilac-white bubble foam pile along the rim of the tub and over the blute's head,
+with a few loose bubble clusters drifting free in the air on either side. One foam clump
+to the right is shaped like a heart. A soft olive shadow pools under the tub's four
+clawed feet. No arms or legs are visible — they're under the water.
+
+birdwatching.png
+A blue-grey blute faces forward wearing an enormous pair of round binoculars whose two
+grey-rimmed lenses cover most of its face, the strap looping around behind. Its brows
+arch high above the eyepieces and its mouth is a small vertical "o" of surprise. The
+joke is in the framing: a mustard-yellow songbird has landed directly on the right
+barrel of the binoculars, wings spread, tail out, tiny black eye and long dark beak
+pointing left — so the bird it's hunting for is sitting on the instrument, inches from
+its face and completely unnoticed. Two thin legs dangle below; no arms are raised.
+
+blowing_a_kiss.PNG
+A warm tan-yellow blute stands facing the viewer, blowing a kiss. Its eyes are closed
+into two downturned lashes under high arched brows, its cheeks carry soft rosy blush
+patches, and its mouth is puckered into a small looped kiss shape. Its right arm (viewer's
+right) reaches up and out to the side, having just released the kiss; a small solid
+terracotta-red heart floats in the air just past the knob of that hand. The left arm
+hangs down loosely. Both legs are planted in a light stride. Nothing else is in frame —
+the heart is the only prop.
+
+blushing.PNG
+A dusty rose-pink blute stands three-quarters on, caught mid-bashful. Its eyes are two
+solid dark ovals set slightly off-center, its brows are asymmetrically arched, and its
+mouth is a long lopsided smile with a small dark dot pressed into the left end of it,
+as though it were biting back the expression. Two soft red-blush glows bloom on the
+cheeks. One arm curls up shyly toward its own face on the right side while the other
+tucks in low. The pose is a small, self-conscious shuffle — legs slightly apart, feet
+turned outward. No props at all; the whole image is carried by the blush and the crooked
+mouth.
+
+brick_laying.PNG
+A salmon-terracotta blute stands in profile facing right, working on a half-built brick
+wall that fills the right third of the frame. The wall is drawn as loose staggered rows
+of individual bricks in two alternating browns, set in grey-tan mortar, with the topmost
+courses uneven as if still going up. The blute has no visible face in this image — it's
+turned fully away from the viewer — and its single visible noodle arm reaches up to press
+a fresh dollop of pale grey mortar onto a brick with a small trowel-shaped blob. Two thin
+legs stand slightly apart at the bottom left. It reads as quiet, absorbed manual labor.
+
+bubbles.PNG
+A dusty rose-mauve blute blows soap bubbles. Its eyes are closed into two curved lashes,
+its brows arch calmly, and its mouth is pursed around the end of a small grey bubble
+wand, drawn as a slim handle with a looped ring at the tip. A thin dark line runs from
+the wand down across the body to where a hand holds a small bubble-solution loop. Three
+translucent pale-grey bubbles float free at the right of the frame — one still attached
+at the wand's ring, two drifting off. Faint blush patches sit on both cheeks. The mood
+is idle, absorbed play.
+
+chef.png
+A sage-green blute in a very tall, pleated cream chef's toque stands facing forward. The
+hat is nearly as large as the blute itself, with five puffed fluted panels above a broad
+banded brim. Its eyes are two solid dark dots under thin arched brows, and beneath them
+sits a large curled handlebar moustache, drawn in the same dark brown as the outlines,
+with a tiny smile visible just under it. Its left arm (viewer's left) hangs loosely; its
+right arm is raised, holding up a dark wooden spoon. Two thin legs stride below. This is
+the classic "proud chef" portrait of the set.
+
+chef_pan.png
+The same moustachioed sage-green chef blute, this time in three-quarter profile facing
+right and mid-cook. The pleated cream toque sits atop its head. Its eyes are narrowed to
+two flat confident slits, the curled handlebar moustache dominates the lower face, and
+its mouth curves in a broad self-satisfied grin. One long arm extends far to the right,
+holding the handle of a dark brown frying pan tipped up in a flip — the pan's contents
+are drawn as a couple of tumbling dark blobs airborne above it, with motion arcs curving
+on either side to show the toss. Both legs are set in a wide, braced stance.
+
+confused.PNG
+A blue-grey blute is caught mid-puzzlement. One brow is drawn flat and low while the
+other arches sharply up, its two eyes are small dark ovals, and its mouth is a single
+wavering S-curve line — neither smile nor frown. Its left arm reaches up and back over
+the top of its own head to scratch at it, the elbow forming a wide loop above the
+silhouette; the right arm hangs out to the side. The legs are mismatched, one straight
+and one bent as though it stopped walking halfway through the thought. There are no
+props — the confusion is entirely in the eyebrows and the wobbling mouth.
+
+cozy.PNG
+A mustard-yellow blute is bundled into an enormous sage-green padded quilt or puffer
+duvet, drawn as thick overlapping folded panels that fill the bottom two-thirds of the
+frame. Only a wedge of the blute's face peeks out from the hood of the wrapping — two
+eyes closed into contented downward lashes, and a small upward-curving smile. No arms or
+legs are visible; the blute is completely cocooned. The image is signed "@blute_world" in
+faint script along the lower edge of the quilt. It reads as pure warmth and comfort.
+
+curtain.PNG
+A mustard-yellow blute peeks out from behind a heavy dusty-mauve stage or window curtain
+that occupies the entire left half of the frame, drawn with long vertical drape folds and
+a gathered, swagged edge. Only the right half of the blute is visible — one arched brow,
+one dark oval eye, and a flat straight dash of a mouth showing no expression. One noodle
+arm hangs down on the exposed right side, and one leg steps out from under the curtain's
+hem at the bottom. The effect is hesitant: something between hiding, eavesdropping, and
+working up the nerve to come out.
+
+dancing.PNG
+A sage-green blute is mid-dance, tilted at a jaunty angle. Its eyes are closed into two
+happy curved lashes, and its mouth is a long sweeping smile with a solid dark dot at its
+center. One arm is thrown up high and out to the upper left, knob-hand raised; the other
+sweeps low across the body to the right. The legs are crossed and kicking, one foot
+pointing away from the other, so the whole figure looks unbalanced in a deliberate,
+joyful way. Two curved motion arcs sit in the air to the lower right, indicating a
+swing or a spin. No props.
+
+daydreaming.png
+An olive-green blute stands facing forward with its eyes closed into two soft downward
+lashes and its mouth in a wide, dreamy, entirely relaxed smile. Both arms are tucked
+loosely behind or beside its body, so almost nothing juts out from the silhouette. Above
+its head, two solid dark brown hearts float upward at different sizes and angles — the
+only props in the frame. Because the hearts are drawn in the same dark brown as the
+outlines rather than in red, the mood reads as vague, drifting infatuation rather than
+active romance.
+
+doctor.png
+A mustard-yellow blute wears a full white doctor's coat with a notched collar, four
+buttons down the front, and short sleeves that the thin noodle arms emerge from. A dark
+stethoscope hangs around its neck, the two tube-ends draping down over the lapels. Its
+eyes are two solid dark dots, its brows are thin arches, both cheeks carry soft orange
+blush patches, and its mouth is a small, reassuring smile. Its right hand (viewer's
+right) holds up a small cream slip of paper covered in illegible scribbled squiggles —
+a prescription. Two short legs poke out beneath the coat. It's a warm, friendly bedside
+manner in one image.
+
+dog_fetch.PNG
+This image has no blute in it at all. Instead it shows the blute-world dog: a golden-tan
+cartoon dog with darker tan floppy ears, a darker tan patch across its crown, and a
+darker tan tail, drawn in the same thick dark-brown outline style. The dog is captured
+mid-leap on its hind legs, front paws lifted, mouth wide open with a small pink tongue
+lolling out, one tiny curved closed eye and a dark round nose. A yellow-green tennis
+ball with a curved seam pattern floats in the air above and to the right of its head,
+with two motion arcs below and behind it showing the ball's flight. Pure fetch-time
+enthusiasm.
+
+envelope.PNG
+A mustard-yellow blute cheers with a piece of mail. Its eyes are two solid dark dots
+under high arched brows, and its mouth is wide open in a big grinning half-moon — one of
+the broadest smiles in the whole set. Its left arm is thrown up and out to the side, knob
+hand raised in celebration; its right arm is raised high above its head, holding aloft a
+sealed envelope drawn as a small dark rectangle with a pale blue-grey flap panel. Both
+legs kick out in a stride, one clearly off the ground. The read is unambiguous good news
+just arrived.
+
+excited.PNG
+A soft lavender-purple blute — one of the few purple ones — is caught mid-celebration.
+Its eyes are squeezed shut into two upward curved lashes under high arched brows, and its
+mouth is thrown wide open into a large solid half-circle of a shout. Both arms are flung
+up and outward in a V, each ending in a raised round knob hand. Both legs are kicked out
+mid-jump, feet clearly off the ground, and the whole body is tilted slightly to one side
+from the momentum. There are no props or effects — the pose alone does all the work.
+
+eye_mask.PNG
+A blue-grey blute wears a padded sleep mask pushed over its eyes, drawn as two joined
+almond-shaped cups with long comically painted-on eyelashes fanning up from the top edge
+of each one, and a thin elastic strap looping around behind its head. Under the mask its
+real eyes are closed into small contented curves, and its mouth is a wide serene smile.
+One arm hangs down at the left, the other reaches out to the right. Two thin legs stand
+loosely apart. The joke is the fake glamour lashes drawn on the mask itself — sleeping
+in style.
+
+fancy.png
+A mustard-yellow blute is dressed for a formal evening in full black tie. It wears a
+tall black top hat with a wide curled brim, a black tailcoat with dark lapels over a
+cream waistcoat with four small buttons, and a black bow tie. A dark curled handlebar
+moustache sits under two dark dot eyes and sharply angled confident brows. Its right
+hand (viewer's right) holds up a slim black walking cane with a curved handle; its left
+sleeve ends in a small dark cuff. Two little dark shoes poke out below the coat. Unlike
+most blutes, the costume here covers the whole silhouette, so it reads almost like a
+tiny gentleman rather than a blob.
+
+farmer.png
+A blue-grey blute stands in a wide-brimmed straw sun hat in mustard yellow with a
+darker gold underbrim, and brown canvas dungarees with shoulder straps, a bib, and
+stitched knee creases that cover the lower two-thirds of its body. Its eyes are two dark
+dots under thin arched brows, and its mouth is a small friendly smile. Its left arm hangs
+down; its right arm reaches up to grip the long handle of a three-tined pitchfork that
+stands taller than the blute itself, planted at the right edge of the frame. Two short
+legs step out below the dungarees.
+
+flying_kite.png
+An olive-green blute flies a kite on a breezy day. Its eyes are closed into two curved
+happy lashes, and its mouth is open in a small delighted grin. Its left arm reaches up
+and across to hold a thin dark string that runs diagonally up to the top-left corner,
+where a pale blue-grey diamond kite tilts in the wind, its cross-spars drawn in and a
+long wavy tail streaming off the bottom. The right arm swings out to the side for
+balance, and both legs are spread in a wide stride as though walking backward to keep
+the kite aloft. The kite face is signed "@bloot_world" in faint pencil script.
+
+gamer.png
+A mustard-yellow blute is locked in intense concentration on a game. Its brows are drawn
+down into a hard determined V, its eyes are two narrow flat slits, and its mouth is a
+small tight dash — the most focused, least friendly expression in the collection. Held
+up in front of its lower body is a large solid dark-brown gaming controller, gripped in
+both knob hands, with a long cable snaking loosely away off the bottom-right of the
+frame. Two thin legs are planted below and behind the controller. The comedy is entirely
+in the mismatch between the cute blob and the utterly serious game face.
+
+ghost.PNG
+A blute in ghost form, and one of the few images that abandons the standard face. The
+body is drawn in pale bone-white with the usual dark brown outline, but the bottom edge
+is drawn as three trailing, tapered wisps instead of legs and feet, so it hovers rather
+than stands. Its two eyes are hollow mustard-yellow almond rings with solid dark pupils
+floating inside, set at slightly different heights and sizes — unsettling rather than
+cute. There is no mouth at all. Three short curved crease lines mark the folds of the
+sheet-like body. No arms extend from the silhouette.
+
+glad.PNG
+A warm tan-yellow blute in the simplest, most default happy pose in the set. Its eyes
+are closed into two gently curved lashes beneath softly arched brows, and its mouth is a
+clean symmetrical upward smile centered on the face. Both noodle arms hang out to the
+sides, relaxed, ending in round knob hands; both legs are planted evenly with feet turned
+slightly out. There are no props, effects, clothes, or scenery of any kind — just an
+uncomplicated, quietly contented blute standing on nothing.
+
+glasses.png
+A dusty rose-mauve blute wears a pair of large round spectacles with thick dark rims and
+tinted tan-brown lenses, the arms of the frames reaching back past the edges of its face.
+Behind the lenses, its two pupils are drawn in dark olive-green rather than the usual
+brown, giving the eyes an unusual depth. Its brows arch high above the frames and its
+mouth is a small modest smile. Both arms extend out to the sides and slightly down, and
+two thin legs stand loosely apart. The glasses are the entire subject — a portrait, not
+an activity.
+
+golden_dog.png
+Another dog-only image with no blute present: the golden retriever of blute-world, drawn
+sitting upright and facing the viewer. Its coat is warm mustard-tan with darker tan floppy
+ears, a darker tan tail curling out to the left, and darker tan paw-tips on the four feet
+at the bottom. Its face is minimal in the blute style — two closed curved smiling eyes,
+no visible mouth, and a small dark rounded triangle for a nose. The rounded chest and
+haunches echo the scalloped blute silhouette. Calm, seated, and content.
+
+groceries.PNG
+A blue-grey blute walks home carrying shopping. Its eyes are two solid dark dots under
+thin arched brows, and its mouth is a long, mildly weary curve. Both noodle arms come
+across the front of its body to hug a large brown paper grocery bag, drawn with a folded
+top rim, side panel, and a couple of crease lines, that covers most of its lower half.
+Poking out of the top of the bag are two red tomatoes and a spray of dark olive leafy
+greens or carrot tops. Two thin legs stride out below the bag. The bag is nearly as big
+as the blute carrying it.
+
+headphones.png
+A warm tan-brown blute wears a full over-ear headset with a padded band arcing over the
+top of its head, two large dark ear cups with olive-green cushioned pads, and a slim boom
+microphone curving forward from the right cup toward its face. Its eyes are closed into
+two relaxed downward lashes, and its mouth is a small round "o" — it appears to be
+humming or singing quietly along. One arm rests low on the left; the other passes behind
+the mic boom on the right. Two thin legs stand loosely apart.
+
+hiker.png
+A mustard-yellow blute is out on a trail, tilted forward in a walking lean. It wears a
+wide-brimmed brown bush hat with a chin cord that loops down under its face and knots
+below, drawn so the brim shades the upper half of its head. Its eyes are two dark dots,
+its brows are thin arches, and its mouth is a small pleased smile. Its left arm swings
+back for momentum; its right arm reaches up to grip a tall thin walking pole planted at
+the right edge of the frame. Both legs are extended in a long, committed stride.
+
+hot_air_balloon.PNG
+The most vertically dramatic image in the set. A huge sage-green hot air balloon envelope
+fills nearly the entire frame, drawn as a tall rounded gore-paneled shape with fine
+vertical seam lines and a scalloped, blute-like lobed outline of its own. Four slim
+suspension cables run down from its neck to a woven brown wicker basket at the bottom.
+Inside the basket, a small mustard-yellow blute peers over the rim — eyes closed into two
+happy lashes, small orange blush patches on its cheeks, and a wide contented smile — with
+both arms thrown straight up in the air in celebration. Only its top lobes clear the
+basket rim.
+
+i_dont_know.PNG
+A warm tan-yellow blute gives the universal shrug. Its brows tilt inward and up, its two
+eyes are small dark ovals, and its mouth is a flat, faintly downturned wavering line.
+Both noodle arms are raised out to the sides and bent upward at the elbow with the knob
+hands turned palm-up at shoulder height — the classic "no idea" gesture. Its two legs
+stand plainly beneath, feet turned slightly out. There are no props; the whole meaning
+comes from the symmetrical raised arms and the noncommittal mouth.
+
+icecream.png
+A mustard-yellow blute holds up an ice cream cone. Its eyes are closed into two happy
+curved lashes, orange blush patches sit on both cheeks, and its mouth is a wide,
+thoroughly pleased smile. Its left arm hangs down and out to the side; its right arm
+reaches up to grip the base of a tall dark waffle cone with a cross-hatched lattice
+pattern. The cone holds two stacked scoops — a lower dusty-pink strawberry scoop dripping
+melt down the side, and an upper brown chocolate scoop — both dotted with multicolored
+sprinkles in blue, yellow, cream, and grey. Two thin legs step below.
+
+in_love.PNG
+An olive-green blute is smitten. Its eyes are closed into two curved lashes tilted
+upward, its cheeks carry soft rosy blush patches, and its mouth is a long dreamy smile
+with a solid dark dot pressed at the right end of it, as though one hand were touching
+its own face. Four small terracotta-orange hearts with dark outlines float around it —
+one above, one to the left, two at the lower right — surrounding the figure like a
+cloud of affection. Both legs step lightly, and the whole body leans in a swooning tilt.
+
+jumprope.PNG
+A sage-green blute skips rope. Its eyes are closed into two content curved lashes and its
+mouth is a wide happy smile. Both noodle arms extend straight out to either side, each
+knob hand gripping one handle of a long dark skipping rope that arcs in a tall sweeping
+loop right over the top of the blute's head and fills the upper half of the frame. Two
+short curved motion arcs sit at the lower left, marking the rope's travel. Both legs are
+bent and tucked mid-hop, feet off the ground. The rope's arc is nearly twice the blute's
+height.
+
+lemon.PNG
+A sage-green blute tastes something sour. Its face is scrunched: one eye squeezed into a
+tight closed lash, the other into a hard angled slit, brows drawn down and inward, and
+its mouth wrenched open into a small twisted grimace. Its right hand holds up a single
+wedge of lemon — pale yellow segments with a bright golden rind — right next to its mouth,
+freshly bitten. Its left arm hangs limply down. Both legs stand slightly apart. The whole
+face reads as a full-body reaction to the sourness.
+
+mining.PNG
+A sage-green blute in a mustard-yellow hard hat with a broad brim stands ready to dig.
+Its eyes are two solid dark ovals under thin arched brows, and its mouth is a small
+willing smile. Its left arm hangs down and out; its right arm reaches up to grip the long
+handle of a spade, held so the shovel's grey-brown blade hangs down near the bottom-right
+of the frame and a small triangular D-grip sits at the top. Both legs step forward. It
+reads as cheerful, uncomplaining hard work about to begin.
+
+monocle.png
+A mustard-yellow blute in aristocratic dress-up: a tall dark brown top hat with a wide
+curled brim sits on its head, a round monocle with a dark rim and a thin dangling chain
+is fitted over its right eye, and a large curled handlebar moustache sits above a small
+pursed mouth. The uncovered eye is a plain dark dot, and the brows are set at sharply
+different angles — one raised in appraisal. Both noodle arms extend out to the sides, and
+two thin legs stand below. Unlike fancy.png, this one wears no coat, so the bare blute
+body under the top hat makes the pretension funnier.
+
+moving.PNG
+A pale sage-green blute stands surrounded by moving boxes on moving day. Its eyes are
+closed into two long resigned downward lashes, and its mouth is a wide flat curve with a
+small dark loop and knob at its center — one hand up near its face, a gesture of "where
+do I even start." Piled all around its legs and filling the bottom half of the frame are
+eight or nine brown cardboard boxes drawn at loose angles, several with open flaps
+sticking out and pale tan packing-tape stripes down the middle. A couple of long
+horizontal ground lines run behind them. Only the blute's head and one arm clear the pile.
+
+party.png
+A dusty rose-mauve blute celebrates in a tall striped conical party hat — alternating
+mustard-yellow and terracotta bands, topped with a spiky olive-and-brown starburst
+pom-pom — that stands nearly as tall as the blute itself. Its eyes are closed into two
+happy curved lashes and its mouth curves into a broad grin, clamped around the mouthpiece
+of a mustard-yellow party blower that unrolls in a long straight tube out to the right,
+its coiled paper end just uncurling. One arm curls up near its face on the left; two legs
+step out in a jaunty stride below.
+
+photobooth.PNG
+A soft lavender-purple blute mugs for a photo with props. A large dark curled handlebar
+moustache is stuck across the lower half of its face and its mouth is wide open in a
+solid half-moon laugh below it. Its eyes are closed into two curved happy lashes. Its
+left hand holds up a photo-booth prop sign on a thin stick: an olive-green oval placard
+with a party-popper icon drawn on it in dark outline, mustard-yellow confetti bursting
+from the cone. Its right hand grips a second thin stick that runs down past its body —
+the moustache prop's handle. Two legs stand apart below.
+
+photographer.png
+An olive-green blute takes a picture. It holds a small brown box camera with a dark lens
+barrel, a pale shutter button on top, and a viewfinder, pressed right up against its right
+eye — so that eye is hidden and only the left one shows, squeezed into a narrow squinting
+slit. Its brows angle sharply and its mouth is a flat, concentrating line. Both noodle
+arms come up and around the camera body to hold it steady, elbows out. Two short legs
+stand quietly below. This is a still, held moment — the instant before the shutter.
+
+pickaxe.PNG
+A salmon-terracotta blute stands beside a large grey-brown boulder at the bottom right,
+holding a pickaxe. Its eyes are two solid dark dots under thin arched brows, and its
+mouth is a small confident smile. Its left arm is raised high above its head, gripping
+the pickaxe's long handle so the dark pointed head sits at the very top-left corner of
+the frame, cocked back and ready to swing. Its right arm hangs loosely down at its side.
+Both legs are set apart in a braced stance. The rock is nearly as wide as the blute is
+tall.
+
+picnic.png
+An olive-green blute heads out for a picnic. It wears a small dusty-mauve bow perched on
+the upper left of its head. Its eyes are two large solid dark dots under thin arched
+brows, and its mouth is a small pleased smile. Its left arm hangs down carrying a woven
+picnic basket with a tan and terracotta cross-hatch weave pattern and a curved handle;
+its right arm extends out to the right holding a single mustard-yellow five-petaled
+flower on a long stem. Both legs step forward. It's the only image in the set that pairs
+a basket with a picked flower.
+
+pizza.png
+An olive-green blute eats a slice of pizza. Its eyes are closed into two blissful
+downward lashes and its mouth is stretched wide open around the pointed tip of a large
+triangular slice, which extends far out to the right of the frame — pale cream cheese
+with a thick browned crust at the far end, topped with red tomato slices, purple onion
+rings, olive-green pepper strips, and scattered dark olives. Its right arm reaches around
+the far end of the slice to hold it up; its left arm hangs down. The slice is enormous
+relative to the blute, roughly half the width of the image.
+
+pottery.png
+A dusty rose-pink blute sits at a pottery wheel, seen from behind and above the wheel
+housing so its lower body is hidden. Its eyes are closed into two focused downward
+lashes, its brows are calm arches, and its mouth is a wide serene smile. Both arms come
+forward and down to cup a tall golden-brown clay vessel with a narrow neck and rounded
+belly, spinning on the dark wheel head. Fine concentric rings on the wheel surface show
+the rotation. The wheel's body is a large olive-and-brown drum that fills the bottom
+third of the frame. Deep, quiet concentration.
+
+programmer.png
+A blue-grey blute is drawn entirely from behind — no face, no features, just the
+scalloped silhouette of its back — sitting or standing at a workstation. Its single
+visible noodle arm reaches out to the left, past a small dark computer mouse trailing a
+long looping cable, toward a brown monitor or whiteboard mounted at the upper left.
+The screen shows nothing but two horizontal squiggle lines of illegible code or text.
+Two thin legs hang below. Of all the images this one is the most anonymous, which is
+exactly the point — the work faces away from you.
+
+ramen.png
+A dusty rose-mauve blute eats a bowl of noodles. Its eyes are closed into two blissful
+downward lashes and its mouth is a long contented curve. Both arms come forward: one
+holds a pair of thin dark chopsticks lifting a bundle of pale wavy noodles up out of the
+bowl toward its mouth, and the other steadies the bowl itself — a blue-grey rounded bowl
+with a broth-brown interior — held right against its body. Three long noodle strands
+stretch up from the broth to the chopsticks. Two thin legs stand below the bowl.
+
+reluctant_agreement.PNG
+A salmon-terracotta blute agrees to something it clearly does not want to. Its brows are
+drawn down hard and inward over two small solid dark eyes, and its mouth is a tight
+wavering flat line. Below the mouth, both noodle arms are crossed over each other across
+the front of its body, knob hands tucked in — a closed, defensive posture. Its two legs
+are planted in a slightly turned-away stance. There are no props or effects. It's one of
+the more emotionally specific images in the set: a firm, unhappy "fine."
+
+rock_climber.PNG
+An olive-green blute clings to the side of a brown rock face that fills most of the
+frame diagonally, drawn with a few loose crease marks to suggest stone. The blute is seen
+from behind and slightly above, so no face is visible; it wears a dark climbing harness
+strapped around its middle with small loops and clips hanging off it. Both arms reach up
+and out to the right to grip dark handholds bolted into the rock, and both legs push
+against footholds below. A short rope loop trails from the harness. The image is signed
+"@blute_world" in faint pencil script at the right. Real exertion, rendered simply.
+
+runner.PNG
+A warm tan-brown blute sprints through a race. It wears an olive-green sweatband across
+the top of its head and a cream race bib safety-pinned across its lower body, printed
+with a hand-scrawled illegible number in dark ink over a pale blue stripe. Its brows are
+angled down in strain, its eyes are squeezed shut into hard curved lashes, and its mouth
+is open in a gritted, wavy-edged grimace. Both arms pump out to the sides, and both legs
+are thrown forward and back mid-stride with both feet off the ground. Two motion arcs
+trail behind at the left. Pure effort.
+
+sad.PNG
+A sage-green blute stands plainly and unhappily. Its brows slope steeply downward toward
+the outside, its eyes are closed into two small downturned lashes, and its mouth is a
+clean symmetrical frown — a downward arc centered on the face. Both noodle arms hang
+straight down and slightly out at its sides, limp and unmoving, and both legs stand
+close together with the feet turned slightly out. There are no tears, props, or effects
+of any kind. The stillness is what makes it read as sadness rather than distress.
+
+sandcastles.PNG
+A blue-grey blute builds a sandcastle at the beach. Its face shows one flat brow and one
+arched brow over two solid dark eyes, with a wide off-center smile and a small dash mark
+on the cheek. In front of its lower body sits a two-tiered tan sandcastle with crenellated
+battlements, an arched gateway, and a tiny red triangular pennant on a flagpole rising
+from its top turret. Loose mounded drifts and small dashes of tan sand spread across the
+ground on both sides and in the foreground. Both arms come around the castle protectively
+and both legs plant in the sand behind it.
+
+shower.png
+A blue-grey blute is washing its hair. A large mound of cream-white lather sits piled
+across the top of its head, drawn as overlapping foam lobes, with four round soap bubbles
+of varying sizes floating free in the air above. Its eyes are closed into two relaxed
+downward lashes and its mouth is a small round "o" — most likely singing. Both arms are
+raised up and back behind the foam to scrub at its own head, forming loops on either side
+of the silhouette. Two thin legs stand below. There's no shower stall or water drawn;
+just the blute and the suds.
+
+sighing.PNG
+A muted olive-tan blute lets out a long breath. Its eyes are closed into two flat
+downward lashes under thin brows, and its mouth is drawn as a small open, weary wavering
+shape — mid-exhale. Emerging from that mouth and drifting down-right is a small pale
+puff-cloud of expelled air, drawn as a scalloped blob. Its left arm hangs limply down and
+its right arm loops up and back behind its head in a slack, deflated gesture. Both legs
+stand loosely apart. Somewhere between exhaustion and exasperation.
+
+singer.png
+An olive-green blute performs into a microphone. Its eyes are closed into two curved
+lashes and its mouth is a small round "o" held open in song. Its left arm extends out
+straight to the left, knob hand raised in a performer's flourish; its right arm comes
+across the body to hold a dark handheld microphone up near its mouth, its cable snaking
+down and away in a long S-curve to the bottom-right corner. Three dark musical notes —
+a beamed pair and a single eighth note — float in the air above its head. Legs step
+apart in a stage stance.
+
+sitting_under_flower.PNG
+The most scale-playful image in the set. An enormous terracotta-brown flower with six
+broad curled petals, a dark center, and one large leaf on its stem towers over the top
+two-thirds of the frame, rising from a wide olive-green leaf that spreads across the
+bottom like ground. Resting on that leaf, tiny by comparison, is a small mustard-yellow
+blute reclining back on one arm with its legs stretched out, two dark dot eyes, a small
+smile, and a little brown book propped open in its other hand. The blute is perhaps a
+tenth the height of the flower shading it.
+
+skirt.png
+A warm tan-brown blute is dressed up in an outfit that covers most of its body: a short
+olive-green top with cap sleeves, a dusty-rose skirt below it, a thin crossbody strap
+running diagonally over the chest to a small mustard-yellow pouch bag at its hip, and a
+delicate flower crown of yellow, mauve, and olive blossoms ringing the top of its head.
+Its eyes are closed into two happy curved lashes and its mouth is a small pleased smile.
+One knob hand peeks out at the right; two tiny feet show below the skirt's hem. Almost
+no bare blute body is visible.
+
+sobbing.PNG
+A salmon-terracotta blute cries hard. Its brows slope sharply down, its eyes are closed
+into tight downturned lashes, and its mouth is open in a small wavering wail. Two thick
+pale grey streams of tears pour straight down from both eyes, running the full height of
+its body, and pool at its feet into a wide grey puddle that spreads across the bottom of
+the frame and partly hides its legs. Both arms hang limp at its sides. Far more extreme
+than sad.PNG — this is full waterworks, played for cartoon comedy.
+
+suitcase_late.png
+A salmon-coral blute is running late. Its brows are drawn down and inward, its eyes are
+two solid dark dots, and its mouth is open in a wide, jagged, panicked rectangle. Its
+left arm stretches far out to the left, dragging a rolling suitcase — an olive-green case
+with a vertical seam, a pulled-up telescoping handle, and two small wheels — that tilts
+back with the momentum. Its right arm reaches around to the right holding what appears to
+be a small ticket or boarding pass. Both legs are thrown out in a wide desperate stride.
+Missing a train or a flight, right now.
+
+surfer.png
+A mustard-yellow blute rides a wave. It stands sideways on a sage-green surfboard, knees
+bent, both arms flung out — one forward-right, one back-left — for balance. Its brows are
+angled down in fierce concentration, its eyes are two flat determined slits, and its
+mouth is a small round "o." Behind and around it, a large blue-grey wave curls in a full
+barrel from the top of the frame down and around to the bottom-left, its crest breaking
+into a pale cream lip at the top and scattered foam chunks spraying at the base. The wave
+dwarfs the blute completely.
+
+swing.png
+A mustard-yellow blute sits on a swing. Two long thin dark ropes run from the top corners
+of the frame down to a curved wooden plank seat that the blute is perched on, its body
+overflowing the seat on both sides. Its eyes are closed into two joyful curved lashes and
+its mouth is wide open in a big laughing half-moon grin. One knob hand grips each rope
+just above the seat. Both legs kick forward and out beneath the plank, feet clearly
+airborne. Nothing else is in frame — no ground, no tree — so it reads as pure mid-air
+delight.
+
+tennis.png
+A warm tan-brown blute plays tennis. Its brows are set at a hard determined angle, its
+eyes are two solid dark ovals, and its mouth is a flat, focused dash. Its right arm
+reaches up to grip the handle of a tall tennis racquet held nearly vertical at the right
+of the frame — a dark oval head with a cream cross-hatched string bed, drawn almost as
+tall as the blute itself. Its left arm swings out low to the left for balance, and both
+legs are thrown apart mid-lunge. Two motion arcs streak across the upper left, marking
+the ball's flight out of frame.
+
+tiny_dog.png
+A third dog-only image with no blute in it. A small mustard-tan dog stands in profile
+facing right, drawn with a rounded scalloped body outline that closely echoes the blute
+silhouette. It has one darker tan floppy ear hanging down over its side, a darker tan
+tail curled up at the left, a long snout with a small dark eye and a knob nose at the
+tip, and a second tiny eye visible above. Four short legs with small rounded feet step
+along the bottom. The proportions are deliberately stubby and chunky — a very small dog
+mid-trot.
+
+umbrella.png
+A dusty rose-mauve blute holds up an umbrella in the rain. The umbrella's canopy is a
+large mustard-yellow dome with dark gore seams and an olive-brown underside, tilted so it
+covers the blute's whole upper body and extends off to the right; its shaft angles down
+across the blute's face to a knob hand gripping it mid-body. Under the canopy, the
+blute's eyes are two dark dots, its brows arch, and its mouth is a wide open cheerful
+grin. A diagonal band of lighter shading falls across its face where the canopy's shadow
+edge lands. Its other arm hangs down holding a small yellow-tipped closed second umbrella
+or bag. It's cheerful about the weather.
+
+waving.PNG
+A soft periwinkle blue-grey blute waves hello. Its eyes are closed into two friendly
+curved lashes under high arched brows, and its mouth is open in a warm, wide half-moon
+smile. Its right arm is raised high up and out to the side, the knob hand lifted in a
+clear greeting; its left arm hangs relaxed down at its side. Both legs stand slightly
+apart with the feet turned outward. There are no props, clothes, or effects — it's the
+plainest possible friendly greeting, and one of the simplest images in the folder.
+
+winter_blushing.png
+A pale cream-yellow blute is bundled up for cold weather. It wears a dusty rose-brown
+knitted beanie with a bobbled pom-pom hanging off a long tail down the right side, a
+matching rose-brown scarf wrapped twice around its middle with a fringed end trailing at
+the left, and two rose-brown winter boots. Its head is tilted to one side; its two dark
+oval eyes are set high, its cheeks carry soft warm blush patches, and its mouth is a long
+bashful smile with a small dark dot at one end. The whole figure is drawn at a rotated,
+snuggling angle, which adds to the shy warmth.
+
+work.png
+A mustard-yellow blute heads off to the office. Its eyes are closed into two content
+curved lashes, orange blush patches sit on both cheeks, and its mouth is a calm, ready
+smile. Its left arm hangs down carrying a dark structured handbag or briefcase with a
+curved top handle; its right arm holds up a dark takeaway coffee cup with a handle and
+three small curls of steam rising off it. Both legs are mid-stride, one forward. Despite
+being a commute image, it reads as genuinely upbeat — the coffee is clearly doing its job.
+
+yawning.PNG
+A sage-green blute yawns. It's tilted slightly off-vertical, as if already half asleep on
+its feet. Its brows are drooping, its eyes are closed into two heavy sagging lashes, and
+its mouth is a tall open oval, sitting off-center to the right, with a long lopsided
+curve running out from it to the left. Two hand-lettered "Z" characters float in the air
+at the upper right. Its left arm reaches across near its own face; its right arm hangs
+slack down the side. Both legs stand loosely, one bent. Unmistakably ready for bed.
+
+yoga.png
+A blue-grey blute holds a yoga pose. Its eyes are closed into two flat serene lashes, its
+brows arch calmly, and its mouth is a very wide, meditative smile spanning nearly the
+full width of its body with a small dark knob at its center. The unusual part is below:
+instead of two legs standing apart, one leg loops up and folds across into a bent
+figure-four while the other extends down as the single supporting limb, so the blute
+balances on one foot with the other tucked up — a blute's version of tree pose. Both arms
+are tucked away out of sight, and nothing else is in frame.
+
+--------------------------------------------------------------------------------
+
+QUICK EXPRESSION INDEX
+======================
+
+Every file, with the expression it wears, in one line each. Alphabetical.
+
+armchair.png ............... eyes open behind glasses, very wide contented smile — cosy absorption
+artist.png ................. no face visible (drawn from behind)
+bathtub.png ................ eyes closed downward, small satisfied curve, blushed cheeks — bliss
+birdwatching.png ........... eyes hidden by binoculars, small round "o" — oblivious surprise
+blowing_a_kiss.PNG ......... eyes closed downward, puckered kiss loop, blushed cheeks — affection
+blushing.PNG ............... asymmetric brows, open eyes, crooked smile with hand-dot — bashful
+brick_laying.PNG ........... no face visible (drawn from behind)
+bubbles.PNG ................ eyes closed upward, mouth pursed on wand, faint blush — idle play
+chef.png ................... eyes open, smile hidden under handlebar moustache — professional pride
+chef_pan.png ............... eyes narrowed to slits, broad grin — confident showmanship
+confused.PNG ............... one brow flat one raised, wavering S-curve mouth — puzzlement
+cozy.PNG ................... eyes closed upward, small smile, face barely visible — deep comfort
+curtain.PNG ................ half a face, one eye, flat dash mouth — hesitant, withholding
+dancing.PNG ................ eyes closed upward, long smile with hand-dot — joyful abandon
+daydreaming.png ............ eyes closed downward, wide dreamy smile — drifting infatuation
+doctor.png ................. eyes open, small smile, blushed cheeks — warm reassurance
+dog_fetch.PNG .............. dog, not a blute: one closed eye, open mouth, tongue out — excitement
+envelope.PNG ............... eyes open, wide open half-moon grin — jubilation
+excited.PNG ................ eyes squeezed shut upward, mouth wide open — shouting celebration
+eye_mask.PNG ............... eyes closed under a lashed sleep mask, serene wide smile — restful
+fancy.png .................. eyes open, sharp brows, small mouth under moustache — smug formality
+farmer.png ................. eyes open, thin arched brows, small friendly smile — placid readiness
+flying_kite.png ............ eyes closed upward, open delighted grin — carefree
+gamer.png .................. hard V brows, flat slit eyes, tight dash mouth — total grim focus
+ghost.PNG .................. hollow ringed eyes with floating pupils, no mouth — eerie, blank
+glad.PNG ................... eyes closed upward, clean symmetrical smile — plain contentment
+glasses.png ................ open eyes behind tinted lenses, small modest smile — mild, studious
+golden_dog.png ............. dog, not a blute: closed smiling eyes, no mouth — calm contentment
+groceries.PNG .............. eyes open, long mildly weary curve — patient resignation
+headphones.png ............. eyes closed downward, small round "o" — humming along
+hiker.png .................. eyes open, small pleased smile — cheerful exertion
+hot_air_balloon.PNG ........ eyes closed upward, wide smile, blushed cheeks — elated
+i_dont_know.PNG ............ brows tilted in, flat wavering mouth — noncommittal shrug
+icecream.png ............... eyes closed upward, wide smile, blushed cheeks — pure treat-joy
+in_love.PNG ................ eyes closed upward, dreamy smile with hand-dot, blush — smitten
+jumprope.PNG ............... eyes closed upward, wide happy smile — energetic play
+lemon.PNG .................. scrunched asymmetric eyes, twisted grimace — sourness
+mining.PNG ................. eyes open, small willing smile — uncomplaining readiness
+monocle.png ................ one eye monocled, mismatched brows, pursed mouth — haughty appraisal
+moving.PNG ................. long resigned closed lashes, flat mouth with hand-dot — overwhelmed
+party.png .................. eyes closed upward, grin clamped on a blower — festive
+photobooth.PNG ............. eyes closed upward, mouth wide open under prop moustache — hamming it up
+photographer.png ........... one eye hidden by camera, other squinting, flat mouth — held concentration
+pickaxe.PNG ................ eyes open, small confident smile — capable and ready
+picnic.png ................. large open eyes, small pleased smile — sweet anticipation
+pizza.png .................. eyes closed downward, mouth stretched wide around a slice — blissful eating
+pottery.png ................ eyes closed downward, wide serene smile — deep quiet focus
+programmer.png ............. no face visible (drawn from behind)
+ramen.png .................. eyes closed downward, long contented curve — savouring
+reluctant_agreement.PNG .... hard lowered brows, tight wavering line, arms crossed — grudging assent
+rock_climber.PNG ........... no face visible (drawn from behind)
+runner.PNG ................. strained brows, eyes shut hard, gritted jagged mouth — maximum effort
+sad.PNG .................... brows sloping out, downturned lashes, symmetrical frown — quiet sadness
+sandcastles.PNG ............ one flat one arched brow, wide off-centre smile — pleased mischief
+shower.png ................. eyes closed downward, small round "o" — singing in the suds
+sighing.PNG ................ flat closed lashes, small open weary mouth with puff-cloud — exasperation
+singer.png ................. eyes closed upward, small round "o" — performing
+sitting_under_flower.PNG ... tiny open dot eyes, small smile — peaceful, dwarfed by the flower
+skirt.png .................. eyes closed upward, small pleased smile — quietly dressed-up
+sobbing.PNG ................ brows sloping down, wailing mouth, twin tear streams — full distress
+suitcase_late.png .......... V brows, open eyes, jagged panicked rectangle mouth — alarm
+surfer.png ................. hard angled brows, flat slit eyes, small "o" — fierce concentration
+swing.png .................. eyes closed upward, wide laughing half-moon — mid-air glee
+tennis.png ................. determined brows, open eyes, flat focused dash — competitive intent
+tiny_dog.png ............... dog, not a blute: small dot eyes, no mouth — neutral trotting
+umbrella.png ............... open eyes, wide open cheerful grin — undeterred by rain
+waving.PNG ................. eyes closed upward, warm wide half-moon smile — friendly greeting
+winter_blushing.png ........ head tilted, open eyes, bashful smile with hand-dot, blush — shy warmth
+work.png ................... eyes closed upward, calm ready smile, blushed cheeks — upbeat commute
+yawning.PNG ................ drooping lashes, tall open oval mouth, floating "Z"s — sleepiness
+yoga.png ................... flat serene closed lashes, very wide smile with centre knob — meditative calm

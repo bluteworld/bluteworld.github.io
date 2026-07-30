@@ -395,14 +395,18 @@ function askQuestion() {
     if (result.reason === 'multiple') {
       showQuestionFeedback('One question at a time, please — try splitting that up.');
       shakeFeedback();
-      logUnansweredQuestion(dailyState.date, getPlayerUUID(), rawText, playerName, 'multiple').catch(() => {});
+      if (gameMode === 'daily') {
+        logUnansweredQuestion(dailyState.date, getPlayerUUID(), rawText, playerName, 'multiple').catch(() => {});
+      }
       return;
     }
 
     questionInput.placeholder = `Try something like: "${randomExampleQuestion()}"`;
     showQuestionFeedback("Couldn't quite figure out what that's asking — try the example above.");
     shakeFeedback();
-    logUnansweredQuestion(dailyState.date, getPlayerUUID(), rawText, playerName, 'unmatched').catch(() => {});
+    if (gameMode === 'daily') {
+      logUnansweredQuestion(dailyState.date, getPlayerUUID(), rawText, playerName, 'unmatched').catch(() => {});
+    }
     return;
   }
 
@@ -419,18 +423,20 @@ function askQuestion() {
   dailyState.history.push({ text: rawText, attribute: result.attribute, value: result.value, answer });
   dailyState.questionsAsked += 1;
 
-  const ref = logQuestionEvent(dailyState.date, getPlayerUUID(), {
-    name: playerName,
-    secretId: dailyState.secretId,
-    rawText,
-    attribute: result.attribute,
-    value: result.value,
-    answer,
-    boardAnswers,
-    marksBefore,
-  });
-  ref.catch(() => {});
-  lastQuestionRef = ref;
+  if (gameMode === 'daily') {
+    const ref = logQuestionEvent(dailyState.date, getPlayerUUID(), {
+      name: playerName,
+      secretId: dailyState.secretId,
+      rawText,
+      attribute: result.attribute,
+      value: result.value,
+      answer,
+      boardAnswers,
+      marksBefore,
+    });
+    ref.catch(() => {});
+    lastQuestionRef = ref;
+  }
 
   questionInput.value = '';
   questionInput.placeholder = `Ask a question... e.g. ${randomExampleQuestion()}`;

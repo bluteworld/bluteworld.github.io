@@ -1,4 +1,11 @@
 /**
+ * SUPERSEDED — historical record only. Do not re-run.
+ *
+ * unansweredQuestions and feedback have since been moved back out to the root
+ * by migrate-feedback-to-root.js, and no longer live under a date. Running this
+ * script again with --live would push them back under /{date}/ and undo that.
+ * Only leaderboard and questionLog are still date-first.
+ *
  * One-time migration: restructure the Realtime Database from
  *   /leaderboard/{date}/{uuid}
  *   /questionLog/{date}/{uuid}/{pushId}

@@ -70,55 +70,65 @@
         }
       },
 
-      "unansweredQuestions": {
-        "$uuid": {
-          ".read": false,
-          ".write": true,
-          "$pushId": {
-            ".validate": "newData.hasChildren(['text', 'uuid', 'reason', 'timestamp'])",
-            "text": {
-              ".validate": "newData.isString() && newData.val().length <= 200"
-            },
-            "name": {
-              ".validate": "newData.isString() && newData.val().length <= 40"
-            },
-            "uuid": {
-              ".validate": "newData.isString() && newData.val() == $uuid"
-            },
-            "reason": {
-              ".validate": "newData.val() == 'multiple' || newData.val() == 'unmatched'"
-            },
-            "timestamp": {
-              ".validate": "newData.isNumber()"
-            },
-            "$other": {
-              ".validate": false
-            }
+      "$other": {
+        ".validate": false
+      }
+    },
+
+    "unansweredQuestions": {
+      "$uuid": {
+        ".read": false,
+        ".write": true,
+        "$pushId": {
+          ".validate": "newData.hasChildren(['text', 'uuid', 'date', 'reason', 'timestamp'])",
+          "text": {
+            ".validate": "newData.isString() && newData.val().length <= 200"
+          },
+          "name": {
+            ".validate": "newData.isString() && newData.val().length <= 40"
+          },
+          "uuid": {
+            ".validate": "newData.isString() && newData.val() == $uuid"
+          },
+          "date": {
+            ".validate": "newData.isString() && newData.val().matches(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)"
+          },
+          "reason": {
+            ".validate": "newData.val() == 'multiple' || newData.val() == 'unmatched'"
+          },
+          "timestamp": {
+            ".validate": "newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
           }
         }
-      },
+      }
+    },
 
-      "feedback": {
-        "$uuid": {
-          ".read": false,
-          ".write": true,
-          "$pushId": {
-            ".validate": "newData.hasChildren(['message', 'uuid', 'timestamp'])",
-            "message": {
-              ".validate": "newData.isString() && newData.val().length <= 2000"
-            },
-            "name": {
-              ".validate": "newData.isString() && newData.val().length <= 40"
-            },
-            "uuid": {
-              ".validate": "newData.isString() && newData.val() == $uuid"
-            },
-            "timestamp": {
-              ".validate": "newData.isNumber()"
-            },
-            "$other": {
-              ".validate": false
-            }
+    "feedback": {
+      "$uuid": {
+        ".read": false,
+        ".write": true,
+        "$pushId": {
+          ".validate": "newData.hasChildren(['message', 'uuid', 'date', 'timestamp'])",
+          "message": {
+            ".validate": "newData.isString() && newData.val().length <= 2000"
+          },
+          "name": {
+            ".validate": "newData.isString() && newData.val().length <= 40"
+          },
+          "uuid": {
+            ".validate": "newData.isString() && newData.val() == $uuid"
+          },
+          "date": {
+            ".validate": "newData.isString() && newData.val().matches(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)"
+          },
+          "timestamp": {
+            ".validate": "newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
           }
         }
       }

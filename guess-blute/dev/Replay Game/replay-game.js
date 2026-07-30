@@ -53,7 +53,9 @@ async function main() {
   const [leaderboardSnap, questionLogSnap, unansweredSnap] = await Promise.all([
     db.ref(`${date}/leaderboard/${uuid}`).get(),
     db.ref(`${date}/questionLog/${uuid}`).get(),
-    db.ref(`${date}/unansweredQuestions/${uuid}`).get(),
+    // unansweredQuestions is stored flat at the root, so this returns every
+    // date for this player — filter down to the one being replayed below.
+    db.ref(`unansweredQuestions/${uuid}`).get(),
   ]);
 
   if (!questionLogSnap.exists()) {
@@ -66,7 +68,7 @@ async function main() {
     uuid,
     leaderboard: leaderboardSnap.val(),
     questionLog: Object.values(questionLogSnap.val() || {}),
-    unansweredQuestions: Object.values(unansweredSnap.val() || {}),
+    unansweredQuestions: Object.values(unansweredSnap.val() || {}).filter((q) => q.date === date),
   };
 
   const outPath = path.resolve(outArg || `replay-${date}-${uuid}.json`);
