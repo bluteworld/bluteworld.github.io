@@ -1,21 +1,24 @@
 /**
- * SUPERSEDED — historical record only. Do not re-run.
+ * SUPERSEDED — historical record only. This has already been run; it will
+ * refuse to do anything unless you pass --i-know-this-is-superseded.
  *
  * unansweredQuestions and feedback have since been moved back out to the root
- * by migrate-feedback-to-root.js, and no longer live under a date. Running this
- * script again with --live would push them back under /{date}/ and undo that.
- * Only leaderboard and questionLog are still date-first.
+ * by migrate-feedback-to-root.js, and no longer live under a date. This script
+ * can no longer touch them: they have been removed from CATEGORIES below, so
+ * even forced past the guard it only handles leaderboard and questionLog, which
+ * are still date-first. Both of those were migrated long ago, so there is
+ * nothing left at the old source paths for it to find.
  *
  * One-time migration: restructure the Realtime Database from
  *   /leaderboard/{date}/{uuid}
  *   /questionLog/{date}/{uuid}/{pushId}
- *   /unansweredQuestions/{date}/{uuid}/{pushId}
- *   /feedback/{date}/{uuid}/{pushId}
+ *   /unansweredQuestions/{date}/{uuid}/{pushId}   (since moved back to the root)
+ *   /feedback/{date}/{uuid}/{pushId}              (since moved back to the root)
  * to
  *   /{date}/leaderboard/{uuid}
  *   /{date}/questionLog/{uuid}/{pushId}
- *   /{date}/unansweredQuestions/{uuid}/{pushId}
- *   /{date}/feedback/{uuid}/{pushId}
+ *   /{date}/unansweredQuestions/{uuid}/{pushId}   (no longer — see above)
+ *   /{date}/feedback/{uuid}/{pushId}              (no longer — see above)
  *
  * This must be run with admin credentials (a service account), not the
  * client SDK — the security rules deny reading questionLog,
@@ -48,8 +51,20 @@ const keyPath = args[args.indexOf('--key') + 1];
 const isLive = args.includes('--live');
 const deleteOld = args.includes('--delete-old');
 
+if (!args.includes('--i-know-this-is-superseded')) {
+  console.error('This migration has already been run and is kept only as a record.');
+  console.error('');
+  console.error('feedback and unansweredQuestions no longer live under a date — they were');
+  console.error('moved back to the root by migrate-feedback-to-root.js. This script has been');
+  console.error('stripped down to leaderboard and questionLog so it cannot undo that, and');
+  console.error('both of those were migrated long ago, so it has nothing left to do.');
+  console.error('');
+  console.error('If you genuinely need to run it anyway, pass --i-know-this-is-superseded.');
+  process.exit(1);
+}
+
 if (!keyPath || args.indexOf('--key') === -1) {
-  console.error('Usage: node migrate-to-date-first.js --key <path-to-service-account.json> [--live] [--delete-old]');
+  console.error('Usage: node migrate-to-date-first.js --key <path-to-service-account.json> [--live] [--delete-old] --i-know-this-is-superseded');
   process.exit(1);
 }
 
@@ -59,7 +74,9 @@ const app = initializeApp({
 });
 
 const db = getDatabase(app);
-const CATEGORIES = ['leaderboard', 'questionLog', 'unansweredQuestions', 'feedback'];
+// unansweredQuestions and feedback deliberately removed — they live at the root
+// now, and listing them here would let this script move them back under a date.
+const CATEGORIES = ['leaderboard', 'questionLog'];
 
 async function main() {
   console.log(isLive ? 'LIVE RUN — writes will happen.' : 'DRY RUN — nothing will be written. Pass --live to actually migrate.');
