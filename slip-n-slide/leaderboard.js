@@ -1,17 +1,17 @@
-// Global scores for Blute Shuffleboard. There is no daily puzzle here, so
+// Global scores for Slip n Slide. There is no daily puzzle here, so
 // unlike Guess Blute every score goes into a single all-time list keyed by
 // player, and the "best" everyone sees is the highest entry in it.
 //
 // Every function here works without a network: if the Firebase scripts failed
 // to load, or the write is refused, the caller falls back to the local best.
 
-const SCORES_PATH = "shuffleboardScores";
+const SCORES_PATH = "slipNSlideScores";
 
 function getPlayerUUID() {
-  let uuid = localStorage.getItem("bluteShuffleboardUUID");
+  let uuid = localStorage.getItem("slipNSlideUUID");
   if (!uuid) {
     uuid = crypto.randomUUID();
-    localStorage.setItem("bluteShuffleboardUUID", uuid);
+    localStorage.setItem("slipNSlideUUID", uuid);
   }
   return uuid;
 }

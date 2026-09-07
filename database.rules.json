@@ -134,7 +134,7 @@
       }
     },
 
-    "shuffleboardScores": {
+    "slipNSlideScores": {
       ".read": true,
       ".indexOn": "score",
       "$uuid": {

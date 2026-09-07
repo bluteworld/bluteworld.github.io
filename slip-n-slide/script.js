@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------
-// Blute Shuffleboard
+// Slip n Slide
 // The canvas is always 400x700 internally, however big it looks on
 // screen, so every number below is in those units.
 // ---------------------------------------------------------------
@@ -101,7 +101,7 @@ let lastShot = null; // the blute most recently launched, until it settles
 let flashBand = null; // band lit up because a blute just landed in it
 let flashLeft = 0; // frames of that flash still to run
 let roundOver = false;
-let best = Number(localStorage.getItem("bluteShuffleboardBest")) || 0; // this browser
+let best = Number(localStorage.getItem("slipNSlideBest")) || 0; // this browser
 let globalBest = 0; // the highest anyone has posted, once it loads
 
 function draw() {
@@ -420,7 +420,7 @@ function endRound() {
 
   if (beatOwn) {
     best = total;
-    localStorage.setItem("bluteShuffleboardBest", best);
+    localStorage.setItem("slipNSlideBest", best);
     // Only post when you improve, so the list holds one row per player.
     submitScore(getPlayerUUID(), total)
       .then(refreshGlobalBest)
