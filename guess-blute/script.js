@@ -15,7 +15,7 @@ const finalGuessBtn = document.getElementById('finalGuessBtn');
 
 let dailyState = null;
 let gameMode = 'daily'; // 'daily' | 'unlimited'
-let playerName = localStorage.getItem('guessBluteName') || '';
+let playerName = getPlayerName(); // shared across games, see ../player.js
 let lastQuestionRef = null;
 let guessModeActive = false;
 
@@ -101,15 +101,6 @@ finalGuessBtn.addEventListener('click', () => {
   if (!dailyState || dailyState.finished) return;
   setGuessMode(!guessModeActive);
 });
-
-function getPlayerUUID() {
-  let uuid = localStorage.getItem('guessBluteUUID');
-  if (!uuid) {
-    uuid = crypto.randomUUID();
-    localStorage.setItem('guessBluteUUID', uuid);
-  }
-  return uuid;
-}
 
 let modalOnDismiss = null;
 
@@ -783,7 +774,7 @@ function renderNameModal(onSubmit) {
     const name = input.value.trim();
     if (name) {
       playerName = name;
-      localStorage.setItem('guessBluteName', name);
+      setPlayerName(name);
     }
     onSubmit();
   };
@@ -860,13 +851,13 @@ const TUTORIAL_SLIDES = [
     body: 'Tap “Guess” next to the menu, then tap a card to select it — you’ll get a chance to confirm before it counts. A wrong guess still counts as a question, so guess when you’re confident.',
   },
   {
-    image: 'blutes/gamer.png',
+    image: '../blutes/gamer.png',
     title: 'Score = Fewer Questions',
     body: 'Your score is how many questions you asked — lower is better.',
     highlight: 'Never ask about color and you’ll earn a bonus that lowers your score even further!',
   },
   {
-    image: 'blutes/party.png',
+    image: '../blutes/party.png',
     title: 'One Puzzle a Day',
     body: 'There’s a new secret blute every day — open the menu to check the Leaderboard, or switch to Unlimited Mode anytime for random practice boards (they don’t affect the leaderboard).',
   },
@@ -874,14 +865,14 @@ const TUTORIAL_SLIDES = [
 
 function renderTutorialSlideVisual(slide) {
   if (slide.visual === 'mark') {
-    return `<div class="tutorial-mock-cell" data-mark="red"><img src="blutes/glad.PNG" alt="" /></div>`;
+    return `<div class="tutorial-mock-cell" data-mark="red"><img src="../blutes/glad.PNG" alt="" /></div>`;
   }
   if (slide.visual === 'guess') {
     return `
       <div class="tutorial-guess-demo">
         <button type="button" class="final-guess-btn active" disabled>Tap a card…</button>
         <div class="tutorial-mock-cell guess-selected">
-          <img src="blutes/glad.PNG" alt="" />
+          <img src="../blutes/glad.PNG" alt="" />
           <button type="button" class="guess-confirm-btn" disabled>Confirm</button>
         </div>
       </div>

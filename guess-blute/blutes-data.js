@@ -606,7 +606,7 @@ const BLUTE_DATA = {
     {
       "id": "armchair",
       "name": "Armchair",
-      "image": "blutes/armchair.png",
+      "image": "../blutes/armchair.png",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -724,7 +724,7 @@ const BLUTE_DATA = {
     {
       "id": "artist",
       "name": "Artist",
-      "image": "blutes/artist.png",
+      "image": "../blutes/artist.png",
       "is_blute": true,
       "color": "blue",
       "attributes": {
@@ -842,7 +842,7 @@ const BLUTE_DATA = {
     {
       "id": "bathtub",
       "name": "Bathtub",
-      "image": "blutes/bathtub.png",
+      "image": "../blutes/bathtub.png",
       "is_blute": true,
       "color": "orange",
       "attributes": {
@@ -960,7 +960,7 @@ const BLUTE_DATA = {
     {
       "id": "birdwatching",
       "name": "Birdwatching",
-      "image": "blutes/birdwatching.png",
+      "image": "../blutes/birdwatching.png",
       "is_blute": true,
       "color": "blue",
       "attributes": {
@@ -1078,7 +1078,7 @@ const BLUTE_DATA = {
     {
       "id": "blowing_a_kiss",
       "name": "Blowing a Kiss",
-      "image": "blutes/blowing_a_kiss.PNG",
+      "image": "../blutes/blowing_a_kiss.PNG",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -1196,7 +1196,7 @@ const BLUTE_DATA = {
     {
       "id": "blushing",
       "name": "Blushing",
-      "image": "blutes/blushing.PNG",
+      "image": "../blutes/blushing.PNG",
       "is_blute": true,
       "color": "pink",
       "attributes": {
@@ -1314,7 +1314,7 @@ const BLUTE_DATA = {
     {
       "id": "brick_laying",
       "name": "Brick Laying",
-      "image": "blutes/brick_laying.PNG",
+      "image": "../blutes/brick_laying.PNG",
       "is_blute": true,
       "color": "red",
       "attributes": {
@@ -1432,7 +1432,7 @@ const BLUTE_DATA = {
     {
       "id": "bubbles",
       "name": "Bubbles",
-      "image": "blutes/bubbles.PNG",
+      "image": "../blutes/bubbles.PNG",
       "is_blute": true,
       "color": "pink",
       "attributes": {
@@ -1550,7 +1550,7 @@ const BLUTE_DATA = {
     {
       "id": "chef",
       "name": "Chef",
-      "image": "blutes/chef.png",
+      "image": "../blutes/chef.png",
       "is_blute": true,
       "color": "green",
       "attributes": {
@@ -1668,7 +1668,7 @@ const BLUTE_DATA = {
     {
       "id": "chef_pan",
       "name": "Chef Pan",
-      "image": "blutes/chef_pan.png",
+      "image": "../blutes/chef_pan.png",
       "is_blute": true,
       "color": "green",
       "attributes": {
@@ -1786,7 +1786,7 @@ const BLUTE_DATA = {
     {
       "id": "confused",
       "name": "Confused",
-      "image": "blutes/confused.PNG",
+      "image": "../blutes/confused.PNG",
       "is_blute": true,
       "color": "blue",
       "attributes": {
@@ -1904,7 +1904,7 @@ const BLUTE_DATA = {
     {
       "id": "cozy",
       "name": "Cozy",
-      "image": "blutes/cozy.PNG",
+      "image": "../blutes/cozy.PNG",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -2022,7 +2022,7 @@ const BLUTE_DATA = {
     {
       "id": "curtain",
       "name": "Curtain",
-      "image": "blutes/curtain.PNG",
+      "image": "../blutes/curtain.PNG",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -2140,7 +2140,7 @@ const BLUTE_DATA = {
     {
       "id": "dancing",
       "name": "Dancing",
-      "image": "blutes/dancing.PNG",
+      "image": "../blutes/dancing.PNG",
       "is_blute": true,
       "color": "green",
       "attributes": {
@@ -2258,7 +2258,7 @@ const BLUTE_DATA = {
     {
       "id": "daydreaming",
       "name": "Daydreaming",
-      "image": "blutes/daydreaming.png",
+      "image": "../blutes/daydreaming.png",
       "is_blute": true,
       "color": "olive",
       "attributes": {
@@ -2376,7 +2376,7 @@ const BLUTE_DATA = {
     {
       "id": "doctor",
       "name": "Doctor",
-      "image": "blutes/doctor.png",
+      "image": "../blutes/doctor.png",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -2494,7 +2494,7 @@ const BLUTE_DATA = {
     {
       "id": "dog_fetch",
       "name": "Dog Fetch",
-      "image": "blutes/dog_fetch.PNG",
+      "image": "../blutes/dog_fetch.PNG",
       "is_blute": false,
       "color": "yellow",
       "attributes": {
@@ -2612,7 +2612,7 @@ const BLUTE_DATA = {
     {
       "id": "envelope",
       "name": "Envelope",
-      "image": "blutes/envelope.PNG",
+      "image": "../blutes/envelope.PNG",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -2730,7 +2730,7 @@ const BLUTE_DATA = {
     {
       "id": "excited",
       "name": "Excited",
-      "image": "blutes/excited.PNG",
+      "image": "../blutes/excited.PNG",
       "is_blute": true,
       "color": "purple",
       "attributes": {
@@ -2848,7 +2848,7 @@ const BLUTE_DATA = {
     {
       "id": "eye_mask",
       "name": "Eye Mask",
-      "image": "blutes/eye_mask.PNG",
+      "image": "../blutes/eye_mask.PNG",
       "is_blute": true,
       "color": "blue",
       "attributes": {
@@ -2966,7 +2966,7 @@ const BLUTE_DATA = {
     {
       "id": "fancy",
       "name": "Fancy",
-      "image": "blutes/fancy.png",
+      "image": "../blutes/fancy.png",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -3084,7 +3084,7 @@ const BLUTE_DATA = {
     {
       "id": "farmer",
       "name": "Farmer",
-      "image": "blutes/farmer.png",
+      "image": "../blutes/farmer.png",
       "is_blute": true,
       "color": "blue",
       "attributes": {
@@ -3202,7 +3202,7 @@ const BLUTE_DATA = {
     {
       "id": "flying_kite",
       "name": "Flying Kite",
-      "image": "blutes/flying_kite.png",
+      "image": "../blutes/flying_kite.png",
       "is_blute": true,
       "color": "olive",
       "attributes": {
@@ -3320,7 +3320,7 @@ const BLUTE_DATA = {
     {
       "id": "gamer",
       "name": "Gamer",
-      "image": "blutes/gamer.png",
+      "image": "../blutes/gamer.png",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -3438,7 +3438,7 @@ const BLUTE_DATA = {
     {
       "id": "ghost",
       "name": "Ghost",
-      "image": "blutes/ghost.PNG",
+      "image": "../blutes/ghost.PNG",
       "is_blute": true,
       "color": "gray",
       "attributes": {
@@ -3556,7 +3556,7 @@ const BLUTE_DATA = {
     {
       "id": "glad",
       "name": "Glad",
-      "image": "blutes/glad.PNG",
+      "image": "../blutes/glad.PNG",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -3674,7 +3674,7 @@ const BLUTE_DATA = {
     {
       "id": "glasses",
       "name": "Glasses",
-      "image": "blutes/glasses.png",
+      "image": "../blutes/glasses.png",
       "is_blute": true,
       "color": "pink",
       "attributes": {
@@ -3792,7 +3792,7 @@ const BLUTE_DATA = {
     {
       "id": "golden_dog",
       "name": "Golden Dog",
-      "image": "blutes/golden_dog.png",
+      "image": "../blutes/golden_dog.png",
       "is_blute": false,
       "color": "yellow",
       "attributes": {
@@ -3910,7 +3910,7 @@ const BLUTE_DATA = {
     {
       "id": "groceries",
       "name": "Groceries",
-      "image": "blutes/groceries.PNG",
+      "image": "../blutes/groceries.PNG",
       "is_blute": true,
       "color": "blue",
       "attributes": {
@@ -4028,7 +4028,7 @@ const BLUTE_DATA = {
     {
       "id": "headphones",
       "name": "Headphones",
-      "image": "blutes/headphones.png",
+      "image": "../blutes/headphones.png",
       "is_blute": true,
       "color": "brown",
       "attributes": {
@@ -4146,7 +4146,7 @@ const BLUTE_DATA = {
     {
       "id": "hiker",
       "name": "Hiker",
-      "image": "blutes/hiker.png",
+      "image": "../blutes/hiker.png",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -4264,7 +4264,7 @@ const BLUTE_DATA = {
     {
       "id": "hot_air_balloon",
       "name": "Hot Air Balloon",
-      "image": "blutes/hot_air_balloon.PNG",
+      "image": "../blutes/hot_air_balloon.PNG",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -4382,7 +4382,7 @@ const BLUTE_DATA = {
     {
       "id": "icecream",
       "name": "Ice Cream",
-      "image": "blutes/icecream.png",
+      "image": "../blutes/icecream.png",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -4500,7 +4500,7 @@ const BLUTE_DATA = {
     {
       "id": "i_dont_know",
       "name": "I Don't Know",
-      "image": "blutes/i_dont_know.PNG",
+      "image": "../blutes/i_dont_know.PNG",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -4618,7 +4618,7 @@ const BLUTE_DATA = {
     {
       "id": "in_love",
       "name": "In Love",
-      "image": "blutes/in_love.PNG",
+      "image": "../blutes/in_love.PNG",
       "is_blute": true,
       "color": "olive",
       "attributes": {
@@ -4736,7 +4736,7 @@ const BLUTE_DATA = {
     {
       "id": "jumprope",
       "name": "Jump Rope",
-      "image": "blutes/jumprope.PNG",
+      "image": "../blutes/jumprope.PNG",
       "is_blute": true,
       "color": "green",
       "attributes": {
@@ -4854,7 +4854,7 @@ const BLUTE_DATA = {
     {
       "id": "lemon",
       "name": "Lemon",
-      "image": "blutes/lemon.PNG",
+      "image": "../blutes/lemon.PNG",
       "is_blute": true,
       "color": "teal",
       "attributes": {
@@ -4972,7 +4972,7 @@ const BLUTE_DATA = {
     {
       "id": "mining",
       "name": "Mining",
-      "image": "blutes/mining.PNG",
+      "image": "../blutes/mining.PNG",
       "is_blute": true,
       "color": "green",
       "attributes": {
@@ -5090,7 +5090,7 @@ const BLUTE_DATA = {
     {
       "id": "monocle",
       "name": "Monocle",
-      "image": "blutes/monocle.png",
+      "image": "../blutes/monocle.png",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -5208,7 +5208,7 @@ const BLUTE_DATA = {
     {
       "id": "moving",
       "name": "Moving",
-      "image": "blutes/moving.PNG",
+      "image": "../blutes/moving.PNG",
       "is_blute": true,
       "color": "teal",
       "attributes": {
@@ -5326,7 +5326,7 @@ const BLUTE_DATA = {
     {
       "id": "party",
       "name": "Party",
-      "image": "blutes/party.png",
+      "image": "../blutes/party.png",
       "is_blute": true,
       "color": "pink",
       "attributes": {
@@ -5444,7 +5444,7 @@ const BLUTE_DATA = {
     {
       "id": "photobooth",
       "name": "Photo Booth",
-      "image": "blutes/photobooth.PNG",
+      "image": "../blutes/photobooth.PNG",
       "is_blute": true,
       "color": "purple",
       "attributes": {
@@ -5562,7 +5562,7 @@ const BLUTE_DATA = {
     {
       "id": "photographer",
       "name": "Photographer",
-      "image": "blutes/photographer.png",
+      "image": "../blutes/photographer.png",
       "is_blute": true,
       "color": "olive",
       "attributes": {
@@ -5680,7 +5680,7 @@ const BLUTE_DATA = {
     {
       "id": "pickaxe",
       "name": "Pickaxe",
-      "image": "blutes/pickaxe.PNG",
+      "image": "../blutes/pickaxe.PNG",
       "is_blute": true,
       "color": "red",
       "attributes": {
@@ -5798,7 +5798,7 @@ const BLUTE_DATA = {
     {
       "id": "picnic",
       "name": "Picnic",
-      "image": "blutes/picnic.png",
+      "image": "../blutes/picnic.png",
       "is_blute": true,
       "color": "olive",
       "attributes": {
@@ -5916,7 +5916,7 @@ const BLUTE_DATA = {
     {
       "id": "pizza",
       "name": "Pizza",
-      "image": "blutes/pizza.png",
+      "image": "../blutes/pizza.png",
       "is_blute": true,
       "color": "olive",
       "attributes": {
@@ -6034,7 +6034,7 @@ const BLUTE_DATA = {
     {
       "id": "pottery",
       "name": "Pottery",
-      "image": "blutes/pottery.png",
+      "image": "../blutes/pottery.png",
       "is_blute": true,
       "color": "pink",
       "attributes": {
@@ -6152,7 +6152,7 @@ const BLUTE_DATA = {
     {
       "id": "programmer",
       "name": "Programmer",
-      "image": "blutes/programmer.png",
+      "image": "../blutes/programmer.png",
       "is_blute": true,
       "color": "blue",
       "attributes": {
@@ -6270,7 +6270,7 @@ const BLUTE_DATA = {
     {
       "id": "ramen",
       "name": "Ramen",
-      "image": "blutes/ramen.png",
+      "image": "../blutes/ramen.png",
       "is_blute": true,
       "color": "pink",
       "attributes": {
@@ -6388,7 +6388,7 @@ const BLUTE_DATA = {
     {
       "id": "reluctant_agreement",
       "name": "Reluctant Agreement",
-      "image": "blutes/reluctant_agreement.PNG",
+      "image": "../blutes/reluctant_agreement.PNG",
       "is_blute": true,
       "color": "red",
       "attributes": {
@@ -6506,7 +6506,7 @@ const BLUTE_DATA = {
     {
       "id": "rock_climber",
       "name": "Rock Climber",
-      "image": "blutes/rock_climber.PNG",
+      "image": "../blutes/rock_climber.PNG",
       "is_blute": true,
       "color": "olive",
       "attributes": {
@@ -6624,7 +6624,7 @@ const BLUTE_DATA = {
     {
       "id": "runner",
       "name": "Runner",
-      "image": "blutes/runner.PNG",
+      "image": "../blutes/runner.PNG",
       "is_blute": true,
       "color": "brown",
       "attributes": {
@@ -6742,7 +6742,7 @@ const BLUTE_DATA = {
     {
       "id": "sad",
       "name": "Sad",
-      "image": "blutes/sad.PNG",
+      "image": "../blutes/sad.PNG",
       "is_blute": true,
       "color": "teal",
       "attributes": {
@@ -6860,7 +6860,7 @@ const BLUTE_DATA = {
     {
       "id": "sandcastles",
       "name": "Sandcastles",
-      "image": "blutes/sandcastles.PNG",
+      "image": "../blutes/sandcastles.PNG",
       "is_blute": true,
       "color": "blue",
       "attributes": {
@@ -6978,7 +6978,7 @@ const BLUTE_DATA = {
     {
       "id": "shower",
       "name": "Shower",
-      "image": "blutes/shower.png",
+      "image": "../blutes/shower.png",
       "is_blute": true,
       "color": "blue",
       "attributes": {
@@ -7096,7 +7096,7 @@ const BLUTE_DATA = {
     {
       "id": "sighing",
       "name": "Sighing",
-      "image": "blutes/sighing.PNG",
+      "image": "../blutes/sighing.PNG",
       "is_blute": true,
       "color": "olive",
       "attributes": {
@@ -7214,7 +7214,7 @@ const BLUTE_DATA = {
     {
       "id": "singer",
       "name": "Singer",
-      "image": "blutes/singer.png",
+      "image": "../blutes/singer.png",
       "is_blute": true,
       "color": "olive",
       "attributes": {
@@ -7332,7 +7332,7 @@ const BLUTE_DATA = {
     {
       "id": "sitting_under_flower",
       "name": "Sitting Under Flower",
-      "image": "blutes/sitting_under_flower.PNG",
+      "image": "../blutes/sitting_under_flower.PNG",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -7450,7 +7450,7 @@ const BLUTE_DATA = {
     {
       "id": "skirt",
       "name": "Skirt",
-      "image": "blutes/skirt.png",
+      "image": "../blutes/skirt.png",
       "is_blute": true,
       "color": "brown",
       "attributes": {
@@ -7568,7 +7568,7 @@ const BLUTE_DATA = {
     {
       "id": "sobbing",
       "name": "Sobbing",
-      "image": "blutes/sobbing.PNG",
+      "image": "../blutes/sobbing.PNG",
       "is_blute": true,
       "color": "red",
       "attributes": {
@@ -7686,7 +7686,7 @@ const BLUTE_DATA = {
     {
       "id": "suitcase_late",
       "name": "Suitcase Late",
-      "image": "blutes/suitcase_late.png",
+      "image": "../blutes/suitcase_late.png",
       "is_blute": true,
       "color": "red",
       "attributes": {
@@ -7804,7 +7804,7 @@ const BLUTE_DATA = {
     {
       "id": "surfer",
       "name": "Surfer",
-      "image": "blutes/surfer.png",
+      "image": "../blutes/surfer.png",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -7922,7 +7922,7 @@ const BLUTE_DATA = {
     {
       "id": "swing",
       "name": "Swing",
-      "image": "blutes/swing.png",
+      "image": "../blutes/swing.png",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -8040,7 +8040,7 @@ const BLUTE_DATA = {
     {
       "id": "tennis",
       "name": "Tennis",
-      "image": "blutes/tennis.png",
+      "image": "../blutes/tennis.png",
       "is_blute": true,
       "color": "brown",
       "attributes": {
@@ -8158,7 +8158,7 @@ const BLUTE_DATA = {
     {
       "id": "tiny_dog",
       "name": "Tiny Dog",
-      "image": "blutes/tiny_dog.png",
+      "image": "../blutes/tiny_dog.png",
       "is_blute": false,
       "color": "yellow",
       "attributes": {
@@ -8276,7 +8276,7 @@ const BLUTE_DATA = {
     {
       "id": "umbrella",
       "name": "Umbrella",
-      "image": "blutes/umbrella.png",
+      "image": "../blutes/umbrella.png",
       "is_blute": true,
       "color": "pink",
       "attributes": {
@@ -8394,7 +8394,7 @@ const BLUTE_DATA = {
     {
       "id": "waving",
       "name": "Waving",
-      "image": "blutes/waving.PNG",
+      "image": "../blutes/waving.PNG",
       "is_blute": true,
       "color": "blue",
       "attributes": {
@@ -8512,7 +8512,7 @@ const BLUTE_DATA = {
     {
       "id": "winter_blushing",
       "name": "Winter Blushing",
-      "image": "blutes/winter_blushing.png",
+      "image": "../blutes/winter_blushing.png",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -8630,7 +8630,7 @@ const BLUTE_DATA = {
     {
       "id": "work",
       "name": "Work",
-      "image": "blutes/work.png",
+      "image": "../blutes/work.png",
       "is_blute": true,
       "color": "yellow",
       "attributes": {
@@ -8748,7 +8748,7 @@ const BLUTE_DATA = {
     {
       "id": "yawning",
       "name": "Yawning",
-      "image": "blutes/yawning.PNG",
+      "image": "../blutes/yawning.PNG",
       "is_blute": true,
       "color": "teal",
       "attributes": {
@@ -8866,7 +8866,7 @@ const BLUTE_DATA = {
     {
       "id": "yoga",
       "name": "Yoga",
-      "image": "blutes/yoga.png",
+      "image": "../blutes/yoga.png",
       "is_blute": true,
       "color": "blue",
       "attributes": {

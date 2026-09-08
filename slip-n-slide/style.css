@@ -1,0 +1,106 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; overflow: hidden; }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5vmin;
+    height: 100dvh;
+    padding: 2vmin;
+    background: #585931;
+    font-family: 'Bubblegum Sans', sans-serif;
+    color: #E3D0A7;
+    text-align: center;
+  }
+
+  .title-bar { flex: 0 0 auto; }
+
+  .title { font-size: clamp(1.5rem, 5vmin, 2.3rem); font-weight: bold; }
+
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 3vmin;
+    margin-top: 0.5vmin;
+    font-size: clamp(0.85rem, 2.2vmin, 1rem);
+  }
+
+  /* The canvas keeps its 400:700 shape and fills whatever height is left. */
+  .board-wrap {
+    position: relative;   /* the round overlay is positioned against this */
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Shown over the board when all eight blutes have been thrown. */
+  .round-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(58, 46, 31, 0.55);
+  }
+
+  .round-overlay[hidden] {
+    display: none;
+  }
+
+  .round-panel {
+    background: #f0e6c8;
+    color: #3a2e1f;
+    border-radius: 2vmin;
+    padding: 4vmin 6vmin;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .round-label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #7a6a4a;
+  }
+
+  .round-score {
+    font-size: clamp(2.2rem, 8vmin, 3.5rem);
+    font-weight: bold;
+    line-height: 1.15;
+  }
+
+  .round-note {
+    margin-bottom: 2.5vmin;
+    font-size: clamp(0.85rem, 2.2vmin, 1rem);
+    color: rgba(58, 46, 31, 0.7);
+  }
+
+  /* A canvas is a replaced element, so auto width and height with both max
+     constraints scales it down keeping its 400:700 ratio. */
+  canvas {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 1.5vmin;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+    touch-action: none;   /* stops the page scrolling while you drag */
+  }
+
+  .controls { flex: 0 0 auto; min-height: 7vmin; }
+
+  #message { font-size: clamp(0.85rem, 2.2vmin, 1rem); color: rgba(227, 208, 167, 0.85); }
+
+  #againBtn {
+    margin-top: 1vmin;
+    padding: 1.2vmin 3vmin;
+    border: none;
+    border-radius: 0.8vmin;
+    background: #ac9366;
+    color: #f0e6c8;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+  }

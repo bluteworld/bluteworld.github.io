@@ -1,0 +1,47 @@
+ <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Slip n Slide</title>
+    <link rel="icon" href="../favicon.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="title-bar">
+      <span class="title">Slip n Slide</span>
+      <div class="stats">
+        <span id="score">Score: 0</span>
+        <span id="shots">Blutes left: 8</span>
+        <span id="best">Best: 0</span>
+      </div>
+    </header>
+
+    <main class="board-wrap">
+      <canvas id="board" width="400" height="740"></canvas>
+
+      <div class="round-overlay" id="roundOverlay" hidden>
+        <div class="round-panel">
+          <p class="round-label">Round over</p>
+          <p class="round-score" id="roundScore">0</p>
+          <p class="round-note" id="roundNote"></p>
+          <button id="againBtn" type="button">Play again</button>
+        </div>
+      </div>
+    </main>
+
+    <footer class="controls">
+      <p id="message">Drag back from your blute and let go.</p>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+    <script src="../firebase-config.js"></script>
+    <script src="../player.js"></script>
+    <script src="leaderboard.js"></script>
+    <script src="script.js"></script>
+  </body>
+  </html>
