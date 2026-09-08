@@ -15,7 +15,7 @@ const finalGuessBtn = document.getElementById('finalGuessBtn');
 
 let dailyState = null;
 let gameMode = 'daily'; // 'daily' | 'unlimited'
-let playerName = localStorage.getItem('guessBluteName') || '';
+let playerName = getPlayerName(); // shared across games, see ../player.js
 let lastQuestionRef = null;
 let guessModeActive = false;
 
@@ -101,15 +101,6 @@ finalGuessBtn.addEventListener('click', () => {
   if (!dailyState || dailyState.finished) return;
   setGuessMode(!guessModeActive);
 });
-
-function getPlayerUUID() {
-  let uuid = localStorage.getItem('guessBluteUUID');
-  if (!uuid) {
-    uuid = crypto.randomUUID();
-    localStorage.setItem('guessBluteUUID', uuid);
-  }
-  return uuid;
-}
 
 let modalOnDismiss = null;
 
@@ -783,7 +774,7 @@ function renderNameModal(onSubmit) {
     const name = input.value.trim();
     if (name) {
       playerName = name;
-      localStorage.setItem('guessBluteName', name);
+      setPlayerName(name);
     }
     onSubmit();
   };

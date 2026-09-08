@@ -4,17 +4,12 @@
 //
 // Every function here works without a network: if the Firebase scripts failed
 // to load, or the write is refused, the caller falls back to the local best.
+//
+// The player UUID comes from ../player.js and is shared with every other game
+// on the site, so a score posted here belongs to the same person who plays
+// Guess Blute in this browser.
 
 const SCORES_PATH = "slipNSlideScores";
-
-function getPlayerUUID() {
-  let uuid = localStorage.getItem("slipNSlideUUID");
-  if (!uuid) {
-    uuid = crypto.randomUUID();
-    localStorage.setItem("slipNSlideUUID", uuid);
-  }
-  return uuid;
-}
 
 // One row per player, holding only their best. Writing again overwrites it.
 function submitScore(uuid, score) {
