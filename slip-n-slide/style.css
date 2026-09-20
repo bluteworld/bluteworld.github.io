@@ -27,7 +27,7 @@
     font-size: clamp(0.85rem, 2.2vmin, 1rem);
   }
 
-  /* The canvas keeps its 400:700 shape and fills whatever height is left. */
+  /* The canvas keeps its 400:762 shape and fills whatever height is left. */
   .board-wrap {
     position: relative;   /* the round overlay is positioned against this */
     flex: 1 1 auto;
@@ -79,7 +79,7 @@
   }
 
   /* A canvas is a replaced element, so auto width and height with both max
-     constraints scales it down keeping its 400:700 ratio. */
+     constraints scales it down keeping its 400:762 ratio. */
   canvas {
     max-width: 100%;
     max-height: 100%;

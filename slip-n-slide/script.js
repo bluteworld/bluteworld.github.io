@@ -4,17 +4,26 @@
 // screen, so every number below is in those units.
 // ---------------------------------------------------------------
 
-const WIDTH = 400;
-const HEIGHT = 700; // the playing surface
-// The canvas is taller than the board. That extra strip above the back edge is
-// off the table, and it is what lets a blute in the hanger overhang the edge
-// without its head being clipped. Nothing else uses it: y = 0 is still the
-// back edge for physics, scoring and everything else.
-const BOARD_TOP = 40;
-const CANVAS_HEIGHT = HEIGHT + BOARD_TOP;
+const WIDTH = 400; // the whole canvas
+const HEIGHT = 700; // the playing surface, back edge to front edge
+
+// A gutter runs all the way round the playing surface. They are cushions, not
+// drop-offs: a blute that reaches one bounces back off it, so nothing ever
+// leaves the board. The back gutter is deeper than the rest so a blute resting
+// against the back rail isn't clipped by the top of the canvas.
+//
+// Only the surface is in board coordinates: y = 0 is the back edge and
+// y = HEIGHT the front edge, for physics, scoring and everything else.
+const GUTTER = 22; // the side and front cushions
+const BACK_GUTTER = 40;
+const PLAY_LEFT = GUTTER;
+const PLAY_RIGHT = WIDTH - GUTTER;
+const PLAY_WIDTH = PLAY_RIGHT - PLAY_LEFT;
+const CANVAS_HEIGHT = HEIGHT + BACK_GUTTER + GUTTER;
 
 const RADIUS = 26; // how big a blute is
 const FRICTION = 0.975; // how fast blutes slow down (1 would be never)
+const WALL_BOUNCE = 0.7; // speed kept coming off a cushion
 const STOP_SPEED = 0.2; // below this, a blute counts as stopped
 const MAX_PULL = 115; // longest useful drag
 const POWER = 0.15; // turns drag length into starting speed
@@ -96,6 +105,7 @@ const roundNoteEl = document.getElementById("roundNote");
 let blutes = []; // every blute on the board, moving or resting
 let current = null; // the blute waiting to be launched, if any
 let shotsLeft = SHOTS_PER_ROUND;
+let dragging = false; // a pointer is down
 let aim = null; // { x, y } while dragging, otherwise null
 let lastShot = null; // the blute most recently launched, until it settles
 let flashBand = null; // band lit up because a blute just landed in it
@@ -112,29 +122,33 @@ function draw() {
   ctx.fillRect(0, 0, WIDTH, CANVAS_HEIGHT);
 
   ctx.save();
-  ctx.translate(0, BOARD_TOP);
+  ctx.translate(0, BACK_GUTTER);
+
+  // The gutter channel, then the playing surface inset inside it.
+  ctx.fillStyle = "#474828";
+  ctx.fillRect(0, -BACK_GUTTER, WIDTH, CANVAS_HEIGHT);
 
   ctx.fillStyle = "#f0e6c8";
-  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+  ctx.fillRect(PLAY_LEFT, 0, PLAY_WIDTH, HEIGHT);
 
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
   for (const band of BANDS) {
     ctx.fillStyle = band.points % 2 ? "#e6d8b0" : "#ece0bd";
-    ctx.fillRect(0, band.top, WIDTH, band.bottom - band.top);
+    ctx.fillRect(PLAY_LEFT, band.top, PLAY_WIDTH, band.bottom - band.top);
 
     // Light the band up briefly when a blute lands in it, fading out.
     if (band === flashBand && flashLeft > 0) {
       ctx.fillStyle = `rgba(126, 168, 84, ${0.65 * (flashLeft / FLASH_FRAMES)})`;
-      ctx.fillRect(0, band.top, WIDTH, band.bottom - band.top);
+      ctx.fillRect(PLAY_LEFT, band.top, PLAY_WIDTH, band.bottom - band.top);
     }
 
     ctx.strokeStyle = "#ac9366";
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(0, band.bottom);
-    ctx.lineTo(WIDTH, band.bottom);
+    ctx.moveTo(PLAY_LEFT, band.bottom);
+    ctx.lineTo(PLAY_RIGHT, band.bottom);
     ctx.stroke();
 
     ctx.fillStyle = "rgba(122, 106, 74, 0.5)";
@@ -142,23 +156,23 @@ function draw() {
     ctx.fillText(band.label, WIDTH / 2, (band.top + band.bottom) / 2);
   }
 
-  // The line you shoot from.
+  // The line you shoot from, lit the whole time you are dragging so it reads
+  // as the track your blute runs along.
+  const sliding = current && dragging;
   ctx.setLineDash([8, 8]);
-  ctx.strokeStyle = "rgba(172, 147, 102, 0.7)";
-  ctx.lineWidth = 2;
+  ctx.strokeStyle = sliding ? "rgba(126, 168, 84, 0.95)" : "rgba(172, 147, 102, 0.7)";
+  ctx.lineWidth = sliding ? 3 : 2;
   ctx.beginPath();
-  ctx.moveTo(0, LAUNCH_Y);
-  ctx.lineTo(WIDTH, LAUNCH_Y);
+  ctx.moveTo(PLAY_LEFT, LAUNCH_Y);
+  ctx.lineTo(PLAY_RIGHT, LAUNCH_Y);
   ctx.stroke();
   ctx.setLineDash([]);
 
-  // The back edge itself. Blutes in the hanger overhang past this.
+  // The cushion face all the way round, where the surface meets the gutter.
+  // It goes down before the blutes so one resting against it sits on top.
   ctx.strokeStyle = "#8a6f42";
   ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.moveTo(0, 0);
-  ctx.lineTo(WIDTH, 0);
-  ctx.stroke();
+  ctx.strokeRect(PLAY_LEFT, 0, PLAY_WIDTH, HEIGHT);
 
   for (const blute of blutes) drawBlute(blute);
   if (current && aim) drawAim();
@@ -213,8 +227,8 @@ function startRound() {
   flashLeft = 0;
   roundOver = false;
   roundOverlay.hidden = true;
-  message.textContent = "Drag back from your blute and let go.";
   loadNextBlute();
+  message.textContent = "Slide side to side, pull down for power, let go.";
   updateHud();
 }
 
@@ -228,6 +242,30 @@ function loadNextBlute() {
     image: images[index % images.length],
   };
   blutes.push(current);
+  // The message is left alone so the score from the shot that just landed
+  // stays up while you line the next one up.
+  dragging = false;
+  aim = null;
+}
+
+// Slide along the launch line to your finger, kept clear of the cushions.
+function placeAt(point) {
+  current.x = Math.min(
+    Math.max(point.x, PLAY_LEFT + RADIUS),
+    PLAY_RIGHT - RADIUS,
+  );
+}
+
+// One gesture, two jobs. The blute always sits at your finger's x, above or
+// below the line, and how far below the line you pull sets the power.
+//
+// Because the blute tracks your finger exactly, pull() is left with no
+// sideways component, so a shot flies straight up the board. The exception is
+// at the cushions: drag past one and the blute stops at the rail while your
+// finger keeps going, and that gap angles the shot back in off the wall.
+function track(point) {
+  placeAt(point);
+  aim = point;
 }
 
 function launch(dx, dy) {
@@ -240,17 +278,13 @@ function launch(dx, dy) {
 
 // Called once everything has come to rest after a shot.
 function resolveShot() {
-  if (!blutes.includes(lastShot)) {
-    message.textContent = "Off the board!";
+  const band = bandFor(footY(lastShot));
+  if (band) {
+    flashBand = band;
+    flashLeft = FLASH_FRAMES;
+    message.textContent = `${band.points} point${band.points === 1 ? "" : "s"}!`;
   } else {
-    const band = bandFor(footY(lastShot));
-    if (band) {
-      flashBand = band;
-      flashLeft = FLASH_FRAMES;
-      message.textContent = `${band.points} point${band.points === 1 ? "" : "s"}!`;
-    } else {
-      message.textContent = "Short of the scoring zone.";
-    }
+    message.textContent = "Short of the scoring zone.";
   }
   lastShot = null;
 }
@@ -260,8 +294,8 @@ function toBoard(event) {
   const rect = canvas.getBoundingClientRect();
   return {
     x: (event.clientX - rect.left) * (WIDTH / rect.width),
-    // Subtract the off-table strip so this comes back in board coordinates.
-    y: (event.clientY - rect.top) * (CANVAS_HEIGHT / rect.height) - BOARD_TOP,
+    // Subtract the back gutter so this comes back in board coordinates.
+    y: (event.clientY - rect.top) * (CANVAS_HEIGHT / rect.height) - BACK_GUTTER,
   };
 }
 
@@ -269,7 +303,9 @@ function toBoard(event) {
 // so pulling back and down sends the blute forward and up.
 function pull() {
   let dx = current.x - aim.x;
-  let dy = current.y - aim.y;
+  // Forwards only. Dragging from above the blute would send it back down the
+  // board, so flatten that to a sideways shot instead of letting it happen.
+  let dy = Math.min(current.y - aim.y, 0);
   const length = Math.hypot(dx, dy);
   if (length > MAX_PULL) {
     dx = (dx / length) * MAX_PULL;
@@ -283,16 +319,19 @@ canvas.addEventListener("pointerdown", (event) => {
   // Keep receiving move/up events even when the drag leaves the canvas.
   // The browser releases this automatically on pointerup.
   canvas.setPointerCapture(event.pointerId);
-  aim = toBoard(event);
+  dragging = true;
+  track(toBoard(event));
 });
 
 canvas.addEventListener("pointermove", (event) => {
-  if (!current || !aim) return;
-  aim = toBoard(event);
+  if (!current || !dragging) return;
+  track(toBoard(event));
 });
 
 canvas.addEventListener("pointerup", () => {
-  if (!current || !aim) return;
+  if (!current || !dragging) return;
+  dragging = false;
+  if (!aim) return;
   const { dx, dy } = pull();
   aim = null;
   if (Math.hypot(dx, dy) < 8) return; // a tap, not a shot
@@ -301,11 +340,13 @@ canvas.addEventListener("pointerup", () => {
 
 // An interrupted drag shouldn't leave the aim stuck on screen.
 canvas.addEventListener("pointercancel", () => {
+  dragging = false;
   aim = null;
 });
 
 function drawAim() {
   const { dx, dy } = pull();
+  if (!dx && !dy) return; // still sliding along the line, nothing aimed yet
   ctx.strokeStyle = "rgba(88, 89, 49, 0.85)";
   ctx.lineWidth = 4;
   ctx.setLineDash([6, 6]);
@@ -330,11 +371,29 @@ function update() {
 
   collide();
 
-  // Off any edge and it's gone. The bottom bound catches a blute fired
-  // backwards, which would otherwise sit out of sight below the board.
-  blutes = blutes.filter(
-    (b) => b.y > 0 && b.y < HEIGHT + RADIUS && b.x > 0 && b.x < WIDTH,
-  );
+  // Off a cushion and back onto the surface. This runs after collide so a
+  // blute shoved into a rail by another one is put back before it is drawn.
+  for (const blute of blutes) bounceOffRails(blute);
+}
+
+// The cushions. A blute never leaves the board: it comes off the rail with
+// its direction reversed and a bit of its speed gone.
+function bounceOffRails(blute) {
+  if (blute.x - RADIUS < PLAY_LEFT) {
+    blute.x = PLAY_LEFT + RADIUS;
+    blute.vx = Math.abs(blute.vx) * WALL_BOUNCE;
+  } else if (blute.x + RADIUS > PLAY_RIGHT) {
+    blute.x = PLAY_RIGHT - RADIUS;
+    blute.vx = -Math.abs(blute.vx) * WALL_BOUNCE;
+  }
+
+  if (blute.y - RADIUS < 0) {
+    blute.y = RADIUS;
+    blute.vy = Math.abs(blute.vy) * WALL_BOUNCE;
+  } else if (blute.y + RADIUS > HEIGHT) {
+    blute.y = HEIGHT - RADIUS;
+    blute.vy = -Math.abs(blute.vy) * WALL_BOUNCE;
+  }
 }
 
 function allStopped() {
